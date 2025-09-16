@@ -38,9 +38,13 @@ class Map:
 map_1 = Map.load("background_1")
 
 
-# todo: skala postaci zgodna z proporcjami zdjecia
-def scale_player(direction_image: pygame.surface.Surface) -> pygame.surface.Surface:
-    return pygame.transform.smoothscale(direction_image, (40, 80))
+def scale_player(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
+    original_height = player_sprite.get_height()
+    original_width = player_sprite.get_width()
+    target_height = 80
+    player_scale = target_height/original_height
+    target_width = player_scale * original_width
+    return pygame.transform.smoothscale(player_sprite, (target_width, target_height))
 
 def load_player_sprite(sprite_name: str) -> pygame.surface.Surface:
     sprite = pygame.image.load(f"sprites/player/{sprite_name}.png")
