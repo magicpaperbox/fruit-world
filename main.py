@@ -16,6 +16,28 @@ gravity = 0.001
 #         self.current_img = image
 
 
+class Animation:
+    def __init__(self, duration: int, frames: list[pygame.surface.Surface]):
+        self.sprite = frames[0]
+        self._duration = duration
+        self._frames = frames
+        self._current_frame = 0
+
+    def advance(self):
+        self._current_frame += 1
+        if self._current_frame < 5:
+            self.sprite = self._frames[0]
+        elif self._current_frame < 10:
+            self.sprite = self._frames[1]
+        elif self._current_frame < 15:
+            self.sprite = self._frames[2]
+        elif self._current_frame < 20:
+            self.sprite = self._frames[1]
+        else:
+            self._current_frame = 0
+            self.sprite = self._frames[0]
+
+
 class Map:
     def __init__(self, sprite: pygame.surface.Surface):
         self.sprite = sprite
@@ -51,25 +73,30 @@ def load_player_sprite(sprite_name: str) -> pygame.surface.Surface:
     return scale_player(sprite)
 
 player_static = load_player_sprite("static")
-player_left1 = load_player_sprite("left_1")
-player_left2 = load_player_sprite("left_2")
-player_left3 = load_player_sprite("left_3")
-player_left4 = load_player_sprite("left_4")
-player_left5 = load_player_sprite("left_5")
 
 
-player_right1 = load_player_sprite("right_1")
-player_right2 = load_player_sprite("right_2")
-player_right3 = load_player_sprite("right_3")
-player_right4 = load_player_sprite("right_4")
-player_right5 = load_player_sprite("right_5")
+
 
 player_img = player_static
 player_rect = player_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
 player_velocity_y = 0
-count = 0
 jumps_left = 2
 
+player_left2 = load_player_sprite("left_1")
+move_left_animation = Animation(duration=5, frames=[
+    # load_player_sprite("left_1"),
+    load_player_sprite("left_2"),
+    load_player_sprite("left_3"),
+    load_player_sprite("left_4"),
+    # load_player_sprite("left_5")
+])
+
+player_right2 = load_player_sprite("right_1")
+move_right_animation = Animation(duration=5, frames=[
+    load_player_sprite("right_2"),
+    load_player_sprite("right_3"),
+    load_player_sprite("right_4"),
+])
 running = True
 while running:
     dt = clock.tick(FPS)  # sekundy od poprzedniej klatki
@@ -86,9 +113,6 @@ while running:
     is_right_pressed = keys[pygame.K_RIGHT]
     is_left_pressed = keys[pygame.K_LEFT]
     is_space_pressed = keys[pygame.K_SPACE]
-
-    if count == 30:
-        count = 0
 
     ground = 480
 
@@ -113,35 +137,22 @@ while running:
         on_ground = True
         jumps_left = 2
 
-
     if is_right_pressed:
-        count += 1
         player_rect.x += 2
         if player_velocity_y != 0:
             player_img = player_right2
-        elif count < 5:
-            player_img = player_right3
-        elif 5 <= count < 10:
-            player_img = player_right4
-        elif 10 <= count < 15:
-            player_img = player_right3
         else:
-            player_img = player_right2
-
+            move_right_animation.advance()
+            player_img = move_right_animation.sprite
 
     elif is_left_pressed:
-        count += 1
         player_rect.x -= 2
         if player_velocity_y != 0:
             player_img = player_left2
-        elif count < 5:
-            player_img = player_left3
-        elif 5 <= count < 10:
-            player_img = player_left4
-        elif 10 <= count < 15:
-            player_img = player_left3
         else:
-            player_img = player_left2
+            move_left_animation.advance()
+            player_img = move_left_animation.sprite
+
     else:
         player_img = player_static
 
