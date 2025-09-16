@@ -1,6 +1,7 @@
 import pygame
 import sys
 from animation import Animation
+from maps import Map
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -10,32 +11,12 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
 
-
 # class Player:
 #     def __init__(self, dx: float, dy: float, image: str):
 #         self.dx = dx
 #         self.dy = dy
 #         self.on_ground = on_ground
 #         self.current_img = image
-
-
-class Map:
-    def __init__(self, sprite: pygame.surface.Surface):
-        self.sprite = sprite
-        self.rect = sprite.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-
-    @staticmethod
-    def scale(direction_image: pygame.surface.Surface) -> pygame.surface.Surface:
-        return pygame.transform.smoothscale(direction_image, (800, 600))
-
-    @classmethod
-    def load(cls, sprite_name: str) -> "Map":
-        sprite = pygame.image.load(f"sprites/map/{sprite_name}.png")
-        sprite = cls.scale(sprite)
-        return Map(sprite)
-
-    def draw(self, screen: pygame.surface.Surface):
-        screen.blit(self.sprite, self.rect)
 
 
 map_1 = Map.load("background_1")
