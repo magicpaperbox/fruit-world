@@ -8,6 +8,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
 
+
 # class Player:
 #     def __init__(self, dx: float, dy: float, image: str):
 #         self.dx = dx
@@ -21,21 +22,18 @@ class Animation:
         self.sprite = frames[0]
         self._duration = duration
         self._frames = frames
-        self._current_frame = 0
+        self._current_game_frame = 0
+        self._frame_index = 0
 
     def advance(self):
-        self._current_frame += 1
-        if self._current_frame < 5:
-            self.sprite = self._frames[0]
-        elif self._current_frame < 10:
-            self.sprite = self._frames[1]
-        elif self._current_frame < 15:
-            self.sprite = self._frames[2]
-        elif self._current_frame < 20:
-            self.sprite = self._frames[1]
-        else:
-            self._current_frame = 0
-            self.sprite = self._frames[0]
+        self._current_game_frame += 1
+
+        if self._current_game_frame % self._duration == 0:
+            if self._frame_index == len(self._frames) - 1:
+                self._frame_index = 0
+            else:
+                self._frame_index += 1
+            self.sprite = self._frames[self._frame_index]
 
 
 class Map:
@@ -64,18 +62,17 @@ def scale_player(player_sprite: pygame.surface.Surface) -> pygame.surface.Surfac
     original_height = player_sprite.get_height()
     original_width = player_sprite.get_width()
     target_height = 80
-    player_scale = target_height/original_height
+    player_scale = target_height / original_height
     target_width = player_scale * original_width
     return pygame.transform.smoothscale(player_sprite, (target_width, target_height))
+
 
 def load_player_sprite(sprite_name: str) -> pygame.surface.Surface:
     sprite = pygame.image.load(f"sprites/player/{sprite_name}.png")
     return scale_player(sprite)
 
+
 player_static = load_player_sprite("static")
-
-
-
 
 player_img = player_static
 player_rect = player_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -128,8 +125,8 @@ while running:
         player_velocity_y = -0.35
         on_ground = False
 
-    player_rect.y += player_velocity_y * dt #y
-    player_velocity_y += gravity * dt #dy
+    player_rect.y += player_velocity_y * dt  # y
+    player_velocity_y += gravity * dt  # dy
 
     if player_rect.y >= ground:
         player_rect.y = ground
