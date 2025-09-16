@@ -1,4 +1,6 @@
-import pygame, sys
+import pygame
+import sys
+from animation import Animation
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -15,25 +17,6 @@ gravity = 0.001
 #         self.dy = dy
 #         self.on_ground = on_ground
 #         self.current_img = image
-
-
-class Animation:
-    def __init__(self, duration: int, frames: list[pygame.surface.Surface]):
-        self.sprite = frames[0]
-        self._duration = duration
-        self._frames = frames
-        self._current_game_frame = 0
-        self._frame_index = 0
-
-    def advance(self):
-        self._current_game_frame += 1
-
-        if self._current_game_frame % self._duration == 0:
-            if self._frame_index == len(self._frames) - 1:
-                self._frame_index = 0
-            else:
-                self._frame_index += 1
-            self.sprite = self._frames[self._frame_index]
 
 
 class Map:
