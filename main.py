@@ -34,6 +34,7 @@ class Map:
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self.sprite, self.rect)
 
+
 map_1 = Map.load("background_1")
 
 
@@ -63,6 +64,7 @@ player_img = player_static
 player_rect = player_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
 player_velocity_y = 0
 count = 0
+jumps_left = 2
 
 running = True
 while running:
@@ -85,7 +87,7 @@ while running:
         count = 0
 
     ground = 480
-    is_single_jumping = False
+
     # player_pos_y = player_rect.y
     # player_pos_x = player_rect.x
     on_ground = False
@@ -93,9 +95,9 @@ while running:
     if player_rect.y == ground:
         on_ground = True
 
-    if space_down_this_frame and on_ground:
+    if space_down_this_frame and jumps_left > 0:
+        jumps_left -= 1
         player_velocity_y = -0.35
-        is_single_jumping = True
         on_ground = False
 
     player_rect.y += player_velocity_y * dt #y
@@ -105,6 +107,7 @@ while running:
         player_rect.y = ground
         player_velocity_y = 0
         on_ground = True
+        jumps_left = 2
 
 
     if is_right_pressed:
