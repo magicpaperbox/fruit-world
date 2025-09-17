@@ -2,6 +2,7 @@ import pygame
 import sys
 from animation import Animation
 from maps import Map
+from platforms import Platform
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -20,6 +21,13 @@ gravity = 0.001
 
 
 map_1 = Map.load("background_1")
+
+my_platform1 = Platform(193, 60, 165, 260)
+my_platform2 = Platform(212, 60, 477, 368)
+my_platform3 = Platform(119, 55, 346, 78)
+my_platform4 = Platform(380, 62, 0, 488)
+my_platform5 = Platform(150, 62, 660, 488)
+my_platform6 = Platform(800, 60, 0, 550)
 
 
 def scale_player(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
@@ -118,6 +126,13 @@ while running:
         player_img = player_static
 
     map_1.draw(screen)
+    my_platform1.draw(screen)
+    my_platform2.draw(screen)
+    my_platform3.draw(screen)
+    my_platform4.draw(screen)
+    my_platform5.draw(screen)
+    my_platform6.draw(screen)
+
     # screen.fill((0, 255, 0))
     screen.blit(player_img, player_rect)
     pygame.display.flip()
