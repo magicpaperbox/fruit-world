@@ -79,11 +79,11 @@ while running:
             space_down_this_frame = True
 
     keys = pygame.key.get_pressed()
-    is_right_pressed = keys[pygame.K_RIGHT]
-    is_left_pressed = keys[pygame.K_LEFT]
+    is_right_pressed = keys[pygame.K_d]
+    is_left_pressed = keys[pygame.K_a]
     is_space_pressed = keys[pygame.K_SPACE]
 
-    ground = 480
+    ground = 475
 
     # player_pos_y = player_rect.y
     # player_pos_x = player_rect.x
@@ -94,7 +94,7 @@ while running:
 
     if space_down_this_frame and jumps_left > 0:
         jumps_left -= 1
-        player_velocity_y = -0.35
+        player_velocity_y = -0.4
         on_ground = False
 
     player_rect.y += player_velocity_y * dt  # y
