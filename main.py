@@ -3,6 +3,7 @@ import sys
 from animation import Animation
 from maps import Map
 from platforms import Platform
+from player import Player
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -12,15 +13,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
 
-# class Player:
-#     def __init__(self, dx: float, dy: float, image: str):
-#         self.dx = dx
-#         self.dy = dy
-#         self.on_ground = on_ground
-#         self.current_img = image
-
-
 map_1 = Map.load("background_1")
+player = Player.load("static")
 
 my_platform1 = Platform(165, 260, 193, 60)  # lewy gorny krzak
 my_platform2 = Platform(477, 368, 212, 60)  # prawy dolny krzak
@@ -48,10 +42,10 @@ def load_player_sprite(sprite_name: str) -> pygame.surface.Surface:
     return scale_player(sprite)
 
 
-player_static = load_player_sprite("static")
+# player_static = load_player_sprite("static")
+player_img = player.sprite
 
-player_img = player_static
-player_rect = player_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+player_rect = player.player_rect
 player_velocity_y = 0
 jumps_left = 2
 
@@ -142,8 +136,6 @@ while running:
     player_rect.y += player_velocity_y * dt  # y
     player_velocity_y += gravity * dt  # dy
 
-
-
     player_velocity_y, on_ground = collision_y(platforms_map1, player_rect, player_velocity_y, prev_top, prev_bottom)
 
     if space_down_this_frame and jumps_left > 0:
@@ -160,7 +152,7 @@ while running:
         elif facing_dir == "left":
             player_img = player_left2
         else:
-            player_img = player_static
+            player_img = player.sprite
     else:
         if facing_dir == "right":
             move_right_animation.advance()
@@ -169,7 +161,7 @@ while running:
             move_left_animation.advance()
             player_img = move_left_animation.sprite
         else:
-            player_img = player_static
+            player_img = player.sprite
 
     map_1.draw(screen)
     my_platform1.draw(screen)
