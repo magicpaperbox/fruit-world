@@ -25,44 +25,26 @@ my_platform6 = Platform(0, 550, 800, 60)  # srodkowa dolna
 
 platforms_map1 = [my_platform1, my_platform2, my_platform3, my_platform4, my_platform5, my_platform6]
 
-
-# solids = [p.rect for p in platforms_map1]
-
-def scale_player(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
-    original_height = player_sprite.get_height()
-    original_width = player_sprite.get_width()
-    target_height = 80
-    player_scale = target_height / original_height
-    target_width = player_scale * original_width
-    return pygame.transform.smoothscale(player_sprite, (target_width, target_height))
-
-
-def load_player_sprite(sprite_name: str) -> pygame.surface.Surface:
-    sprite = pygame.image.load(f"sprites/player/{sprite_name}.png")
-    return scale_player(sprite)
-
-
-# player_static = load_player_sprite("static")
 player_img = player.sprite
 
 player_rect = player.player_rect
 player_velocity_y = 0
 jumps_left = 2
 
-player_left2 = load_player_sprite("left_1")
+player_left2 = Player.load("left_1").sprite
 move_left_animation = Animation(duration=10, frames=[
     # load_player_sprite("left_1"),
-    load_player_sprite("left_2"),
-    load_player_sprite("left_3"),
-    load_player_sprite("left_4"),
+    Player.load("left_2").sprite,
+    Player.load("left_3").sprite,
+    Player.load("left_4").sprite,
     # load_player_sprite("left_5")
 ])
 
-player_right2 = load_player_sprite("right_1")
+player_right2 = Player.load("right_1").sprite
 move_right_animation = Animation(duration=10, frames=[
-    load_player_sprite("right_2"),
-    load_player_sprite("right_3"),
-    load_player_sprite("right_4"),
+    Player.load("right_2").sprite,
+    Player.load("right_3").sprite,
+    Player.load("right_4").sprite,
 ])
 
 
