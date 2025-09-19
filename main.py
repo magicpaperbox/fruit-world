@@ -2,7 +2,8 @@ import pygame
 import sys
 from platforms import Platform
 from player import Player
-from maps_data import load_level
+from maps_data import load_level, MAP_SPECS
+from strawberry import Strawberry
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -53,6 +54,8 @@ def collision_y(
     return player_velocity_y, on_ground
 
 
+strawberry = Strawberry.load("strawberry", 30, MAP_SPECS["map1"].bushes["krzak 1"].x, MAP_SPECS["map1"].bushes["krzak 1"].y)
+
 running = True
 while running:
     dt = clock.tick(FPS)  # ms od poprzedniej klatki
@@ -68,10 +71,16 @@ while running:
     keys = pygame.key.get_pressed()
     is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
     is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
-    is_space_pressed = keys[pygame.K_SPACE]
+    is_jump_pressed = keys[pygame.K_SPACE]
+    is_pick_pressed = keys[pygame.K_1]
 
     on_ground = False
     prev_x = sara.player_rect.x
+
+    if is_pick_pressed and strawberry is not None:
+        if sara.player_rect.colliderect(strawberry.rect):
+            strawberry = None
+
 
     if is_right_pressed:
         sara.player_rect.x += 2
@@ -105,6 +114,8 @@ while running:
         p.draw(screen)
 
     # screen.fill((0, 255, 0))
+    if strawberry is not None:
+        strawberry.draw(screen)
     sara.draw(screen)
     pygame.display.flip()
 

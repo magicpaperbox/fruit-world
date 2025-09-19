@@ -9,11 +9,19 @@ class PlatformSpec:
         self.width = width
         self.height = height
 
+class ObjectSpec:
+    def __init__(self, x: int, y: int, width: int, height: int):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
 
 class MapSpec:
-    def __init__(self, background: str, platforms: dict[str, PlatformSpec]):
+    def __init__(self, background: str, platforms: dict[str, PlatformSpec], bushes: dict[str, ObjectSpec]):
         self.background = background
         self.platforms = platforms
+        self.bushes = bushes
 
 
 def load_level(map_id: str):
@@ -33,5 +41,13 @@ MAP_SPECS: dict[str, MapSpec] = {
             "lewa dolna": PlatformSpec(0, 488, 380, 62),
             "prawa dolna": PlatformSpec(660, 488, 150, 62),
             "srodkowa dolna": PlatformSpec(0, 550, 800, 60)
-        })
+        },
+        bushes={
+            "krzak 1": ObjectSpec(220, 230, 193, 60),
+            "krzak 2": ObjectSpec(477, 368, 212, 60),
+            "krzak 3": ObjectSpec(346, 78, 119, 55)
+        }
+    )
 }
+
+
