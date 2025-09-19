@@ -57,6 +57,6 @@ class Player:
         sprite = Player.scale(sprite)
         return sprite
 
-    def draw(self, player: pygame.surface.Surface):
-        player.blit(self.sprite, self.player_rect)
+    def draw(self, screen: pygame.surface.Surface):
+        screen.blit(self.sprite, self.player_rect)
 

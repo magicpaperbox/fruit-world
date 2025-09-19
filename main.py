@@ -16,7 +16,6 @@ sara = Player.load()
 background, platforms = load_level("map1")
 
 
-player_rect = sara.player_rect
 player_velocity_y = 0
 jumps_left = 2
 
@@ -72,26 +71,26 @@ while running:
     is_space_pressed = keys[pygame.K_SPACE]
 
     on_ground = False
-    prev_x = player_rect.x
+    prev_x = sara.player_rect.x
 
     if is_right_pressed:
-        player_rect.x += 2
+        sara.player_rect.x += 2
         facing_dir = "right"
     elif is_left_pressed:
-        player_rect.x -= 2
+        sara.player_rect.x -= 2
         facing_dir = "left"
     else:
         facing_dir = "front"
 
-    collision_x(platforms, player_rect, prev_x)
+    collision_x(platforms, sara.player_rect, prev_x)
 
-    prev_top = player_rect.top
-    prev_bottom = player_rect.bottom
+    prev_top = sara.player_rect.top
+    prev_bottom = sara.player_rect.bottom
 
-    player_rect.y += player_velocity_y * dt  # y
+    sara.player_rect.y += player_velocity_y * dt  # y
     player_velocity_y += gravity * dt  # dy
 
-    player_velocity_y, on_ground = collision_y(platforms, player_rect, player_velocity_y, prev_top, prev_bottom)
+    player_velocity_y, on_ground = collision_y(platforms, sara.player_rect, player_velocity_y, prev_top, prev_bottom)
 
     if space_down_this_frame and jumps_left > 0:
         jumps_left -= 1
@@ -121,7 +120,7 @@ while running:
         p.draw(screen)
 
     # screen.fill((0, 255, 0))
-    screen.blit(sara.sprite, player_rect)
+    sara.draw(screen)
     pygame.display.flip()
 
 pygame.quit()
