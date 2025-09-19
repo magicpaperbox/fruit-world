@@ -19,9 +19,30 @@ class Player:
 
     @classmethod
     def load(cls, sprite_name: str) -> "Player":
-        sprite = pygame.image.load(f"sprites/player/{sprite_name}.png")
-        sprite = cls.scale(sprite)
+        sprite = Player.load_player_sprite(sprite_name)
         return Player(sprite)
+
+    @staticmethod
+    def load_player_sprite(sprite_name: str) -> pygame.Surface:
+        sprite = pygame.image.load(f"sprites/player/{sprite_name}.png")
+        sprite = Player.scale(sprite)
+        return sprite
+
+    @staticmethod
+    def move_left() -> list[pygame.Surface]:
+        return [
+        Player.load_player_sprite("left_2"),
+        Player.load_player_sprite("left_3"),
+        Player.load_player_sprite("left_4")
+        ]
+
+    @staticmethod
+    def move_right() -> list[pygame.Surface]:
+        return [
+        Player.load_player_sprite("right_2"),
+        Player.load_player_sprite("right_3"),
+        Player.load_player_sprite("right_4")
+        ]
 
     def draw(self, player: pygame.surface.Surface):
         player.blit(self.sprite, self.player_rect)

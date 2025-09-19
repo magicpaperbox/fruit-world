@@ -32,20 +32,10 @@ player_velocity_y = 0
 jumps_left = 2
 
 player_left2 = Player.load("left_1").sprite
-move_left_animation = Animation(duration=10, frames=[
-    # load_player_sprite("left_1"),
-    Player.load("left_2").sprite,
-    Player.load("left_3").sprite,
-    Player.load("left_4").sprite,
-    # load_player_sprite("left_5")
-])
+move_left_animation = Animation(duration=10, frames=Player.move_left())
 
 player_right2 = Player.load("right_1").sprite
-move_right_animation = Animation(duration=10, frames=[
-    Player.load("right_2").sprite,
-    Player.load("right_3").sprite,
-    Player.load("right_4").sprite,
-])
+move_right_animation = Animation(duration=10, frames=Player.move_right())
 
 
 def collision_x(solids: list[Platform], player_rect, prev_x):
