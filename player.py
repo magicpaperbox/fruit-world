@@ -1,12 +1,26 @@
 import pygame
+from animation import Animation
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 
 
 class Player:
-    def __init__(self, sprite: pygame.surface.Surface):
-        self.sprite = sprite
-        self.player_rect = sprite.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+    def __init__(
+            self,
+            right_jump: pygame.Surface,
+            left_jump: pygame.Surface,
+            static: pygame.Surface,
+            right_animation: Animation,
+            left_animation: Animation
+    ):
+        self.right_jump = right_jump
+        self.left_jump = left_jump
+        self.static = static
+        self.right_animation = right_animation
+        self.left_animation = left_animation
+
+        self.sprite = self.static
+        self.player_rect = self.sprite.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
 
     @staticmethod
     def scale(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
@@ -18,9 +32,24 @@ class Player:
         return pygame.transform.smoothscale(player_sprite, (target_width, target_height))
 
     @classmethod
-    def load(cls, sprite_name: str) -> "Player":
-        sprite = Player.load_player_sprite(sprite_name)
-        return Player(sprite)
+    def load(cls) -> "Player":
+        right_jump = Player.load_player_sprite("right_1")
+        left_jump = Player.load_player_sprite("left_1")
+        static = Player.load_player_sprite("static")
+
+        right_animation = Animation(duration=10, frames=[
+            Player.load_player_sprite("right_2"),
+            Player.load_player_sprite("right_3"),
+            Player.load_player_sprite("right_4")
+        ])
+
+        left_animation = Animation(duration=10, frames=[
+            Player.load_player_sprite("left_2"),
+            Player.load_player_sprite("left_3"),
+            Player.load_player_sprite("left_4")
+        ])
+
+        return Player(right_jump, left_jump, static, right_animation, left_animation)
 
     @staticmethod
     def load_player_sprite(sprite_name: str) -> pygame.Surface:
@@ -28,28 +57,6 @@ class Player:
         sprite = Player.scale(sprite)
         return sprite
 
-    @staticmethod
-    def move_left() -> list[pygame.Surface]:
-        return [
-        Player.load_player_sprite("left_2"),
-        Player.load_player_sprite("left_3"),
-        Player.load_player_sprite("left_4")
-        ]
-
-    @staticmethod
-    def move_right() -> list[pygame.Surface]:
-        return [
-        Player.load_player_sprite("right_2"),
-        Player.load_player_sprite("right_3"),
-        Player.load_player_sprite("right_4")
-        ]
-
-    @staticmethod
-    def static() -> list[pygame.Surface]:
-        return [Player.load_player_sprite("static")]
-
-
     def draw(self, player: pygame.surface.Surface):
         player.blit(self.sprite, self.player_rect)
 
-# player_img -> player.sprite

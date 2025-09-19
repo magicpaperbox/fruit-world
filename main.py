@@ -1,6 +1,5 @@
 import pygame
 import sys
-from animation import Animation
 from platforms import Platform
 from player import Player
 from maps_data import load_level
@@ -13,19 +12,13 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
 
-player = Player.load(sprite_name="static")
+sara = Player.load()
 background, platforms = load_level("map1")
-player_img = player.sprite
 
-player_rect = player.player_rect
+
+player_rect = sara.player_rect
 player_velocity_y = 0
 jumps_left = 2
-
-player_left2 = Player.load("left_1").sprite
-move_left_animation = Animation(duration=10, frames=Player.move_left())
-
-player_right2 = Player.load("right_1").sprite
-move_right_animation = Animation(duration=10, frames=Player.move_right())
 
 
 def collision_x(solids: list[Platform], player_rect, prev_x):
@@ -108,27 +101,27 @@ while running:
         jumps_left = 2
     if not on_ground:
         if facing_dir == "right":
-            player_img = player_right2
+            sara.sprite = sara.right_jump
         elif facing_dir == "left":
-            player_img = player_left2
+            sara.sprite = sara.left_jump
         else:
-            player_img = player.sprite
+            sara.sprite = sara.static
     else:
         if facing_dir == "right":
-            move_right_animation.advance()
-            player_img = move_right_animation.sprite
+            sara.right_animation.advance()
+            sara.sprite = sara.right_animation.sprite
         elif facing_dir == "left":
-            move_left_animation.advance()
-            player_img = move_left_animation.sprite
+            sara.left_animation.advance()
+            sara.sprite = sara.left_animation.sprite
         else:
-            player_img = player.sprite
+            sara.sprite = sara.static
 
     background.draw(screen)
     for p in platforms:
         p.draw(screen)
 
     # screen.fill((0, 255, 0))
-    screen.blit(player_img, player_rect)
+    screen.blit(sara.sprite, player_rect)
     pygame.display.flip()
 
 pygame.quit()
