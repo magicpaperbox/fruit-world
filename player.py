@@ -44,5 +44,12 @@ class Player:
         Player.load_player_sprite("right_4")
         ]
 
+    @staticmethod
+    def static() -> list[pygame.Surface]:
+        return [Player.load_player_sprite("static")]
+
+
     def draw(self, player: pygame.surface.Surface):
         player.blit(self.sprite, self.player_rect)
+
+# player_img -> player.sprite

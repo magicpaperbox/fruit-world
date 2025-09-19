@@ -1,9 +1,9 @@
 import pygame
 import sys
 from animation import Animation
-from maps import Map
 from platforms import Platform
 from player import Player
+from maps_data import load_level
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -13,18 +13,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
 
-map_1 = Map.load("background_1")
-player = Player.load("static")
-
-my_platform1 = Platform(165, 260, 193, 60)  # lewy gorny krzak
-my_platform2 = Platform(477, 368, 212, 60)  # prawy dolny krzak
-my_platform3 = Platform(346, 78, 119, 55)  # maly goreny krzak
-my_platform4 = Platform(0, 488, 380, 62)  # lewa dolna
-my_platform5 = Platform(660, 488, 150, 62)  # prawa dolna
-my_platform6 = Platform(0, 550, 800, 60)  # srodkowa dolna
-
-platforms_map1 = [my_platform1, my_platform2, my_platform3, my_platform4, my_platform5, my_platform6]
-
+player = Player.load(sprite_name="static")
+background, platforms = load_level("map1")
 player_img = player.sprite
 
 player_rect = player.player_rect
@@ -48,11 +38,11 @@ def collision_x(solids: list[Platform], player_rect, prev_x):
 
 
 def collision_y(
-    solids: list[Platform],
-    player_rect: pygame.Rect,
-    player_velocity_y: float,
-    prev_top: int,
-    prev_bottom: int
+        solids: list[Platform],
+        player_rect: pygame.Rect,
+        player_velocity_y: float,
+        prev_top: int,
+        prev_bottom: int
 ) -> tuple[float, bool]:
     on_ground = False
     for s in solids:
@@ -100,7 +90,7 @@ while running:
     else:
         facing_dir = "front"
 
-    collision_x(platforms_map1, player_rect, prev_x)
+    collision_x(platforms, player_rect, prev_x)
 
     prev_top = player_rect.top
     prev_bottom = player_rect.bottom
@@ -108,7 +98,7 @@ while running:
     player_rect.y += player_velocity_y * dt  # y
     player_velocity_y += gravity * dt  # dy
 
-    player_velocity_y, on_ground = collision_y(platforms_map1, player_rect, player_velocity_y, prev_top, prev_bottom)
+    player_velocity_y, on_ground = collision_y(platforms, player_rect, player_velocity_y, prev_top, prev_bottom)
 
     if space_down_this_frame and jumps_left > 0:
         jumps_left -= 1
@@ -135,13 +125,9 @@ while running:
         else:
             player_img = player.sprite
 
-    map_1.draw(screen)
-    my_platform1.draw(screen)
-    my_platform2.draw(screen)
-    my_platform3.draw(screen)
-    my_platform4.draw(screen)
-    my_platform5.draw(screen)
-    my_platform6.draw(screen)
+    background.draw(screen)
+    for p in platforms:
+        p.draw(screen)
 
     # screen.fill((0, 255, 0))
     screen.blit(player_img, player_rect)
