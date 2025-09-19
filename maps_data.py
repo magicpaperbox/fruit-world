@@ -18,6 +18,13 @@ class MapSpec:
         self.platforms = platforms
 
 
+def load_level(map_id: str):
+    current_screen = MAP_SPECS[map_id]
+    background_img = Map.load(current_screen.background)
+    platforms = [Platform(p.x, p.y, p.width, p.height) for p in current_screen.platforms]
+    return background_img, platforms
+
+
 MAP_SPECS: Dict[str, MapSpec] = {
     "map1": MapSpec(
         background="background_1",
@@ -30,10 +37,3 @@ MAP_SPECS: Dict[str, MapSpec] = {
             PlatformSpec(0, 550, 800, 60, "srodkowa dolna")
         ])
 }
-
-
-def load_level(map_id: str):
-    current_screen = MAP_SPECS[map_id]
-    background_img = Map.load(current_screen.background)
-    platforms = [Platform(p.x, p.y, p.width, p.height) for p in current_screen.platforms]
-    return background_img, platforms

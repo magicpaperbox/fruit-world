@@ -106,8 +106,6 @@ while running:
         on_ground = False
     elif on_ground:
         jumps_left = 2
-    if player_rect.bottom < 100:
-        print(player_rect.bottom)
     if not on_ground:
         if facing_dir == "right":
             player_img = player_right2
