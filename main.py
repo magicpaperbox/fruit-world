@@ -98,22 +98,7 @@ while running:
         on_ground = False
     elif on_ground:
         jumps_left = 2
-    if not on_ground:
-        if facing_dir == "right":
-            sara.sprite = sara.right_jump
-        elif facing_dir == "left":
-            sara.sprite = sara.left_jump
-        else:
-            sara.sprite = sara.static
-    else:
-        if facing_dir == "right":
-            sara.right_animation.advance()
-            sara.sprite = sara.right_animation.sprite
-        elif facing_dir == "left":
-            sara.left_animation.advance()
-            sara.sprite = sara.left_animation.sprite
-        else:
-            sara.sprite = sara.static
+    sara.update_sprite(facing_dir, on_ground)
 
     background.draw(screen)
     for p in platforms:
