@@ -12,10 +12,11 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
-
+font = pygame.font.SysFont("comicsansms", 18)
 sara = Player.load()
-background, platforms = load_level("map1")
-
+background, platforms, bushes = load_level("map1")
+strawberries_collected = 0
+berries_collected = 0
 
 player_velocity_y = 0
 jumps_left = 2
@@ -55,6 +56,8 @@ def collision_y(
 
 
 strawberry = Strawberry.load("strawberry", 30, MAP_SPECS["map1"].bushes["krzak 1"].x, MAP_SPECS["map1"].bushes["krzak 1"].y)
+strawberry2 = Strawberry.load("strawberry", 30, MAP_SPECS["map1"].bushes["krzak 2"].x, MAP_SPECS["map1"].bushes["krzak 2"].y)
+strawberry3 = Strawberry.load("strawberry", 30, MAP_SPECS["map1"].bushes["krzak 3"].x, MAP_SPECS["map1"].bushes["krzak 3"].y)
 
 running = True
 while running:
@@ -79,7 +82,16 @@ while running:
 
     if is_pick_pressed and strawberry is not None:
         if sara.player_rect.colliderect(strawberry.rect):
+            strawberries_collected += 1
             strawberry = None
+    if is_pick_pressed and strawberry2 is not None:
+        if sara.player_rect.colliderect(strawberry2.rect):
+            strawberries_collected += 1
+            strawberry2 = None
+    if is_pick_pressed and strawberry3 is not None:
+        if sara.player_rect.colliderect(strawberry3.rect):
+            strawberries_collected += 1
+            strawberry3 = None
 
 
     if is_right_pressed:
@@ -116,7 +128,19 @@ while running:
     # screen.fill((0, 255, 0))
     if strawberry is not None:
         strawberry.draw(screen)
+    if strawberry2 is not None:
+        strawberry2.draw(screen)
+    if strawberry3 is not None:
+        strawberry3.draw(screen)
     sara.draw(screen)
+
+
+    counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
+    counter_text2 = font.render(f"Borówki: {berries_collected}", True, (255, 255, 255))
+
+    screen.blit(counter_text1, (10, 550))
+    screen.blit(counter_text2, (10, 570))
+
     pygame.display.flip()
 
 pygame.quit()

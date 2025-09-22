@@ -1,5 +1,6 @@
 from maps import Map
 from platforms import Platform
+from bushes import Bush
 
 
 class PlatformSpec:
@@ -28,7 +29,8 @@ def load_level(map_id: str):
     current_screen = MAP_SPECS[map_id]
     background_img = Map.load(current_screen.background)
     platforms = [Platform(p.x, p.y, p.width, p.height) for p in current_screen.platforms.values()]
-    return background_img, platforms
+    bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.bushes.values()]
+    return background_img, platforms, bushes
 
 
 MAP_SPECS: dict[str, MapSpec] = {
@@ -44,8 +46,8 @@ MAP_SPECS: dict[str, MapSpec] = {
         },
         bushes={
             "krzak 1": ObjectSpec(220, 230, 193, 60),
-            "krzak 2": ObjectSpec(477, 368, 212, 60),
-            "krzak 3": ObjectSpec(346, 78, 119, 55)
+            "krzak 2": ObjectSpec(597, 338, 212, 60),
+            "krzak 3": ObjectSpec(146, 468, 119, 55)
         }
     )
 }
