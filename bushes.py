@@ -1,9 +1,14 @@
 import pygame
-from random import Random
+import random
+from strawberry import Strawberry
 
 
 class Bush:
     def __init__(self, x: float, y: float, width: float, height: float):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
         self.rect = pygame.rect.Rect(x, y, width, height)
         self.surface = pygame.surface.Surface((width, height), pygame.SRCALPHA)
         self.surface.fill((255, 0, 0, 0))
@@ -12,32 +17,24 @@ class Bush:
         screen.blit(self.surface, self.rect)
 
 
+def spawn_berries_for_bushes(
+    bushes: list,
+    per_bush: int,
+    sprite: str,
+    height_px: int = 30,
+    seed: int | None = None,
+    jitter_px: int = 20,         # drobny rozrzut, by nie nakładały się idealnie
+):
+    rnd = random.Random(seed)
+    berries = []
 
+    for b in bushes:
+        for _ in range(per_bush):
+            x_min = b.x + 0.2 * b.width
+            x_max = b.x + 0.8 * b.width
+            x = rnd.uniform(x_min, x_max) + rnd.randint(-jitter_px, jitter_px)
 
-class FruitSpawner:
-    def __init__(
-        self,
-        map_specs,
-        map_name: str,
-        sprite_name: str,
-        fruit_size: int,
-        max_total: int = 4,
-        max_per_bush: int = 2,
-        respawn_ms: int = 6000,
-        jitter_px: int = 8,           # lekkie rozrzucenie pozycji na krzaku
-        rng_seed: int | None = None,  # ustaw seed dla powtarzalności
-    ):
-        self.map_specs = map_specs
-        self.map_name = map_name
-        self.sprite_name = sprite_name
-        self.fruit_size = fruit_size
-        self.max_total = max_total
-        self.max_per_bush = max_per_bush
-        self.respawn_ms = respawn_ms
-        self.jitter_px = jitter_px
-        self.rng = Random(rng_seed)
+            y = b.y + 0.9 * b.height + rnd.randint(-jitter_px, jitter_px)
+            berries.append(Strawberry.load(sprite, height_px, x, y))
 
-        self.bushes = self.map_specs[self.map_name].bushes
-        self.active: list[tuple[str, Strawberry]] = []  # (nazwa_krzaka, obiekt)
-        self.per_bush_counts = defaultdict(int)
-        self.respawn_queue: list[tuple[str, int]] = []  # (nazwa_krzaka, timestamp_ready_ms)
+    return berries

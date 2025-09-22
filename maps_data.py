@@ -45,9 +45,9 @@ MAP_SPECS: dict[str, MapSpec] = {
             "srodkowa dolna": PlatformSpec(0, 550, 800, 60)
         },
         bushes={
-            "krzak 1": ObjectSpec(220, 230, 193, 60),
-            "krzak 2": ObjectSpec(597, 338, 212, 60),
-            "krzak 3": ObjectSpec(146, 468, 119, 55)
+            "krzak 1": ObjectSpec(180, 170, 193, 60),
+            "krzak 2": ObjectSpec(477, 288, 212, 60),
+            "krzak 3": ObjectSpec(106, 408, 119, 55)
         }
     )
 }

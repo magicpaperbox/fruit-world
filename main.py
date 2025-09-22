@@ -1,5 +1,7 @@
 import pygame
 import sys
+
+from bushes import spawn_berries_for_bushes
 from platforms import Platform
 from player import Player
 from maps_data import load_level, MAP_SPECS
@@ -20,7 +22,6 @@ berries_collected = 0
 
 player_velocity_y = 0
 jumps_left = 2
-
 
 def collision_x(solids: list[Platform], player_rect, prev_x):
     for s in solids:
@@ -55,9 +56,14 @@ def collision_y(
     return player_velocity_y, on_ground
 
 
-strawberry = Strawberry.load("strawberry", 30, MAP_SPECS["map1"].bushes["krzak 1"].x, MAP_SPECS["map1"].bushes["krzak 1"].y)
-strawberry2 = Strawberry.load("strawberry", 30, MAP_SPECS["map1"].bushes["krzak 2"].x, MAP_SPECS["map1"].bushes["krzak 2"].y)
-strawberry3 = Strawberry.load("strawberry", 30, MAP_SPECS["map1"].bushes["krzak 3"].x, MAP_SPECS["map1"].bushes["krzak 3"].y)
+strawberries = spawn_berries_for_bushes(
+    bushes,
+    per_bush=2,
+    sprite="strawberry",
+    height_px=30,
+    seed=42
+)
+
 
 running = True
 while running:
@@ -80,19 +86,11 @@ while running:
     on_ground = False
     prev_x = sara.player_rect.x
 
-    if is_pick_pressed and strawberry is not None:
-        if sara.player_rect.colliderect(strawberry.rect):
-            strawberries_collected += 1
-            strawberry = None
-    if is_pick_pressed and strawberry2 is not None:
-        if sara.player_rect.colliderect(strawberry2.rect):
-            strawberries_collected += 1
-            strawberry2 = None
-    if is_pick_pressed and strawberry3 is not None:
-        if sara.player_rect.colliderect(strawberry3.rect):
-            strawberries_collected += 1
-            strawberry3 = None
-
+    for strawberry in strawberries[:]:
+        if is_pick_pressed:
+            if sara.player_rect.colliderect(strawberry.rect):
+                strawberries_collected += 1
+                strawberries.remove(strawberry)
 
     if is_right_pressed:
         sara.player_rect.x += 2
@@ -125,15 +123,10 @@ while running:
     for p in platforms:
         p.draw(screen)
 
-    # screen.fill((0, 255, 0))
-    if strawberry is not None:
-        strawberry.draw(screen)
-    if strawberry2 is not None:
-        strawberry2.draw(screen)
-    if strawberry3 is not None:
-        strawberry3.draw(screen)
-    sara.draw(screen)
+    for s in strawberries:
+        s.draw(screen)
 
+    sara.draw(screen)
 
     counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
     counter_text2 = font.render(f"Borówki: {berries_collected}", True, (255, 255, 255))
