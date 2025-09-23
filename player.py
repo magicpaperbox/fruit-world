@@ -18,6 +18,8 @@ class Player:
         self._static = static
         self._right_animation = right_animation
         self._left_animation = left_animation
+        self.facing_dir = "front"
+
 
         self._sprite = self._static
         self.player_rect = self._sprite.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -79,3 +81,12 @@ class Player:
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self._sprite, self.player_rect)
 
+    def update_move(self, is_right_pressed: bool, is_left_pressed: bool):
+        if is_right_pressed:
+            self.player_rect.x += 2
+            self.facing_dir = "right"
+        elif is_left_pressed:
+            self.player_rect.x -= 2
+            self.facing_dir = "left"
+        else:
+            self.facing_dir = "front"

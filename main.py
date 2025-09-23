@@ -62,16 +62,7 @@ while running:
     strawberries_collected += pick_berry(strawberries, sara.player_rect, is_pick_pressed)
     blueberries_collected += pick_berry(blueberries, sara.player_rect, is_pick_pressed)
 
-
-    if is_right_pressed:
-        sara.player_rect.x += 2
-        facing_dir = "right"
-    elif is_left_pressed:
-        sara.player_rect.x -= 2
-        facing_dir = "left"
-    else:
-        facing_dir = "front"
-
+    sara.update_move(is_right_pressed, is_left_pressed)
     collision_x(platforms, sara.player_rect, prev_x)
 
     prev_top = sara.player_rect.top
@@ -88,7 +79,7 @@ while running:
         on_ground = False
     elif on_ground:
         jumps_left = 2
-    sara.update_sprite(facing_dir, on_ground)
+    sara.update_sprite(sara.facing_dir, on_ground)
 
     background.draw(screen)
     for platform in platforms:
