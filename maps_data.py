@@ -17,7 +17,6 @@ class ObjectSpec:
         self.width = width
         self.height = height
 
-
 class MapSpec:
     def __init__(self, background: str, platforms: dict[str, PlatformSpec], strawberry_bushes: dict[str, ObjectSpec], blueberry_bushes: dict[str, ObjectSpec]):
         self.background = background
@@ -52,7 +51,7 @@ MAP_SPECS: dict[str, MapSpec] = {
             "krzak 3": ObjectSpec(80, 408, 119, 55)
         },
         blueberry_bushes = {
-        "krzak 1": ObjectSpec(685, 415, 80, 50),
+        "krzak 4": ObjectSpec(685, 415, 80, 50),
     }
     )
 }

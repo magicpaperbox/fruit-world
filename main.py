@@ -2,9 +2,10 @@ import pygame
 import sys
 
 from bushes import spawn_berries_for_bushes
-from platforms import Platform
 from player import Player
 from maps_data import load_level
+from collisions import collision_x, collision_y
+from berry import pick_berry
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -21,39 +22,6 @@ blueberries_collected = 0
 
 player_velocity_y = 0
 jumps_left = 2
-
-def collision_x(solids: list[Platform], player_rect, prev_x):
-    for s in solids:
-        if player_rect.colliderect(s.rect):
-            if player_rect.x > prev_x:  # kolizja z prawej
-                player_rect.right = s.rect.left
-            elif player_rect.x < prev_x:  # kolizja z lewej
-                player_rect.left = s.rect.right
-
-
-def collision_y(
-        solids: list[Platform],
-        player_rect: pygame.Rect,
-        player_velocity_y: float,
-        prev_top: int,
-        prev_bottom: int
-) -> tuple[float, bool]:
-    on_ground = False
-    for s in solids:
-        if player_rect.colliderect(s.rect):
-            if player_velocity_y > 0 and prev_bottom <= s.rect.top:
-                # spadła na platformę
-                player_rect.bottom = s.rect.top
-                player_velocity_y = 0
-                on_ground = True
-            elif player_velocity_y < 0 and prev_top >= s.rect.bottom:
-                # uderzyła w sufit
-                player_rect.top = s.rect.bottom
-                player_velocity_y = 0
-        elif player_rect.bottom == s.rect.top:
-            on_ground = True
-    return player_velocity_y, on_ground
-
 
 strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
@@ -91,17 +59,9 @@ while running:
     on_ground = False
     prev_x = sara.player_rect.x
 
-    for strawberry in strawberries[:]:
-        if is_pick_pressed:
-            if sara.player_rect.colliderect(strawberry.rect):
-                strawberries_collected += 1
-                strawberries.remove(strawberry)
+    strawberries_collected += pick_berry(strawberries, sara.player_rect, is_pick_pressed)
+    blueberries_collected += pick_berry(blueberries, sara.player_rect, is_pick_pressed)
 
-    for blueberry in blueberries[:]:
-        if is_pick_pressed:
-            if sara.player_rect.colliderect(blueberry.rect):
-                blueberries_collected += 1
-                blueberries.remove(blueberry)
 
     if is_right_pressed:
         sara.player_rect.x += 2
@@ -131,14 +91,12 @@ while running:
     sara.update_sprite(facing_dir, on_ground)
 
     background.draw(screen)
-    for p in platforms:
-        p.draw(screen)
-
-    for s in strawberries:
-        s.draw(screen)
-    for s in blueberries:
-        s.draw(screen)
-
+    for platform in platforms:
+        platform.draw(screen)
+    for strawberry in strawberries:
+        strawberry.draw(screen)
+    for blueberry in blueberries:
+        blueberry.draw(screen)
     sara.draw(screen)
 
     counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
