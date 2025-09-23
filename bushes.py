@@ -1,6 +1,6 @@
 import pygame
 import random
-from strawberry import Strawberry
+from berry import Berry
 
 
 class Bush:
@@ -35,6 +35,6 @@ def spawn_berries_for_bushes(
             x = rnd.uniform(x_min, x_max) + rnd.randint(-jitter_px, jitter_px)
 
             y = b.y + 0.9 * b.height + rnd.randint(-jitter_px, jitter_px)
-            berries.append(Strawberry.load(sprite, height_px, x, y))
+            berries.append(Berry.load(sprite, height_px, x, y))
 
     return berries

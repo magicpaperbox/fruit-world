@@ -4,8 +4,7 @@ import sys
 from bushes import spawn_berries_for_bushes
 from platforms import Platform
 from player import Player
-from maps_data import load_level, MAP_SPECS
-from strawberry import Strawberry
+from maps_data import load_level
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
@@ -16,9 +15,9 @@ clock = pygame.time.Clock()
 gravity = 0.001
 font = pygame.font.SysFont("comicsansms", 18)
 sara = Player.load()
-background, platforms, bushes = load_level("map1")
+background, platforms, strawberry_bushes, blueberry_bushes = load_level("map1")
 strawberries_collected = 0
-berries_collected = 0
+blueberries_collected = 0
 
 player_velocity_y = 0
 jumps_left = 2
@@ -57,13 +56,19 @@ def collision_y(
 
 
 strawberries = spawn_berries_for_bushes(
-    bushes,
+    strawberry_bushes,
     per_bush=2,
     sprite="strawberry",
     height_px=30,
     seed=42
 )
-
+blueberries = spawn_berries_for_bushes(
+    blueberry_bushes,
+    per_bush=1,
+    sprite="blueberry",
+    height_px=30,
+    seed=42
+)
 
 running = True
 while running:
@@ -91,6 +96,12 @@ while running:
             if sara.player_rect.colliderect(strawberry.rect):
                 strawberries_collected += 1
                 strawberries.remove(strawberry)
+
+    for blueberry in blueberries[:]:
+        if is_pick_pressed:
+            if sara.player_rect.colliderect(blueberry.rect):
+                blueberries_collected += 1
+                blueberries.remove(blueberry)
 
     if is_right_pressed:
         sara.player_rect.x += 2
@@ -125,11 +136,13 @@ while running:
 
     for s in strawberries:
         s.draw(screen)
+    for s in blueberries:
+        s.draw(screen)
 
     sara.draw(screen)
 
     counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
-    counter_text2 = font.render(f"Borówki: {berries_collected}", True, (255, 255, 255))
+    counter_text2 = font.render(f"Borówki: {blueberries_collected}", True, (255, 255, 255))
 
     screen.blit(counter_text1, (10, 550))
     screen.blit(counter_text2, (10, 570))

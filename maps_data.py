@@ -19,18 +19,20 @@ class ObjectSpec:
 
 
 class MapSpec:
-    def __init__(self, background: str, platforms: dict[str, PlatformSpec], bushes: dict[str, ObjectSpec]):
+    def __init__(self, background: str, platforms: dict[str, PlatformSpec], strawberry_bushes: dict[str, ObjectSpec], blueberry_bushes: dict[str, ObjectSpec]):
         self.background = background
         self.platforms = platforms
-        self.bushes = bushes
+        self.strawberry_bushes = strawberry_bushes
+        self.blueberry_bushes = blueberry_bushes
 
 
 def load_level(map_id: str):
     current_screen = MAP_SPECS[map_id]
     background_img = Map.load(current_screen.background)
     platforms = [Platform(p.x, p.y, p.width, p.height) for p in current_screen.platforms.values()]
-    bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.bushes.values()]
-    return background_img, platforms, bushes
+    strawberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.strawberry_bushes.values()]
+    blueberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.blueberry_bushes.values()]
+    return background_img, platforms, strawberry_bushes, blueberry_bushes
 
 
 MAP_SPECS: dict[str, MapSpec] = {
@@ -44,11 +46,14 @@ MAP_SPECS: dict[str, MapSpec] = {
             "prawa dolna": PlatformSpec(660, 488, 150, 62),
             "srodkowa dolna": PlatformSpec(0, 550, 800, 60)
         },
-        bushes={
-            "krzak 1": ObjectSpec(180, 170, 193, 60),
-            "krzak 2": ObjectSpec(477, 288, 212, 60),
-            "krzak 3": ObjectSpec(106, 408, 119, 55)
-        }
+        strawberry_bushes={
+            "krzak 1": ObjectSpec(180, 175, 150, 60),
+            "krzak 2": ObjectSpec(495, 278, 170, 60),
+            "krzak 3": ObjectSpec(80, 408, 119, 55)
+        },
+        blueberry_bushes = {
+        "krzak 1": ObjectSpec(685, 415, 80, 50),
+    }
     )
 }
 

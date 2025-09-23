@@ -1,7 +1,7 @@
 import pygame
 
 
-class Strawberry:
+class Berry:
     def __init__(self, sprite: pygame.surface.Surface, x: int, y: int):
         self.sprite = sprite
         self.rect = sprite.get_rect(center=(x, y))
@@ -15,10 +15,10 @@ class Strawberry:
         return pygame.transform.smoothscale(sprite, (target_width, target_height))
 
     @classmethod
-    def load(cls, sprite_name: str, target_height: int, x: int, y: int) -> "Strawberry":
+    def load(cls, sprite_name: str, target_height: int, x: int, y: int) -> "Berry":
         sprite = pygame.image.load(f"sprites/items/{sprite_name}.png")
         sprite = cls.scale(sprite, target_height)
-        return Strawberry(sprite, x, y)
+        return Berry(sprite, x, y)
 
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self.sprite, self.rect)
