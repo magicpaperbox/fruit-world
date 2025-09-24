@@ -1,6 +1,7 @@
 from maps import Map
 from platforms import Platform
 from bushes import Bush
+from npcs import Npc
 
 
 class PlatformSpec:
@@ -18,11 +19,12 @@ class ObjectSpec:
         self.height = height
 
 class MapSpec:
-    def __init__(self, background: str, platforms: dict[str, PlatformSpec], strawberry_bushes: dict[str, ObjectSpec], blueberry_bushes: dict[str, ObjectSpec]):
+    def __init__(self, background: str, platforms: dict[str, PlatformSpec], strawberry_bushes: dict[str, ObjectSpec], blueberry_bushes: dict[str, ObjectSpec], npcs: dict[str, ObjectSpec]):
         self.background = background
         self.platforms = platforms
         self.strawberry_bushes = strawberry_bushes
         self.blueberry_bushes = blueberry_bushes
+        self.npcs = npcs
 
 
 def load_level(map_id: str):
@@ -31,7 +33,12 @@ def load_level(map_id: str):
     platforms = [Platform(p.x, p.y, p.width, p.height) for p in current_screen.platforms.values()]
     strawberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.strawberry_bushes.values()]
     blueberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.blueberry_bushes.values()]
-    return background_img, platforms, strawberry_bushes, blueberry_bushes
+    npcs = []
+    for key, value in MAP_SPECS[map_id].npcs.items():
+        if key == "mouse":
+            npcs.append(Npc.load_mouse(value.x, value.y))
+
+    return background_img, platforms, strawberry_bushes, blueberry_bushes, npcs
 
 
 MAP_SPECS: dict[str, MapSpec] = {
@@ -51,8 +58,11 @@ MAP_SPECS: dict[str, MapSpec] = {
             "krzak 3": ObjectSpec(80, 408, 119, 55)
         },
         blueberry_bushes = {
-        "krzak 4": ObjectSpec(685, 415, 80, 50),
-    }
+        "krzak 4": ObjectSpec(685, 415, 80, 50)
+        },
+        npcs = {
+        "mouse": ObjectSpec(685, 415, 80, 50)
+        }
     )
 }
 

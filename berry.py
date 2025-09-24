@@ -2,7 +2,7 @@ import pygame
 
 
 class Berry:
-    def __init__(self, sprite: pygame.surface.Surface, x: int, y: int):
+    def __init__(self, sprite: pygame.Surface, x: int, y: int):
         self.sprite = sprite
         self.rect = sprite.get_rect(center=(x, y))
 

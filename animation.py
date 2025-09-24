@@ -2,7 +2,7 @@ import pygame
 
 
 class Animation:
-    def __init__(self, duration: int, frames: list[pygame.surface.Surface]):
+    def __init__(self, duration: int, frames: list[pygame.Surface]):
         self.sprite = frames[0]
         self._duration = duration
         self._frames = frames
@@ -18,3 +18,6 @@ class Animation:
             else:
                 self._frame_index += 1
             self.sprite = self._frames[self._frame_index]
+
+    def surface(self) -> pygame.Surface:
+        return self._frames[self._frame_index]
