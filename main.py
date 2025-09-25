@@ -3,21 +3,19 @@ import sys
 
 from bushes import spawn_berries_for_bushes
 from player import Player
-from npcs import Npc
 from maps_data import load_level
 from collisions import collision_x, collision_y
 from berry import pick_berry
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
-
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
 font = pygame.font.SysFont("comicsansms", 18)
 sara = Player.load()
-background, platforms, strawberry_bushes, blueberry_bushes, npcs = load_level("map1")
+background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
 strawberries_collected = 0
 blueberries_collected = 0
 
@@ -91,6 +89,8 @@ while running:
         strawberry.draw(screen)
     for blueberry in blueberries:
         blueberry.draw(screen)
+    for obj in static_objects:
+        obj.draw(screen)
     for npc in npcs:
         npc.draw(screen)
     sara.draw(screen)

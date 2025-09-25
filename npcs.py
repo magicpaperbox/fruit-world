@@ -5,6 +5,8 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 
 
 class Npc:
+    _SPRITE_TARGET_HEIGHT = 70
+    _sprite_cache: dict[tuple[str, int], pygame.Surface] = {}
     def __init__(
             self,
             x:int,
@@ -14,6 +16,7 @@ class Npc:
             interaction: pygame.Surface,
             quest_update: pygame.Surface,
             bye_bye_animation: Animation,
+
     ):
 
         self._static = static
@@ -40,22 +43,23 @@ class Npc:
         happy = Npc.load_npc_sprite("npc_mouse_happy")
         hello = Npc.load_npc_sprite("npc_mouse_hi")
 
-        standby_animation = Animation(duration=10, frames=[
-            Npc.load_npc_sprite("npc_mouse"),
-            Npc.load_npc_sprite("npc_mouse_standby")
-        ])
+        mouse = Npc.load_npc_sprite("npc_mouse")
+        blink = Npc.load_npc_sprite("npc_mouse_standby")
 
-        bye_animation = Animation(duration=10, frames=[
-            Npc.load_npc_sprite("npc_mouse_bye"),
-            Npc.load_npc_sprite("npc_mouse")
-        ])
+        frames = [mouse] * 25 + [blink]
+        standby_animation = Animation(duration=10, frames=frames)
+
+        bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("npc_mouse_bye"), mouse])
 
         return Npc(x, y, standby_animation, hello, happy, thinking, bye_animation)
 
     @staticmethod
     def load_npc_sprite(sprite_name: str) -> pygame.Surface:
-        sprite = pygame.image.load(f"sprites/npc/{sprite_name}.png")
-        return Npc.scale(sprite)
+        key = (sprite_name, 70)
+        if key not in Npc._sprite_cache:
+            surf = pygame.image.load(f"sprites/npc/{sprite_name}.png").convert_alpha()
+            Npc._sprite_cache[key] = Npc.scale(surf)
+        return Npc._sprite_cache[key]
 
 
     def update_sprite(self):
