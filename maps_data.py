@@ -12,12 +12,14 @@ class PlatformSpec:
         self.width = width
         self.height = height
 
+
 class ObjectSpec:
     def __init__(self, x: int, y: int, width: int, height: int):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+
 
 class MapSpec:
     def __init__(
@@ -73,16 +75,14 @@ MAP_SPECS: dict[str, MapSpec] = {
             "krzak 2": ObjectSpec(495, 278, 170, 60),
             "krzak 3": ObjectSpec(80, 408, 119, 55)
         },
-        blueberry_bushes = {
-        "krzak 4": ObjectSpec(685, 415, 80, 50)
+        blueberry_bushes={
+            "krzak 4": ObjectSpec(685, 415, 80, 50)
         },
-        npcs = {
-        "mouse": ObjectSpec(580, 555, 80, 50)
+        npcs={
+            "mouse": ObjectSpec(580, 555, 80, 50)
         },
-        static_objects = {
-        "domek": ObjectSpec(610, 495, 200, 140)
-}
+        static_objects={
+            "domek": ObjectSpec(610, 495, 200, 140)
+        }
     )
 }
-
-
