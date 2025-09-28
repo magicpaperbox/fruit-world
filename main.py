@@ -26,15 +26,13 @@ strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
     per_bush=2,
     sprite="strawberry",
-    height_px=30,
-    seed=42
+    height_px=30
 )
 blueberries = spawn_berries_for_bushes(
     blueberry_bushes,
     per_bush=1,
     sprite="blueberry",
-    height_px=30,
-    seed=42
+    height_px=30
 )
 
 running = True
@@ -42,18 +40,19 @@ while running:
     dt = clock.tick(FPS)  # ms od poprzedniej klatki
 
     space_down_this_frame = False
+    is_pick_pressed = False
 
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
         elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
             space_down_this_frame = True
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_1:
+            is_pick_pressed = True
 
     keys = pygame.key.get_pressed()
     is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
     is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
-    is_jump_pressed = keys[pygame.K_SPACE]
-    is_pick_pressed = keys[pygame.K_1]
 
     on_ground = False
     prev_x = sara.player_rect.x

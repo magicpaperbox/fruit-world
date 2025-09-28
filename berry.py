@@ -24,12 +24,11 @@ class Berry:
         screen.blit(self.sprite, self.rect)
         # screen.fill((0, 255, 0))
 
-def pick_berry(berries: list, player_rect: pygame.Rect, is_pick_pressed: bool) -> int:
+def pick_berry(berries: list[Berry], player_rect: pygame.Rect, is_pick_pressed: bool) -> int:
     if not is_pick_pressed:
         return 0
-    picked = 0
     for berry in berries[:]:  # kopia, bo modyfikujemy listę
         if berry.rect.colliderect(player_rect):
             berries.remove(berry)
-            picked += 1
-    return picked
+            return 1
+    return 0

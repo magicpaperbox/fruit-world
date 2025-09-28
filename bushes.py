@@ -22,13 +22,12 @@ def spawn_berries_for_bushes(
     per_bush: int,
     sprite: str,
     height_px: int = 30,
-    seed: int | None = None,
-    jitter_px: int = 20,         # drobny rozrzut, by nie nakładały się idealnie
+    jitter_px: int = 20, # drobny rozrzut, by nie nakładały się idealnie
 ):
-    rnd = random.Random(seed)
+    rnd = random.Random(42)
     berries = []
 
-    for b in bushes:
+    for b in bushes: #todo zmienić logikę - zapytać, deterministyczny rozklad na siatce + losowy jitter
         for _ in range(per_bush):
             x_min = b.x + 0.2 * b.width
             x_max = b.x + 0.8 * b.width
