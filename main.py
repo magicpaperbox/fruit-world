@@ -93,9 +93,6 @@ while running:
     for platform in platforms:
         platform.draw(screen)
 
-    if DEBUG_OVERLAYS:
-        draw_bush_debug(screen, font, strawberry_bushes, (0, 200, 0), "TRUS")
-        draw_bush_debug(screen, font, blueberry_bushes, (60, 120, 255), "BOR")
 
     for strawberry in strawberries:
         strawberry.draw(screen)
@@ -107,6 +104,10 @@ while running:
         npc.draw(screen)
     sara.draw(screen)
 
+
+    if DEBUG_OVERLAYS:
+        draw_bush_debug(screen, font, strawberry_bushes, (0, 200, 0), "TRUS")
+        draw_bush_debug(screen, font, blueberry_bushes, (60, 120, 255), "BOR")
 
     counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
     counter_text2 = font.render(f"Borówki: {blueberries_collected}", True, (255, 255, 255))
