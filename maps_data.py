@@ -71,12 +71,12 @@ MAP_SPECS: dict[str, MapSpec] = {
             "srodkowa dolna": PlatformSpec(0, 550, 800, 60)
         },
         strawberry_bushes={
-            "krzak 1": ObjectSpec(180, 175, 150, 60),
-            "krzak 2": ObjectSpec(495, 278, 170, 60),
-            "krzak 3": ObjectSpec(80, 408, 119, 55)
+            "krzak 1": ObjectSpec(200, 210, 120, 50),
+            "krzak 2": ObjectSpec(535, 310, 120, 60),
+            "krzak 3": ObjectSpec(90, 435, 110, 50)
         },
         blueberry_bushes={
-            "krzak 4": ObjectSpec(685, 415, 80, 50)
+            "krzak 4": ObjectSpec(685, 440, 90, 45)
         },
         npcs={
             "mouse": ObjectSpec(580, 555, 80, 50)

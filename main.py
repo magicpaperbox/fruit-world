@@ -1,12 +1,13 @@
 import pygame
 import sys
 
-from bushes import spawn_berries_for_bushes
+from bushes import spawn_berries_for_bushes, draw_bush_debug
 from player import Player
 from maps_data import load_level
 from collisions import collision_x, collision_y
 from berry import pick_berry
 
+DEBUG_OVERLAYS = False
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
 pygame.init()
@@ -24,15 +25,15 @@ jumps_left = 2
 
 strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
-    per_bush=2,
+    per_bush=3,
     sprite="strawberry",
-    height_px=30
+    height_px=25
 )
 blueberries = spawn_berries_for_bushes(
     blueberry_bushes,
     per_bush=1,
     sprite="blueberry",
-    height_px=30
+    height_px=20
 )
 
 running = True
@@ -49,6 +50,8 @@ while running:
             space_down_this_frame = True
         elif e.type == pygame.KEYDOWN and e.key == pygame.K_1:
             is_pick_pressed = True
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_0:
+            DEBUG_OVERLAYS = not DEBUG_OVERLAYS
 
     keys = pygame.key.get_pressed()
     is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
@@ -84,6 +87,11 @@ while running:
     background.draw(screen)
     for platform in platforms:
         platform.draw(screen)
+
+    if DEBUG_OVERLAYS:
+        draw_bush_debug(screen, font, strawberry_bushes, (0, 200, 0), "TRUS")
+        draw_bush_debug(screen, font, blueberry_bushes, (60, 120, 255), "BOR")
+
     for strawberry in strawberries:
         strawberry.draw(screen)
     for blueberry in blueberries:
