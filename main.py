@@ -82,7 +82,7 @@ while running:
         on_ground = False
     elif on_ground:
         jumps_left = 2
-    sara.update_sprite(sara.facing_dir, on_ground)
+    sara.update_sprite(on_ground)
 
     background.draw(screen)
     for platform in platforms:
