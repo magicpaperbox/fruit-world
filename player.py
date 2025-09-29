@@ -18,7 +18,6 @@ class Player:
         self._static = static
         self._right_animation = right_animation
         self._left_animation = left_animation
-        self._facing_dir = "front"
 
 
         self._sprite = self._static
@@ -59,19 +58,25 @@ class Player:
         sprite = Player.scale(sprite)
         return sprite
 
-    def update_sprite(self, on_ground: bool) -> None:
+    def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool) -> None:
+        if is_right_pressed:
+            facing_dir = "right"
+        elif is_left_pressed:
+            facing_dir = "left"
+        else:
+            facing_dir = "front"
         if not on_ground:
-            if self._facing_dir == "right":
+            if facing_dir == "right":
                 self._sprite = self._right_jump
-            elif self._facing_dir == "left":
+            elif facing_dir == "left":
                 self._sprite = self._left_jump
             else:
                 self._sprite = self._static
         else:
-            if self._facing_dir == "right":
+            if facing_dir == "right":
                 self._right_animation.advance()
                 self._sprite = self._right_animation.sprite
-            elif self._facing_dir == "left":
+            elif facing_dir == "left":
                 self._left_animation.advance()
                 self._sprite = self._left_animation.sprite
             else:
@@ -80,13 +85,3 @@ class Player:
 
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self._sprite, self.player_rect)
-
-    def update_move(self, is_right_pressed: bool, is_left_pressed: bool):
-        if is_right_pressed:
-            self.player_rect.x += 2
-            self._facing_dir = "right"
-        elif is_left_pressed:
-            self.player_rect.x -= 2
-            self._facing_dir = "left"
-        else:
-            self._facing_dir = "front"

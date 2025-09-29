@@ -65,7 +65,11 @@ while running:
     for npc in npcs:
         npc.update_sprite()
 
-    sara.update_move(is_right_pressed, is_left_pressed)
+    if is_right_pressed:
+        sara.player_rect.x += 2
+    elif is_left_pressed:
+        sara.player_rect.x -= 2
+
     collision_x(platforms, sara.player_rect, prev_x)
 
     prev_top = sara.player_rect.top
@@ -82,7 +86,8 @@ while running:
         on_ground = False
     elif on_ground:
         jumps_left = 2
-    sara.update_sprite(on_ground)
+
+    sara.update_sprite(on_ground, is_right_pressed, is_left_pressed)
 
     background.draw(screen)
     for platform in platforms:
