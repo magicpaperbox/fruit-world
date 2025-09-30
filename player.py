@@ -59,9 +59,9 @@ class Player:
         sprite = Player.scale(sprite)
         return sprite
 
-    def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, x: int, y: int) -> None:
-        self.player_rect.x = x
-        self.player_rect.y = y
+    def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int]) -> None:
+        self.player_rect.x = coordinates[0]
+        self.player_rect.y = coordinates[1]
         if is_right_pressed:
             facing_dir = "right"
         elif is_left_pressed:

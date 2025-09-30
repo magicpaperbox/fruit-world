@@ -5,7 +5,7 @@ from bushes import spawn_berries_for_bushes, draw_bush_debug
 from player import Player
 from maps_data import load_level
 from berry import pick_berry
-from player_mobility import MovePlayer
+from player_mobility import PlayerMobility
 
 DEBUG_OVERLAYS = False
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 gravity = 0.001
 font = pygame.font.SysFont("comicsansms", 18)
 sara = Player.load()
-move_player = MovePlayer(gravity)
+move_player = PlayerMobility(gravity)
 background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
 strawberries_collected = 0
 blueberries_collected = 0
@@ -55,7 +55,6 @@ while running:
     is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
     is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
 
-    prev_x = sara.player_rect.x
 
     strawberries_collected += pick_berry(strawberries, sara.player_rect, is_pick_pressed)
     blueberries_collected += pick_berry(blueberries, sara.player_rect, is_pick_pressed)
@@ -63,17 +62,15 @@ while running:
         npc.update_sprite()
 
     if is_right_pressed:
-        move_player.right()
+        move_player.move_right(platforms)
     elif is_left_pressed:
-        move_player.left()
+        move_player.move_left(platforms)
 
-    prev_top = sara.player_rect.top
-    prev_bottom = sara.player_rect.bottom
-    move_player.check_collision_in_x(platforms, prev_x)
-    move_player.check_collision_in_y(platforms, dt, prev_top, prev_bottom)
-    move_player.jump(space_down_this_frame)
+    if space_down_this_frame:
+        move_player.jump()
 
-    sara.update_sprite(move_player.on_ground(), is_right_pressed, is_left_pressed, move_player.x(), move_player.y())
+    move_player.move_vertically(platforms, dt)
+    sara.update_sprite(move_player.is_on_ground(), is_right_pressed, is_left_pressed, move_player.get_coordinates())
 
     background.draw(screen)
     for platform in platforms:
