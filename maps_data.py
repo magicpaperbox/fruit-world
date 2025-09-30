@@ -11,6 +11,7 @@ class PlatformSpec:
         self.y = y
         self.width = width
         self.height = height
+        self.area = width * height
 
 
 class ObjectSpec:

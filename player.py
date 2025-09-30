@@ -22,6 +22,7 @@ class Player:
 
         self._sprite = self._static
         self.player_rect = self._sprite.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        # self.player_rect = pygame.Rect(0, 0, self._sprite.get_width(), self._sprite.get_height())
 
     @staticmethod
     def scale(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
@@ -58,7 +59,9 @@ class Player:
         sprite = Player.scale(sprite)
         return sprite
 
-    def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool) -> None:
+    def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, x: int, y: int) -> None:
+        self.player_rect.x = x
+        self.player_rect.y = y
         if is_right_pressed:
             facing_dir = "right"
         elif is_left_pressed:
