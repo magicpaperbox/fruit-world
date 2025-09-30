@@ -5,7 +5,8 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 
 
 class MovePlayer:
-    def __init__(self):
+    def __init__(self, gravity: float):
+        self._gravity = gravity
         self.player_rect = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 50, 80)
 
     def x(self):
@@ -23,9 +24,9 @@ class MovePlayer:
     def check_collision_in_x(self, platforms, prev_x):
         collision_x(platforms, self.player_rect, prev_x)
 
-    def check_collision_in_y(self, platforms, dt, gravity, player_velocity_y, prev_top, prev_bottom):
+    def check_collision_in_y(self, platforms, dt, player_velocity_y, prev_top, prev_bottom):
         self.player_rect.y += player_velocity_y * dt  # y
-        player_velocity_y += gravity * dt  # dy
+        player_velocity_y += self._gravity * dt  # dy
         player_velocity_y, on_ground = collision_y(platforms, self.player_rect, player_velocity_y, prev_top, prev_bottom)
         return player_velocity_y, on_ground
 
