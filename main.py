@@ -55,7 +55,6 @@ while running:
     is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
     is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
 
-    on_ground = False
     prev_x = sara.player_rect.x
 
     strawberries_collected += pick_berry(strawberries, sara.player_rect, is_pick_pressed)
@@ -68,15 +67,13 @@ while running:
     elif is_left_pressed:
         move_player.left()
 
-
     prev_top = sara.player_rect.top
     prev_bottom = sara.player_rect.bottom
     move_player.check_collision_in_x(platforms, prev_x)
-    on_ground = move_player.check_collision_in_y(platforms, dt, prev_top, prev_bottom)
-    on_ground = move_player.jump(space_down_this_frame, on_ground)
+    move_player.check_collision_in_y(platforms, dt, prev_top, prev_bottom)
+    move_player.jump(space_down_this_frame)
 
-
-    sara.update_sprite(on_ground, is_right_pressed, is_left_pressed, move_player.x(), move_player.y())
+    sara.update_sprite(move_player.on_ground(), is_right_pressed, is_left_pressed, move_player.x(), move_player.y())
 
     background.draw(screen)
     for platform in platforms:
