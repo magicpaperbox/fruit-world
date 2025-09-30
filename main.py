@@ -21,9 +21,6 @@ background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects
 strawberries_collected = 0
 blueberries_collected = 0
 
-player_velocity_y = 0
-jumps_left = 2
-
 strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
     per_bush=3,
@@ -75,8 +72,8 @@ while running:
     prev_top = sara.player_rect.top
     prev_bottom = sara.player_rect.bottom
     move_player.check_collision_in_x(platforms, prev_x)
-    player_velocity_y, on_ground = move_player.check_collision_in_y(platforms, dt, player_velocity_y, prev_top, prev_bottom)
-    jumps_left, on_ground, player_velocity_y = move_player.jump(space_down_this_frame, jumps_left, on_ground, player_velocity_y)
+    on_ground = move_player.check_collision_in_y(platforms, dt, prev_top, prev_bottom)
+    on_ground = move_player.jump(space_down_this_frame, on_ground)
 
 
     sara.update_sprite(on_ground, is_right_pressed, is_left_pressed, move_player.x(), move_player.y())
