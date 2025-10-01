@@ -88,3 +88,4 @@ class Player:
 
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self._sprite, self.player_rect)
+

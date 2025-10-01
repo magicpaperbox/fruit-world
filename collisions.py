@@ -3,12 +3,16 @@ import pygame
 from platforms import Platform
 
 
-def collision_x(solids: list[Platform], player_rect, prev_x):
+
+def collision_x(solids: list[Platform], player_rect):
     for s in solids:
         if player_rect.colliderect(s.rect):
-            if player_rect.x > prev_x:  # kolizja z prawej
+            distance_from_right_platform = abs(player_rect.left - s.rect.right)
+            distance_from_left_platform = abs(player_rect.right - s.rect.left)
+
+            if distance_from_left_platform < distance_from_right_platform:
                 player_rect.right = s.rect.left
-            elif player_rect.x < prev_x:  # kolizja z lewej
+            else:
                 player_rect.left = s.rect.right
 
 
@@ -22,12 +26,14 @@ def collision_y(
     on_ground = False
     for s in solids:
         if player_rect.colliderect(s.rect):
-            if player_velocity_y > 0 and prev_bottom <= s.rect.top:
+            distance_from_top_platform = abs(player_rect.top - s.rect.bottom)
+            distance_from_bottom_platform = abs(player_rect.bottom - s.rect.top)
+            if player_velocity_y > 0 and distance_from_bottom_platform < distance_from_top_platform:
                 # spadła na platformę
                 player_rect.bottom = s.rect.top
                 player_velocity_y = 0
                 on_ground = True
-            elif player_velocity_y < 0 and prev_top >= s.rect.bottom:
+            elif player_velocity_y < 0 and distance_from_top_platform < distance_from_bottom_platform:
                 # uderzyła w sufit
                 player_rect.top = s.rect.bottom
                 player_velocity_y = 0
