@@ -16,7 +16,6 @@ class Npc:
             interaction: pygame.Surface,
             quest_update: pygame.Surface,
             bye_bye_animation: Animation,
-
     ):
 
         self._static = static
@@ -27,6 +26,44 @@ class Npc:
 
         self._sprite = self._static.surface()
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
+
+        #tymczasowa podmiana animacji
+        self._override_surface: pygame.Surface | None = None
+        self._override_until_ms: int = 0
+        #jednorazowa animacja
+        self._override_anim: Animation | None = None
+        self._override_anim_until_ms: int = 0
+        self._status = "standby_animation"
+
+    def interaction(self, now_ms: int) -> None:
+        if self._status == "standby_animation":
+            self.show_frame("hello", ms=800, now_ms=now_ms)
+            print("Hello my friend")
+            self._status = "hello"
+        # npc.show_frame("happy", ms=1200, now_ms=now_ms)
+    def end_interaction(self, now_ms: int) -> None:
+        if self._status == "hello":
+            self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
+            print("Bye bye!")
+        self._status = "standby_animation"
+
+
+    def show_frame(self, kind: str, ms: int, now_ms: int):
+        mapping = {
+            "hello": self._hello,
+            "happy": self._interaction,
+            "thinking": self._quest_update,
+        }
+        self._override_surface = mapping[kind]
+        self._override_until_ms = now_ms + ms
+        self._override_anim = None
+
+    def play_once(self, anim: Animation, ms: int, now_ms: int):
+        #Pokaż jednorazową animację przez ms milisekund
+        self._override_anim = anim.copy() if hasattr(anim, "copy") else anim
+        self._override_anim_until_ms = now_ms + ms
+        self._override_surface = None
+
 
     @staticmethod
     def scale(npc_sprite: pygame.surface.Surface) -> pygame.Surface:
@@ -48,7 +85,6 @@ class Npc:
 
         frames = [mouse] * 25 + [blink]
         standby_animation = Animation(duration=10, frames=frames)
-
         bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("npc_mouse_bye"), mouse])
 
         return Npc(x, y, standby_animation, hello, happy, thinking, bye_animation)
@@ -62,7 +98,31 @@ class Npc:
         return Npc._sprite_cache[key]
 
 
-    def update_sprite(self):
+    def update_sprite(self, now_ms: int):
+        # jednorazowa animacja
+        if self._override_anim and now_ms < self._override_anim_until_ms:
+            self._override_anim.advance()
+            new_frame = self._override_anim.surface()
+            if new_frame.get_size() != self._sprite.get_size():
+                cx, by = self.npc_rect.centerx, self.npc_rect.bottom
+                self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
+            self._sprite = new_frame
+            return
+        else:
+            self._override_anim = None
+
+        # tymczasowa statyczna klatka
+        if self._override_surface and now_ms < self._override_until_ms:
+            new_frame = self._override_surface
+            if new_frame.get_size() != self._sprite.get_size():
+                cx, by = self.npc_rect.centerx, self.npc_rect.bottom
+                self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
+            self._sprite = new_frame
+            return
+        else:
+            self._override_surface = None
+
+        #standby domyślnie
         self._static.advance()
         new_frame = self._static.surface()
         if new_frame.get_size() != self._sprite.get_size():

@@ -67,7 +67,7 @@ class PlayerMobility:
         prev_bottom = self.player_rect3.bottom
         self.player_rect3.y += self.player_velocity_y * dt  # y
         self.player_velocity_y += self._gravity * dt  # dy
-        player_velocity_y, on_ground = collision_y(platforms, self.player_rect3, self.player_velocity_y, prev_top, prev_bottom)
+        player_velocity_y, on_ground = collision_y(platforms, self.player_rect3, self.player_velocity_y)
         self.player_velocity_y = player_velocity_y
         self._on_ground = on_ground
         self._anchor = self._anchor_from_rect3()

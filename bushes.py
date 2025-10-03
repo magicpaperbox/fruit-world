@@ -29,7 +29,7 @@ def spawn_berries_for_bushes(
     if per_bush <= 0:
         return berries
 
-    for b in bushes: #todo zmienić logikę - zapytać, deterministyczny rozklad na siatce + losowy jitter
+    for b in bushes:
         x_min = b.x + 0.1 * b.width
         x_max = b.x + 0.9 * b.width
         y_min = b.y + height_px/2

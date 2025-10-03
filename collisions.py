@@ -20,8 +20,6 @@ def collision_y(
         solids: list[Platform],
         player_rect: pygame.Rect,
         player_velocity_y: float,
-        prev_top: int,
-        prev_bottom: int
 ) -> tuple[float, bool]:
     on_ground = False
     for s in solids:

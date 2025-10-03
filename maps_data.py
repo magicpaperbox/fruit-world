@@ -64,12 +64,12 @@ MAP_SPECS: dict[str, MapSpec] = {
     "map1": MapSpec(
         background="background_1",
         platforms={
-            "lewy gorny krzak": PlatformSpec(165, 260, 193, 60),
-            "prawy dolny krzak": PlatformSpec(477, 368, 212, 60),
+            "lewy gorny krzak": PlatformSpec(165, 262, 193, 60),
+            "prawy dolny krzak": PlatformSpec(477, 370, 212, 60),
             "maly gorny krzak": PlatformSpec(346, 78, 119, 55),
-            "lewa dolna": PlatformSpec(0, 488, 380, 62),
-            "prawa dolna": PlatformSpec(660, 488, 150, 62),
-            "srodkowa dolna": PlatformSpec(0, 550, 800, 60)
+            "lewa dolna": PlatformSpec(0, 490, 380, 62),
+            "prawa dolna": PlatformSpec(660, 490, 150, 62),
+            "srodkowa dolna": PlatformSpec(0, 555, 800, 60)
         },
         strawberry_bushes={
             "krzak 1": ObjectSpec(200, 210, 120, 50),

@@ -39,7 +39,7 @@ running = True
 while running:
     try:
         dt = clock.tick(FPS)  # ms od poprzedniej klatki
-
+        now_ms = pygame.time.get_ticks()
         space_down_this_frame = False
         is_pick_pressed = False
 
@@ -60,8 +60,14 @@ while running:
 
         strawberries_collected += pick_berry(strawberries, sara.player_rect, is_pick_pressed)
         blueberries_collected += pick_berry(blueberries, sara.player_rect, is_pick_pressed)
+
         for npc in npcs:
-            npc.update_sprite()
+            if sara.player_rect.colliderect(npc.npc_rect):
+                if is_pick_pressed:
+                    npc.interaction(now_ms)
+            else:
+                npc.end_interaction(now_ms)
+            npc.update_sprite(now_ms)
 
         prev_left = move_player.player_rect2.left
         prev_right = move_player.player_rect2.right
@@ -76,6 +82,9 @@ while running:
 
         move_player.move_vertically(platforms, dt)
         sara.update_sprite(move_player.is_on_ground(), is_right_pressed, is_left_pressed, move_player.get_coordinates())
+
+
+
 
         background.draw(screen)
         for platform in platforms:
