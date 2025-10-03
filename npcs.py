@@ -98,15 +98,18 @@ class Npc:
         return Npc._sprite_cache[key]
 
 
+    def center(self, new_frame):
+        if new_frame.get_size() != self._sprite.get_size():
+            cx, by = self.npc_rect.centerx, self.npc_rect.bottom
+            self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
+        self._sprite = new_frame
+
     def update_sprite(self, now_ms: int):
         # jednorazowa animacja
         if self._override_anim and now_ms < self._override_anim_until_ms:
             self._override_anim.advance()
             new_frame = self._override_anim.surface()
-            if new_frame.get_size() != self._sprite.get_size():
-                cx, by = self.npc_rect.centerx, self.npc_rect.bottom
-                self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
-            self._sprite = new_frame
+            self.center(new_frame)
             return
         else:
             self._override_anim = None
@@ -114,10 +117,7 @@ class Npc:
         # tymczasowa statyczna klatka
         if self._override_surface and now_ms < self._override_until_ms:
             new_frame = self._override_surface
-            if new_frame.get_size() != self._sprite.get_size():
-                cx, by = self.npc_rect.centerx, self.npc_rect.bottom
-                self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
-            self._sprite = new_frame
+            self.center(new_frame)
             return
         else:
             self._override_surface = None
@@ -125,10 +125,7 @@ class Npc:
         #standby domyślnie
         self._static.advance()
         new_frame = self._static.surface()
-        if new_frame.get_size() != self._sprite.get_size():
-            cx, by = self.npc_rect.centerx, self.npc_rect.bottom
-            self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
-        self._sprite = new_frame
+        self.center(new_frame)
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self._sprite, self.npc_rect)
