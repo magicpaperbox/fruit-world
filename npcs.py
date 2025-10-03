@@ -15,7 +15,7 @@ class Npc:
             hello: pygame.Surface,
             interaction: pygame.Surface,
             quest_update: pygame.Surface,
-            bye_bye_animation: Animation,
+            bye_bye_animation: Animation
     ):
 
         self._static = static
@@ -35,17 +35,20 @@ class Npc:
         self._override_anim_until_ms: int = 0
         self._status = "standby_animation"
 
-    def interaction(self, now_ms: int) -> None:
+    def interaction(self, now_ms: int) -> str|None:
         if self._status == "standby_animation":
             self.show_frame("hello", ms=800, now_ms=now_ms)
-            print("Hello my friend")
+            message = "Hello my friend!"
             self._status = "hello"
-        # npc.show_frame("happy", ms=1200, now_ms=now_ms)
-    def end_interaction(self, now_ms: int) -> None:
+            return message
+
+    def end_interaction(self, now_ms: int) -> str|None:
+        message = None
         if self._status == "hello":
             self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
-            print("Bye bye!")
+            message = "Bye bye!"
         self._status = "standby_animation"
+        return message
 
 
     def show_frame(self, kind: str, ms: int, now_ms: int):
@@ -122,7 +125,6 @@ class Npc:
         else:
             self._override_surface = None
 
-        #standby domyślnie
         self._static.advance()
         new_frame = self._static.surface()
         self.center(new_frame)
