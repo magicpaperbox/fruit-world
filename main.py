@@ -23,6 +23,8 @@ move_player = PlayerMobility(gravity)
 background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
 strawberries_collected = 0
 blueberries_collected = 0
+away = True
+colliding_npc = None
 
 strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
@@ -58,7 +60,7 @@ while running:
                 DEBUG_OVERLAYS = not DEBUG_OVERLAYS
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_q:
                 is_exit_pressed = True
-            dialog.handle_event(is_pick_pressed, is_exit_pressed)
+            dialog.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms)
 
         keys = pygame.key.get_pressed()
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
@@ -67,15 +69,18 @@ while running:
         strawberries_collected += pick_berry(strawberries, sara.player_rect, is_pick_pressed)
         blueberries_collected += pick_berry(blueberries, sara.player_rect, is_pick_pressed)
 
+
         for npc in npcs:
             if sara.player_rect.colliderect(npc.npc_rect):
+                away = False
+                colliding_npc = npc
                 if is_pick_pressed:
                     message = npc.interaction(now_ms)
-                    dialog.show(message)
+                    dialog.show(message, npc=npc)
             else:
-                message = npc.end_interaction(now_ms)
-                dialog.show(message)
+                away = True
             npc.update_sprite(now_ms)
+
 
         prev_left = move_player.player_rect2.left
         prev_right = move_player.player_rect2.right
@@ -91,7 +96,6 @@ while running:
         dialog.update(dt)
         move_player.move_vertically(platforms, dt)
         sara.update_sprite(move_player.is_on_ground(), is_right_pressed, is_left_pressed, move_player.get_coordinates())
-
 
 
         screen.fill((67, 39, 15, 230))
