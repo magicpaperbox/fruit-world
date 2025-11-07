@@ -7,11 +7,14 @@ from maps_data import load_level
 from berry import pick_berry
 from player_mobility import PlayerMobility, draw_rect_debug
 from dialog_box import DialogBox
+from ui import UIManager, Action
+from settings_menu import toggle_settings, make_settings_modal
 
 DEBUG_OVERLAYS = False
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 720
 FPS = 60
 pygame.init()
+ui = UIManager()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
@@ -48,10 +51,12 @@ while running:
         space_down_this_frame = False
         is_pick_pressed = False
         is_exit_pressed = False
+        settings_pressed = False
 
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 running = False
+
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_1:
@@ -60,6 +65,8 @@ while running:
                 DEBUG_OVERLAYS = not DEBUG_OVERLAYS
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_q:
                 is_exit_pressed = True
+            elif e.type == pygame.KEYDOWN and e.key == pygame.K_TAB:
+                settings_pressed = True
             dialog.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms)
 
         keys = pygame.key.get_pressed()
@@ -95,7 +102,7 @@ while running:
 
         dialog.update(dt)
         move_player.move_vertically(platforms, dt)
-        sara.update_sprite(move_player.is_on_ground(), is_right_pressed, is_left_pressed, move_player.get_coordinates())
+        sara.update_sprite(move_player.is_on_ground, is_right_pressed, is_left_pressed, move_player.coordinates)
 
 
         screen.fill((67, 39, 15, 230))

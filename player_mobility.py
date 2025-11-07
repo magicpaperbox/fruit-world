@@ -43,10 +43,12 @@ class PlayerMobility:
         ax, ay = self.player_rect3.midbottom
         return ax, ay - self._legs_offset
 
+    @property
     def is_on_ground(self):
         return self._on_ground
 
-    def get_coordinates(self) -> tuple[int, int]:
+    @property
+    def coordinates(self) -> tuple[int, int]:
         return self.player_rect.x, self.player_rect.y
 
     def move_right(self, platforms: list[Platform]):

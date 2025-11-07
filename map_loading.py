@@ -21,3 +21,5 @@ class Map:
 
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self.sprite, self.rect)
+
+

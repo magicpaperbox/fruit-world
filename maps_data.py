@@ -1,4 +1,4 @@
-from maps import Map
+from map_loading import Map
 from platforms import Platform
 from bushes import Bush
 from npcs import Npc
@@ -67,7 +67,7 @@ MAP_SPECS: dict[str, MapSpec] = {
             "lewy gorny krzak": PlatformSpec(165, 262, 193, 60),
             "prawy dolny krzak": PlatformSpec(477, 370, 212, 60),
             "maly gorny krzak": PlatformSpec(346, 78, 119, 55),
-            "lewa dolna": PlatformSpec(0, 490, 380, 62),
+            "lewa dolna": PlatformSpec(-20, 490, 380, 62),
             "prawa dolna": PlatformSpec(660, 490, 150, 62),
             "srodkowa dolna": PlatformSpec(0, 555, 800, 60)
         },
@@ -85,5 +85,28 @@ MAP_SPECS: dict[str, MapSpec] = {
         static_objects={
             "domek": ObjectSpec(610, 495, 200, 140)
         }
-    )
+    ),
+    "map2": MapSpec(
+        background="background_2",
+        platforms={
+            "lewy krzak": PlatformSpec(165, 262, 193, 60),
+            "prawy krzak": PlatformSpec(477, 370, 212, 60),
+            "maly gorny krzak": PlatformSpec(346, 78, 119, 55),
+            "lewa dolna": PlatformSpec(0, 490, 380, 62),
+            "prawa dolna": PlatformSpec(660, 490, 150, 62),
+            "srodkowa dolna": PlatformSpec(0, 555, 800, 60)
+        },
+        strawberry_bushes={
+
+        },
+        blueberry_bushes={
+
+        },
+        npcs={
+
+        },
+        static_objects={
+
+        }
+    ),
 }

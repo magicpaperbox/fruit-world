@@ -1,8 +1,13 @@
+import enum
+
 import pygame
 from animation import Animation
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 
+class Status(enum.Enum, str):
+    STANDBY = "standby"
+    HELLO = "hello"
 
 class Npc:
     _SPRITE_TARGET_HEIGHT = 70
@@ -33,21 +38,21 @@ class Npc:
         #jednorazowa animacja
         self._override_anim: Animation | None = None
         self._override_anim_until_ms: int = 0
-        self._status = "standby_animation"
+        self._status = Status.STANDBY
 
     def interaction(self, now_ms: int) -> str|None:
-        if self._status == "standby_animation":
+        if self._status == Status.STANDBY:
             self.show_frame("hello", ms=800, now_ms=now_ms)
             message = "Hello my friend!"
-            self._status = "hello"
+            self._status = Status.HELLO
             return message
 
     def end_interaction(self, now_ms: int) -> str|None:
         message = None
-        if self._status == "hello":
+        if self._status == Status.HELLO:
             self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
             message = "Bye bye!"
-        self._status = "standby_animation"
+        self._status = Status.STANDBY
         return message
 
 

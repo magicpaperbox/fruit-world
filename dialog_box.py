@@ -1,20 +1,22 @@
 import pygame
 from typing import List
 
+from npcs import Npc
+
 
 class DialogBox:
     def __init__(
-        self,
-        screen_w: int,
-        screen_h: int,
-        font: pygame.font.Font,
-        text_color=(0, 0, 0),
-        bg_color=(255, 255, 255),
-        border_color=(30, 30, 30),
-        box_height=100,
-        margin=12,
-        padding=16,
-        cps=45,  # chars per second (efekt pisania)
+            self,
+            screen_w: int,
+            screen_h: int,
+            font: pygame.font.Font,
+            text_color=(0, 0, 0),
+            bg_color=(255, 255, 255),
+            border_color=(30, 30, 30),
+            box_height=100,
+            margin=12,
+            padding=16,
+            cps=45,  # chars per second (efekt pisania)
     ):
         self.font = font
         self.text_color = text_color
@@ -41,7 +43,7 @@ class DialogBox:
         self._farewell_shown = False
         self._active_npc = None
 
-    def show(self, text: str, npc=None):
+    def show(self, text: str, npc: Npc | None = None):
         self.queue.clear()
         self.current = ""
         self.visible = True
@@ -71,10 +73,8 @@ class DialogBox:
             else:
                 self._hide()
             return
-
         if is_exit_pressed:
             self._hide()
-
         if away:
             if not self._farewell_shown and self._active_npc is not None:
                 farewell_msg = self._active_npc.end_interaction(now_ms)
