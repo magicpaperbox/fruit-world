@@ -3,7 +3,10 @@ from platforms import Platform
 from bushes import Bush
 from npcs import Npc
 from static_objects import StaticObject
+import scale_screen
 
+X = scale_screen.GAME_WIDTH
+Y = scale_screen.GAME_HEIGHT
 
 class PlatformSpec:
     def __init__(self, x: int, y: int, width: int, height: int):
@@ -64,26 +67,26 @@ MAP_SPECS: dict[str, MapSpec] = {
     "map1": MapSpec(
         background="background_1",
         platforms={
-            "lewy gorny krzak": PlatformSpec(165, 262, 193, 60),
-            "prawy dolny krzak": PlatformSpec(477, 370, 212, 60),
-            "maly gorny krzak": PlatformSpec(346, 78, 119, 55),
-            "lewa dolna": PlatformSpec(-20, 490, 380, 62),
-            "prawa dolna": PlatformSpec(660, 490, 150, 62),
-            "srodkowa dolna": PlatformSpec(0, 555, 800, 60)
+            "lewy gorny krzak": PlatformSpec(X*0.20625, Y*0.4366, X*0.24125, Y*0.1),
+            "prawy dolny krzak": PlatformSpec(X*0.59625, Y*0.616, X*0.265, Y*0.1),
+            "maly gorny krzak": PlatformSpec(X*0.4325, Y*0.13, X*0.14875, Y*0.09166),
+            "lewa dolna": PlatformSpec(X*-0.025, Y*0.8166, X*0.475, Y*0.103),
+            "prawa dolna": PlatformSpec(X*0.825, Y*0.816, X*0.1875, Y*0.1033),
+            "srodkowa dolna": PlatformSpec(X*0, Y*0.925, X, Y*0.1)
         },
         strawberry_bushes={
-            "krzak 1": ObjectSpec(200, 210, 120, 50),
-            "krzak 2": ObjectSpec(535, 310, 120, 60),
-            "krzak 3": ObjectSpec(90, 435, 110, 50)
+            "krzak 1": ObjectSpec(X*0.25, Y*0.35, X*0.15, Y*0.0833),
+            "krzak 2": ObjectSpec(X*0.66875, Y*0.5167, X*0.15, Y*0.10),
+            "krzak 3": ObjectSpec(X*0.1125, Y*0.7250, X*0.1375, Y*0.0833)
         },
         blueberry_bushes={
-            "krzak 4": ObjectSpec(685, 440, 90, 45)
+            "krzak 4": ObjectSpec(X*0.87, Y*0.72, X*0.09, Y*0.09)
         },
         npcs={
-            "mouse": ObjectSpec(580, 555, 80, 50)
+            "mouse": ObjectSpec(X*0.74, Y*0.925, X*0.256, Y*0.256)
         },
         static_objects={
-            "domek": ObjectSpec(610, 495, 200, 140)
+            "domek": ObjectSpec(X*0.745, Y*0.825, X*0.256, Y*0.256)
         }
     ),
     "map2": MapSpec(

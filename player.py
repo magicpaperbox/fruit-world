@@ -1,7 +1,8 @@
 import pygame
 from animation import Animation
+import scale_screen
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
+SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
 
 
 class Player:
@@ -28,7 +29,7 @@ class Player:
     def scale(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
         original_height = player_sprite.get_height()
         original_width = player_sprite.get_width()
-        target_height = 80
+        target_height = scale_screen.target_height
         player_scale = target_height / original_height
         target_width = player_scale * original_width
         return pygame.transform.smoothscale(player_sprite, (target_width, target_height))

@@ -25,8 +25,8 @@ game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 clock = pygame.time.Clock()
 gravity = 0.001
 font = pygame.font.SysFont("comicsansms", 18)
-dialog = DialogBox(SCREEN_WIDTH, SCREEN_HEIGHT, font,
-                   text_color=(61,43,31), bg_color=(255,255,247))
+dialog = DialogBox(GAME_WIDTH, SCREEN_HEIGHT, font,
+                   text_color=(61,43,31), bg_color=(255,255,247), margin=0)
 sara = Player.load()
 move_player = PlayerMobility(gravity)
 background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
@@ -110,39 +110,46 @@ while running:
         move_player.move_vertically(platforms, dt)
         sara.update_sprite(move_player.is_on_ground, is_right_pressed, is_left_pressed, move_player.coordinates)
 
+        screen.fill((67, 39, 15))  # tło gry
 
-        screen.fill((67, 39, 15, 230))
-        background.draw(screen)
+        background.draw(game_surface)
         for platform in platforms:
-            platform.draw(screen)
+            platform.draw(game_surface)
 
         for strawberry in strawberries:
-            strawberry.draw(screen)
+            strawberry.draw(game_surface)
         for blueberry in blueberries:
-            blueberry.draw(screen)
+            blueberry.draw(game_surface)
         for obj in static_objects:
-            obj.draw(screen)
+            obj.draw(game_surface)
         for npc in npcs:
-            npc.draw(screen)
-        sara.draw(screen)
-        dialog.draw(screen)
+            npc.draw(game_surface)
+        sara.draw(game_surface)
 
         if DEBUG_OVERLAYS:
-            draw_bush_debug(screen, font, strawberry_bushes, (0, 200, 0), "TRUS")
-            draw_bush_debug(screen, font, blueberry_bushes, (60, 120, 255), "BOR")
-            small_font = pygame.font.SysFont("comicsansms", 10)  # było np. 18
-            draw_rect_debug(screen, small_font, move_player.player_rect2, (0, 200, 0), "HIT")
-            draw_rect_debug(screen, small_font, move_player.player_rect3, (0, 0, 200), "HIT")
+            draw_bush_debug(game_surface, font, strawberry_bushes, (0, 200, 0), "TRUS")
+            draw_bush_debug(game_surface, font, blueberry_bushes, (60, 120, 255), "BOR")
+            small_font = pygame.font.SysFont("comicsansms", 10)
+            draw_rect_debug(game_surface, small_font, move_player.player_rect2, (0, 200, 0), "HIT")
+            draw_rect_debug(game_surface, small_font, move_player.player_rect3, (0, 0, 200), "HIT")
 
         counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
         counter_text2 = font.render(f"Borówki: {blueberries_collected}", True, (255, 255, 255))
-
-        screen.blit(counter_text1, (10, 550))
-        screen.blit(counter_text2, (10, 570))
+        game_surface.blit(counter_text1, (10, 550))
+        game_surface.blit(counter_text2, (10, 570))
 
         screen_w, screen_h = screen.get_size()
-        offset_x = (screen_w - scale_screen.GAME_WIDTH) // 2
+        offset_x = (screen_w - GAME_WIDTH) // 2
         offset_y = 0
+
+        # WYŚRODKOWANA gra:
+        screen.blit(game_surface, (offset_x, offset_y))
+
+        # RYSUJEMY DIALOG NA DOLE:
+        dialog.rect.y = GAME_HEIGHT
+        dialog.rect.x = (SCREEN_WIDTH - GAME_WIDTH)//2
+        dialog.draw(screen)
+
         pygame.display.flip()
 
     except Exception as e:
