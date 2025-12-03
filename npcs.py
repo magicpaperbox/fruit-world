@@ -5,7 +5,7 @@ from animation import Animation
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 
-class Status(enum.Enum, str):
+class Status(str, enum.Enum):
     STANDBY = "standby"
     HELLO = "hello"
 
