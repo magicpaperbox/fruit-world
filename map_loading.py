@@ -1,7 +1,7 @@
 import pygame
+import scale_screen
 
-
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
+SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
 
 
 class Map:

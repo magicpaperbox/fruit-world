@@ -2,6 +2,7 @@ import pygame
 from typing import List
 
 from npcs import Npc
+import scale_screen
 
 
 class DialogBox:
@@ -13,7 +14,7 @@ class DialogBox:
             text_color=(0, 0, 0),
             bg_color=(255, 255, 255),
             border_color=(30, 30, 30),
-            box_height=100,
+            box_height=scale_screen.DIALOG_HEIGHT,
             margin=12,
             padding=16,
             cps=45,  # chars per second (efekt pisania)

@@ -9,18 +9,24 @@ from player_mobility import PlayerMobility, draw_rect_debug
 from dialog_box import DialogBox
 from ui import UIManager, Action
 from settings_menu import toggle_settings, make_settings_modal
+import scale_screen
 
 DEBUG_OVERLAYS = False
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 720
+SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.chosen_size
 FPS = 60
 pygame.init()
 ui = UIManager()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+GAME_WIDTH = scale_screen.GAME_WIDTH
+GAME_HEIGHT = scale_screen.GAME_HEIGHT
+game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
+
 clock = pygame.time.Clock()
 gravity = 0.001
 font = pygame.font.SysFont("comicsansms", 18)
 dialog = DialogBox(SCREEN_WIDTH, SCREEN_HEIGHT, font,
-                   text_color=(0,0,0), bg_color=(255,255,255))
+                   text_color=(61,43,31), bg_color=(255,255,247))
 sara = Player.load()
 move_player = PlayerMobility(gravity)
 background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
@@ -134,6 +140,9 @@ while running:
         screen.blit(counter_text1, (10, 550))
         screen.blit(counter_text2, (10, 570))
 
+        screen_w, screen_h = screen.get_size()
+        offset_x = (screen_w - scale_screen.GAME_WIDTH) // 2
+        offset_y = 0
         pygame.display.flip()
 
     except Exception as e:
