@@ -4,7 +4,7 @@ size_HD = 1600, 900
 size_1080p = 1920, 1080
 size_2K = 2048, 1152
 
-chosen_size = size_1080p
+chosen_size = size_720p
 
 DIALOG_HEIGHT = 100
 SCREEN_WIDTH, SCREEN_HEIGHT = chosen_size

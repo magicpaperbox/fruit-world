@@ -99,9 +99,9 @@ while running:
         prev_right = move_player.player_rect2.right
 
         if is_right_pressed:
-            move_player.move_right(platforms)
+            move_player.move_right(platforms, dt)
         elif is_left_pressed:
-            move_player.move_left(platforms)
+            move_player.move_left(platforms, dt)
 
         if space_down_this_frame:
             move_player.jump()

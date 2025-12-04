@@ -24,6 +24,7 @@ class PlayerMobility:
         self.player_velocity_y = 0
         self.jumps_left = 2
         self._on_ground = False
+        self._horizontal_speed_px_per_s = 0.15 * SCREEN_WIDTH
 
         self._sync_all()
 
@@ -52,13 +53,14 @@ class PlayerMobility:
     def coordinates(self) -> tuple[int, int]:
         return self.player_rect.x, self.player_rect.y
 
-    def move_right(self, platforms: list[Platform]):
-        self._move_horizontally(platforms, offset=2)
+    def move_right(self, platforms: list[Platform], dt: int):
+        self._move_horizontally(platforms, dt, direction=+1)
 
-    def move_left(self, platforms: list[Platform]):
-        self._move_horizontally(platforms, offset=-2)
+    def move_left(self, platforms: list[Platform], dt: int):
+        self._move_horizontally(platforms, dt, direction=-1)
 
-    def _move_horizontally(self, platforms: list[Platform], offset: int):
+    def _move_horizontally(self, platforms: list[Platform], dt: int, direction: int):
+        offset = direction * self._horizontal_speed_px_per_s * (dt / 1000.0)
         self.player_rect2.x += offset
         collision_x(platforms, self.player_rect2)
         self._anchor = self._anchor_from_rect2()
