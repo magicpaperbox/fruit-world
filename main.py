@@ -115,7 +115,6 @@ while running:
         background.draw(game_surface)
         for platform in platforms:
             platform.draw(game_surface)
-
         for strawberry in strawberries:
             strawberry.draw(game_surface)
         for blueberry in blueberries:
@@ -132,6 +131,8 @@ while running:
             small_font = pygame.font.SysFont("comicsansms", 10)
             draw_rect_debug(game_surface, small_font, move_player.player_rect2, (0, 200, 0), "HIT")
             draw_rect_debug(game_surface, small_font, move_player.player_rect3, (0, 0, 200), "HIT")
+            for platform in platforms:
+                draw_rect_debug(game_surface, small_font, platform.rect, (10, 30, 200), "PLAT")
 
         counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
         counter_text2 = font.render(f"Borówki: {blueberries_collected}", True, (255, 255, 255))
