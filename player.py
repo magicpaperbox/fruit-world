@@ -29,7 +29,7 @@ class Player:
     def scale(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
         original_height = player_sprite.get_height()
         original_width = player_sprite.get_width()
-        target_height = scale_screen.target_height
+        target_height = scale_screen.GAME_HEIGHT*0.1
         player_scale = target_height / original_height
         target_width = player_scale * original_width
         return pygame.transform.smoothscale(player_sprite, (target_width, target_height))

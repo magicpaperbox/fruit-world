@@ -5,7 +5,6 @@ import scale_screen
 import player
 
 SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
-target_height = scale_screen.target_height
 
 
 class PlayerMobility:
@@ -14,9 +13,9 @@ class PlayerMobility:
 
         self._anchor = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
-        self.player_rect = pygame.Rect(0, 0, 45, target_height)  # do rysowania
-        self.player_rect2 = pygame.Rect(0, 0, 45, 50)  # do kolizji w X
-        self.player_rect3 = pygame.Rect(0, 0, 10, target_height)  # do kolizji w Y
+        self.player_rect = pygame.Rect(0, 0, scale_screen.GAME_WIDTH*0.037, scale_screen.GAME_HEIGHT*0.1)  # do rysowania
+        self.player_rect2 = pygame.Rect(0, 0, 45, scale_screen.GAME_HEIGHT*0.07)  # do kolizji w X
+        self.player_rect3 = pygame.Rect(0, 0, 10, scale_screen.GAME_HEIGHT*0.1)  # do kolizji w Y
 
         self._render_offset = 0
         self._belly_offset = -15

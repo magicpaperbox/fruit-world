@@ -70,7 +70,7 @@ MAP_SPECS: dict[str, MapSpec] = {
             "lewy gorny krzak": PlatformSpec(X*0.20625, Y*0.4366, X*0.24125, Y*0.1),
             "prawy dolny krzak": PlatformSpec(X*0.59625, Y*0.616, X*0.265, Y*0.1),
             "maly gorny krzak": PlatformSpec(X*0.4325, Y*0.13, X*0.14875, Y*0.09166),
-            "lewa dolna": PlatformSpec(X*-0.025, Y*0.8166, X*0.475, Y*0.103),
+            "lewa dolna": PlatformSpec(X*-0.025, Y*0.8166, X*0.5, Y*0.103),
             "prawa dolna": PlatformSpec(X*0.825, Y*0.816, X*0.1875, Y*0.1033),
             "srodkowa dolna": PlatformSpec(X*0, Y*0.925, X, Y*0.1)
         },
