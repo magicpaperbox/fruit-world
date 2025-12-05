@@ -35,6 +35,6 @@ def collision_y(
                 # uderzyła w sufit
                 player_rect.top = s.rect.bottom
                 player_velocity_y = 0
-        elif player_rect.bottom == s.rect.top:
+        elif player_rect.bottom == s.rect.top and player_rect.right > s.rect.left and player_rect.left < s.rect.right:
             on_ground = True
     return player_velocity_y, on_ground
