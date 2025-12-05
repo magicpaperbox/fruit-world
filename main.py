@@ -132,7 +132,7 @@ while running:
             draw_rect_debug(game_surface, small_font, move_player.player_rect2, (0, 200, 0), "HIT")
             draw_rect_debug(game_surface, small_font, move_player.player_rect3, (0, 0, 200), "HIT")
             for platform in platforms:
-                draw_rect_debug(game_surface, small_font, platform.rect, (10, 30, 200), "PLAT")
+                draw_rect_debug(game_surface, small_font, platform.rect, (10, 30, 200), f"{platform.rect.left}x{platform.rect.top}")
 
         counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
         counter_text2 = font.render(f"Borówki: {blueberries_collected}", True, (255, 255, 255))
