@@ -2,35 +2,22 @@ from map_loading import Map
 from platforms import Platform
 from bushes import Bush
 from npcs import Npc
+from src.scale_screen import game_units_to_px
 from static_objects import StaticObject
-import scale_screen
-
-X = scale_screen.GAME_WIDTH
-Y = scale_screen.GAME_HEIGHT
-
-
-class PlatformSpec:
-    def __init__(self, x: int, y: int, width: int, height: int):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.area = width * height
-
 
 class ObjectSpec:
     def __init__(self, x: int, y: int, width: int, height: int):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        self.x = game_units_to_px(x)
+        self.y = game_units_to_px(y)
+        self.width = game_units_to_px(width)
+        self.height = game_units_to_px(height)
 
 
 class MapSpec:
     def __init__(
         self,
         background: str,
-        platforms: dict[str, PlatformSpec],
+        platforms: dict[str, ObjectSpec],
         strawberry_bushes: dict[str, ObjectSpec],
         blueberry_bushes: dict[str, ObjectSpec],
         npcs: dict[str, ObjectSpec],
@@ -73,32 +60,25 @@ MAP_SPECS: dict[str, MapSpec] = {
     "map1": MapSpec(
         background="background_1",
         platforms={
-            "lewy gorny krzak": PlatformSpec(X * 0.20625, Y * 0.4366, X * 0.24125, Y * 0.1),
-            "prawy dolny krzak": PlatformSpec(X * 0.59625, Y * 0.616, X * 0.265, Y * 0.1),
-            "maly gorny krzak": PlatformSpec(X * 0.4325, Y * 0.13, X * 0.14875, Y * 0.09166),
-            "lewa dolna": PlatformSpec(X * -0.025, Y * 0.8166, X * 0.5, Y * 0.103),
-            "prawa dolna": PlatformSpec(X * 0.825, Y * 0.816, X * 0.1875, Y * 0.1033),
-            "srodkowa dolna": PlatformSpec(X * 0, Y * 0.925, X, Y * 0.1),
+            "lewy gorny krzak": ObjectSpec(314, 428, 367, 98),
+            "prawy dolny krzak": ObjectSpec(906, 604, 403, 98),
+            "maly gorny krzak": ObjectSpec(657, 127, 226, 90),
+            "lewa dolna": ObjectSpec(-38, 800, 760, 101),
+            "prawa dolna": ObjectSpec(1254, 800, 285, 101),
+            "srodkowa dolna": ObjectSpec(0, 907, 1520, 98),
         },
         strawberry_bushes={
-            "krzak 1": ObjectSpec(X * 0.25, Y * 0.35, X * 0.15, Y * 0.0833),
-            "krzak 2": ObjectSpec(X * 0.66875, Y * 0.5167, X * 0.15, Y * 0.10),
-            "krzak 3": ObjectSpec(X * 0.1125, Y * 0.7250, X * 0.1375, Y * 0.0833),
+            "krzak 1": ObjectSpec(380, 343, 228, 82),
+            "krzak 2": ObjectSpec(1017, 506, 228, 98),
+            "krzak 3": ObjectSpec(171, 711, 209, 82),
         },
-        blueberry_bushes={"krzak 4": ObjectSpec(X * 0.87, Y * 0.72, X * 0.09, Y * 0.09)},
-        npcs={"mouse": ObjectSpec(X * 0.74, Y * 0.925, X * 0.256, Y * 0.256)},
-        static_objects={"domek": ObjectSpec(X * 0.745, Y * 0.825, X * 0.256, Y * 0.256)},
+        blueberry_bushes={"krzak 4": ObjectSpec(1322, 706, 137, 88)},
+        npcs={"mouse": ObjectSpec(1125, 907, 389, 251)},
+        static_objects={"domek": ObjectSpec(1132, 809, 389, 251)},
     ),
     "map2": MapSpec(
         background="background_2",
-        platforms={
-            "lewy krzak": PlatformSpec(165, 262, 193, 60),
-            "prawy krzak": PlatformSpec(477, 370, 212, 60),
-            "maly gorny krzak": PlatformSpec(346, 78, 119, 55),
-            "lewa dolna": PlatformSpec(0, 490, 380, 62),
-            "prawa dolna": PlatformSpec(660, 490, 150, 62),
-            "srodkowa dolna": PlatformSpec(0, 555, 800, 60),
-        },
+        platforms={},
         strawberry_bushes={},
         blueberry_bushes={},
         npcs={},

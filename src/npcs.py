@@ -13,7 +13,6 @@ class Status(str, enum.Enum):
 
 
 class Npc:
-    _SPRITE_TARGET_HEIGHT = scale_screen.target_height
     _sprite_cache: dict[tuple[str, int], pygame.Surface] = {}
 
     def __init__(

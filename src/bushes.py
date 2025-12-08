@@ -1,9 +1,7 @@
 import pygame
 import random
 from item import Item
-import scale_screen
-
-SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
+from scale_screen import game_units_to_px
 
 
 class Bush:
@@ -24,19 +22,19 @@ def spawn_berries_for_bushes(
     bushes: list,
     per_bush: int,
     sprite: str,
-    height_px: int = scale_screen.GAME_HEIGHT * 0.04,
-    jitter_px: int = 20,  # drobny rozrzut, by nie nakładały się idealnie
+    height_px: int = game_units_to_px(42),
 ):
+    jitter_px = game_units_to_px(36)
     rnd = random.Random()
     berries = []
     if per_bush <= 0:
         return berries
 
     for b in bushes:
-        x_min = b.x + 0.1 * b.width
-        x_max = b.x + 0.9 * b.width
-        y_min = b.y + height_px / 2
-        y_max = b.y + b.height - height_px / 2
+        x_min = b.x + int(0.1 * b.width)
+        x_max = b.x + int(0.9 * b.width)
+        y_min = b.y + height_px // 2
+        y_max = b.y + b.height - height_px // 2
 
         slot_w = (x_max - x_min) / per_bush
         jx_max = int(min(jitter_px, slot_w * 0.1))
@@ -44,7 +42,7 @@ def spawn_berries_for_bushes(
         for i in range(per_bush):
             base_x = x_min + (i + 0.5) * slot_w
             x = base_x + (rnd.randint(-jx_max, jx_max) if jx_max > 0 else 0)
-            y = rnd.uniform(y_min, y_max)
+            y = rnd.randint(y_min, y_max)
             berries.append(Item.load(sprite, height_px, x, y))
 
     return berries

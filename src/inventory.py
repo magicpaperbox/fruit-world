@@ -5,27 +5,27 @@ from scale_screen import GAME_HEIGHT
 
 class Inventory:
     def __init__(self):
-        self.items = {}
+        self._items = {}
 
     def add(self, item_id: str, amount: int = 1):
         # self.items.get("strawberry", 0) → nie istnieje → 0; 0 + 1 = 1
-        self.items[item_id] = self.items.get(item_id, 0) + amount
+        self._items[item_id] = self._items.get(item_id, 0) + amount
 
     def remove(self, item_id: str, amount: int = 1):
-        if item_id in self.items:
-            self.items[item_id] = max(0, self.items[item_id] - amount)  # max(a, b) zwraca większą z dwóch wartości
+        if item_id in self._items:
+            self._items[item_id] = max(0, self._items[item_id] - amount)  # max(a, b) zwraca większą z dwóch wartości
 
     def count(self, item_id: str) -> int:
-        return self.items.get(item_id, 0)  # 0 <- to co dostaniemy jeśli klucz nie istnieje
+        return self._items.get(item_id, 0)  # 0 <- to co dostaniemy jeśli klucz nie istnieje
 
     def all_items(self):
-        return self.items.items()
+        return self._items.items()
 
 
 class InventoryUI:
     def __init__(
         self,
-        font,
+        font: pygame.font.Font,
         item_icons: dict[str, pygame.Surface],
         padding: float = GAME_HEIGHT * 0.02,
         line_space: float = GAME_HEIGHT * 0.01,

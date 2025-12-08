@@ -57,13 +57,11 @@ strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
     per_bush=3,
     sprite="strawberry",
-    height_px=scale_screen.GAME_HEIGHT * 0.04,
 )
 blueberries = spawn_berries_for_bushes(
     blueberry_bushes,
     per_bush=1,
     sprite="blueberry",
-    height_px=scale_screen.GAME_HEIGHT * 0.04,
 )
 
 
