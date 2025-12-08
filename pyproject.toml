@@ -6,3 +6,16 @@ requires-python = ">=3.12"
 dependencies = [
     "pygame",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.8",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+# Wybierz reguły: E (pycodestyle error), F (Pyflakes), I (isort)
+select = ["E", "F", "I"]

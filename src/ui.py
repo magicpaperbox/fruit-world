@@ -10,21 +10,15 @@ class Action(Enum):
     RES_800x600 = auto()
     RES_1280x720 = auto()
 
+
 class Button:
-    def __init__(
-            self,
-            rect: pygame.Rect,
-            text: str,
-            action: Action,
-            font: pygame.font.Font
-    ):
+    def __init__(self, rect: pygame.Rect, text: str, action: Action, font: pygame.font.Font):
         self.rect = rect
         self.text = text
         self.action = action
         self.font = font
         self._pressed = False
         self._hover = False
-
 
     def handle_event(self, e: pygame.event.Event) -> Action:
         if e.type == pygame.MOUSEMOTION:
@@ -50,8 +44,15 @@ class Button:
         txt = self.font.render(self.text, True, (240, 240, 255))
         surf.blit(txt, txt.get_rect(center=self.rect.center))
 
+
 class Modal:
-    def __init__(self, rect: pygame.Rect, title: str, buttons: list[Button], font: pygame.font.Font):
+    def __init__(
+        self,
+        rect: pygame.Rect,
+        title: str,
+        buttons: list[Button],
+        font: pygame.font.Font,
+    ):
         self.rect = rect
         self.title = title
         self.buttons = buttons
@@ -79,6 +80,7 @@ class Modal:
 
         for b in self.buttons:
             b.draw(surf)
+
 
 class UIManager:
     def __init__(self):

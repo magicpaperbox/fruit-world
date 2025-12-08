@@ -7,17 +7,17 @@ import scale_screen
 
 class DialogBox:
     def __init__(
-            self,
-            screen_w: int,
-            screen_h: int,
-            font: pygame.font.Font,
-            text_color=(0, 0, 0),
-            bg_color=(255, 255, 255),
-            border_color=(30, 30, 30),
-            box_height=scale_screen.DIALOG_HEIGHT,
-            margin=12,
-            padding=16,
-            cps=45,  # chars per second (efekt pisania)
+        self,
+        screen_w: int,
+        screen_h: int,
+        font: pygame.font.Font,
+        text_color=(0, 0, 0),
+        bg_color=(255, 255, 255),
+        border_color=(30, 30, 30),
+        box_height=scale_screen.DIALOG_HEIGHT,
+        margin=12,
+        padding=16,
+        cps=45,  # chars per second (efekt pisania)
     ):
         self.font = font
         self.text_color = text_color

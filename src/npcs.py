@@ -6,24 +6,26 @@ import scale_screen
 
 SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
 
+
 class Status(str, enum.Enum):
     STANDBY = "standby"
     HELLO = "hello"
 
+
 class Npc:
     _SPRITE_TARGET_HEIGHT = scale_screen.target_height
     _sprite_cache: dict[tuple[str, int], pygame.Surface] = {}
-    def __init__(
-            self,
-            x:int,
-            y:int,
-            static: Animation,
-            hello: pygame.Surface,
-            interaction: pygame.Surface,
-            quest_update: pygame.Surface,
-            bye_bye_animation: Animation
-    ):
 
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        static: Animation,
+        hello: pygame.Surface,
+        interaction: pygame.Surface,
+        quest_update: pygame.Surface,
+        bye_bye_animation: Animation,
+    ):
         self._static = static
         self._hello = hello
         self._interaction = interaction
@@ -33,29 +35,28 @@ class Npc:
         self._sprite = self._static.surface()
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
 
-        #tymczasowa podmiana animacji
+        # tymczasowa podmiana animacji
         self._override_surface: pygame.Surface | None = None
         self._override_until_ms: int = 0
-        #jednorazowa animacja
+        # jednorazowa animacja
         self._override_anim: Animation | None = None
         self._override_anim_until_ms: int = 0
         self._status = Status.STANDBY
 
-    def interaction(self, now_ms: int) -> str|None:
+    def interaction(self, now_ms: int) -> str | None:
         if self._status == Status.STANDBY:
             self.show_frame("hello", ms=800, now_ms=now_ms)
             message = "Hello my friend!"
             self._status = Status.HELLO
             return message
 
-    def end_interaction(self, now_ms: int) -> str|None:
+    def end_interaction(self, now_ms: int) -> str | None:
         message = None
         if self._status == Status.HELLO:
             self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
             message = "Bye bye!"
         self._status = Status.STANDBY
         return message
-
 
     def show_frame(self, kind: str, ms: int, now_ms: int):
         mapping = {
@@ -68,11 +69,10 @@ class Npc:
         self._override_anim = None
 
     def play_once(self, anim: Animation, ms: int, now_ms: int):
-        #Pokaż jednorazową animację przez ms milisekund
+        # Pokaż jednorazową animację przez ms milisekund
         self._override_anim = anim.copy() if hasattr(anim, "copy") else anim
         self._override_anim_until_ms = now_ms + ms
         self._override_surface = None
-
 
     @staticmethod
     def scale(npc_sprite: pygame.surface.Surface) -> pygame.Surface:
@@ -105,7 +105,6 @@ class Npc:
             surf = pygame.image.load(f"sprites/npc/{sprite_name}.png").convert_alpha()
             Npc._sprite_cache[key] = Npc.scale(surf)
         return Npc._sprite_cache[key]
-
 
     def center(self, new_frame):
         if new_frame.get_size() != self._sprite.get_size():

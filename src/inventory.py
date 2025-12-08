@@ -8,21 +8,28 @@ class Inventory:
         self.items = {}
 
     def add(self, item_id: str, amount: int = 1):
-        self.items[item_id] = self.items.get(item_id, 0) + amount #self.items.get("strawberry", 0) → nie istnieje → 0; 0 + 1 = 1
+        # self.items.get("strawberry", 0) → nie istnieje → 0; 0 + 1 = 1
+        self.items[item_id] = self.items.get(item_id, 0) + amount
 
     def remove(self, item_id: str, amount: int = 1):
         if item_id in self.items:
-            self.items[item_id] = max(0, self.items[item_id] - amount) # max(a, b) zwraca większą z dwóch wartości
+            self.items[item_id] = max(0, self.items[item_id] - amount)  # max(a, b) zwraca większą z dwóch wartości
 
     def count(self, item_id: str) -> int:
-        return self.items.get(item_id, 0) # 0 <- to co dostaniemy jeśli klucz nie istnieje
+        return self.items.get(item_id, 0)  # 0 <- to co dostaniemy jeśli klucz nie istnieje
 
     def all_items(self):
         return self.items.items()
 
 
 class InventoryUI:
-    def __init__(self, font, item_icons: dict[str, pygame.Surface], padding: float = GAME_HEIGHT*0.02, line_space: float = GAME_HEIGHT*0.01):
+    def __init__(
+        self,
+        font,
+        item_icons: dict[str, pygame.Surface],
+        padding: float = GAME_HEIGHT * 0.02,
+        line_space: float = GAME_HEIGHT * 0.01,
+    ):
         self.font = font
         self.item_icons = item_icons
         self.padding = padding

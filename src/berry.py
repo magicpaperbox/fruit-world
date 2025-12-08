@@ -23,6 +23,7 @@ class Berry:
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self.sprite, self.rect)
 
+
 def pick_berry(berries: list[Berry], player_rect: pygame.Rect, is_pick_pressed: bool) -> int:
     if not is_pick_pressed:
         return 0

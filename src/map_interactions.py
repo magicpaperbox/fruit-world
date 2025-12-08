@@ -1,6 +1,3 @@
-import pygame
-
-
 def change_map():
     pass
     # if left_border:
@@ -24,4 +21,3 @@ def health_leech():
     # elif bad_border:
     #     die()
     #     respawn()
-

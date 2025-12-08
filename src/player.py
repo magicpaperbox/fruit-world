@@ -7,19 +7,18 @@ SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
 
 class Player:
     def __init__(
-            self,
-            right_jump: pygame.Surface,
-            left_jump: pygame.Surface,
-            static: pygame.Surface,
-            right_animation: Animation,
-            left_animation: Animation
+        self,
+        right_jump: pygame.Surface,
+        left_jump: pygame.Surface,
+        static: pygame.Surface,
+        right_animation: Animation,
+        left_animation: Animation,
     ):
         self._right_jump = right_jump
         self._left_jump = left_jump
         self._static = static
         self._right_animation = right_animation
         self._left_animation = left_animation
-
 
         self._sprite = self._static
         self.player_rect = self._sprite.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -40,17 +39,23 @@ class Player:
         left_jump = Player.load_player_sprite("left_1")
         static = Player.load_player_sprite("static")
 
-        right_animation = Animation(duration=10, frames=[
-            Player.load_player_sprite("right_2"),
-            Player.load_player_sprite("right_3"),
-            Player.load_player_sprite("right_4")
-        ])
+        right_animation = Animation(
+            duration=10,
+            frames=[
+                Player.load_player_sprite("right_2"),
+                Player.load_player_sprite("right_3"),
+                Player.load_player_sprite("right_4"),
+            ],
+        )
 
-        left_animation = Animation(duration=10, frames=[
-            Player.load_player_sprite("left_2"),
-            Player.load_player_sprite("left_3"),
-            Player.load_player_sprite("left_4")
-        ])
+        left_animation = Animation(
+            duration=10,
+            frames=[
+                Player.load_player_sprite("left_2"),
+                Player.load_player_sprite("left_3"),
+                Player.load_player_sprite("left_4"),
+            ],
+        )
 
         return Player(right_jump, left_jump, static, right_animation, left_animation)
 
@@ -60,7 +65,13 @@ class Player:
         sprite = Player.scale(sprite)
         return sprite
 
-    def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int]) -> None:
+    def update_sprite(
+        self,
+        on_ground: bool,
+        is_right_pressed: bool,
+        is_left_pressed: bool,
+        coordinates: tuple[int, int],
+    ) -> None:
         self.player_rect.x = coordinates[0]
         self.player_rect.y = coordinates[1]
         if is_right_pressed:
@@ -86,7 +97,5 @@ class Player:
             else:
                 self._sprite = self._static
 
-
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self._sprite, self.player_rect)
-

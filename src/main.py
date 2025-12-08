@@ -22,21 +22,27 @@ GAME_WIDTH = scale_screen.GAME_WIDTH
 GAME_HEIGHT = scale_screen.GAME_HEIGHT
 game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
-raw_blueberry  = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
+raw_blueberry = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
 ICON_HEIGHT = int(GAME_HEIGHT * 0.05)
 strawberry_icon = Berry.scale(raw_strawberry, ICON_HEIGHT)
-blueberry_icon  = Berry.scale(raw_blueberry,  ICON_HEIGHT)
+blueberry_icon = Berry.scale(raw_blueberry, ICON_HEIGHT)
 
 item_icons = {
     "strawberry": strawberry_icon,
-    "blueberry":  blueberry_icon,
+    "blueberry": blueberry_icon,
 }
 
 clock = pygame.time.Clock()
-gravity = 0.001*GAME_HEIGHT*0.001
+gravity = 0.001 * GAME_HEIGHT * 0.001
 font = pygame.font.SysFont("comicsansms", 18)
-dialog = DialogBox(GAME_WIDTH, SCREEN_HEIGHT, font,
-                   text_color=(61,43,31), bg_color=(255,255,247), margin=0)
+dialog = DialogBox(
+    GAME_WIDTH,
+    SCREEN_HEIGHT,
+    font,
+    text_color=(61, 43, 31),
+    bg_color=(255, 255, 247),
+    margin=0,
+)
 sara = Player.load()
 move_player = PlayerMobility(gravity)
 background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
@@ -51,13 +57,13 @@ strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
     per_bush=3,
     sprite="strawberry",
-    height_px=scale_screen.GAME_HEIGHT * 0.04
+    height_px=scale_screen.GAME_HEIGHT * 0.04,
 )
 blueberries = spawn_berries_for_bushes(
     blueberry_bushes,
     per_bush=1,
     sprite="blueberry",
-    height_px=scale_screen.GAME_HEIGHT * 0.04
+    height_px=scale_screen.GAME_HEIGHT * 0.04,
 )
 
 
@@ -91,7 +97,6 @@ while running:
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
 
-
         for npc in npcs:
             if sara.player_rect.colliderect(npc.npc_rect):
                 away = False
@@ -102,7 +107,6 @@ while running:
             else:
                 away = True
             npc.update_sprite(now_ms)
-
 
         prev_left = move_player.player_rect2.left
         prev_right = move_player.player_rect2.right
@@ -117,7 +121,12 @@ while running:
 
         dialog.update(dt)
         move_player.move_vertically(platforms, dt)
-        sara.update_sprite(move_player.is_on_ground, is_right_pressed, is_left_pressed, move_player.coordinates)
+        sara.update_sprite(
+            move_player.is_on_ground,
+            is_right_pressed,
+            is_left_pressed,
+            move_player.coordinates,
+        )
 
         screen.fill((67, 39, 15))  # tło gry
 
@@ -141,9 +150,13 @@ while running:
             draw_rect_debug(game_surface, small_font, move_player.player_rect2, (0, 200, 0), "HIT")
             draw_rect_debug(game_surface, small_font, move_player.player_rect3, (0, 0, 200), "HIT")
             for platform in platforms:
-                draw_rect_debug(game_surface, small_font, platform.rect, (10, 30, 200), f"{platform.rect.left}x{platform.rect.top}")
-
-
+                draw_rect_debug(
+                    game_surface,
+                    small_font,
+                    platform.rect,
+                    (10, 30, 200),
+                    f"{platform.rect.left}x{platform.rect.top}",
+                )
 
         screen_w, screen_h = screen.get_size()
         offset_x = (screen_w - GAME_WIDTH) // 2
@@ -154,7 +167,7 @@ while running:
 
         # DIALOGI:
         dialog.rect.y = GAME_HEIGHT
-        dialog.rect.x = (SCREEN_WIDTH - GAME_WIDTH)//2
+        dialog.rect.x = (SCREEN_WIDTH - GAME_WIDTH) // 2
         dialog.draw(screen)
 
         # PRZEDMIOTY:
@@ -168,7 +181,6 @@ while running:
             inventory.add("blueberry", picked_blueberries)
 
         inventory_ui.draw(screen, inventory, x=10, y=20)
-
 
         pygame.display.flip()
 

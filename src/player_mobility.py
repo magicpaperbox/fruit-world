@@ -12,9 +12,9 @@ class PlayerMobility:
 
         self._anchor = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
-        self.player_rect = pygame.Rect(0, 0, X*0.037, Y*0.1)  # do rysowania
-        self.player_rect2 = pygame.Rect(0, 0, X*0.032, Y*0.07)  # do kolizji w X
-        self.player_rect3 = pygame.Rect(0, 0, X*0.013, Y*0.1)  # do kolizji w Y
+        self.player_rect = pygame.Rect(0, 0, X * 0.037, Y * 0.1)  # do rysowania
+        self.player_rect2 = pygame.Rect(0, 0, X * 0.032, Y * 0.07)  # do kolizji w X
+        self.player_rect3 = pygame.Rect(0, 0, X * 0.013, Y * 0.1)  # do kolizji w Y
 
         self._render_offset = 0
         self._belly_offset = -15
@@ -65,10 +65,7 @@ class PlayerMobility:
         self._anchor = self._anchor_from_rect2()
         self._sync_all()
 
-
     def move_vertically(self, platforms: list[Platform], dt: int):
-        prev_top = self.player_rect3.top
-        prev_bottom = self.player_rect3.bottom
         self.player_rect3.y += self.player_velocity_y * dt  # y
         self.player_velocity_y += self._gravity * dt  # dy
         player_velocity_y, on_ground = collision_y(platforms, self.player_rect3, self.player_velocity_y)
@@ -79,11 +76,10 @@ class PlayerMobility:
         if self._on_ground:
             self.jumps_left = 2
 
-
     def jump(self):
         if self.jumps_left > 0:
             self.jumps_left -= 1
-            self.player_velocity_y = -0.0005*Y
+            self.player_velocity_y = -0.0005 * Y
             self._on_ground = False
 
 

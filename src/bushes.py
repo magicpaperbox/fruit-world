@@ -5,6 +5,7 @@ import scale_screen
 
 SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
 
+
 class Bush:
     def __init__(self, x: float, y: float, width: float, height: float):
         self.x = x
@@ -24,7 +25,7 @@ def spawn_berries_for_bushes(
     per_bush: int,
     sprite: str,
     height_px: int = scale_screen.GAME_HEIGHT * 0.04,
-    jitter_px: int = 20, # drobny rozrzut, by nie nakładały się idealnie
+    jitter_px: int = 20,  # drobny rozrzut, by nie nakładały się idealnie
 ):
     rnd = random.Random(42)
     berries = []
@@ -34,8 +35,8 @@ def spawn_berries_for_bushes(
     for b in bushes:
         x_min = b.x + 0.1 * b.width
         x_max = b.x + 0.9 * b.width
-        y_min = b.y + height_px/2
-        y_max = b.y + b.height - height_px/2
+        y_min = b.y + height_px / 2
+        y_max = b.y + b.height - height_px / 2
 
         slot_w = (x_max - x_min) / per_bush
         jx_max = int(min(jitter_px, slot_w * 0.1))
