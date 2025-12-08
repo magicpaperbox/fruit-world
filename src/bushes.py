@@ -27,7 +27,7 @@ def spawn_berries_for_bushes(
     height_px: int = scale_screen.GAME_HEIGHT * 0.04,
     jitter_px: int = 20,  # drobny rozrzut, by nie nakładały się idealnie
 ):
-    rnd = random.Random(42)
+    rnd = random.Random()
     berries = []
     if per_bush <= 0:
         return berries
