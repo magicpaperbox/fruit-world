@@ -23,7 +23,7 @@ def spawn_berries_for_bushes(
     bushes: list,
     per_bush: int,
     sprite: str,
-    height_px: int = scale_screen.GAME_HEIGHT*0.04,
+    height_px: int = scale_screen.GAME_HEIGHT * 0.04,
     jitter_px: int = 20, # drobny rozrzut, by nie nakładały się idealnie
 ):
     rnd = random.Random(42)

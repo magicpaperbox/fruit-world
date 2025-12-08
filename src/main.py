@@ -8,8 +8,7 @@ from berry import pick_berry, Berry
 from player_mobility import PlayerMobility, draw_rect_debug
 from inventory import Inventory, InventoryUI
 from dialog_box import DialogBox
-from ui import UIManager, Action
-from settings_menu import toggle_settings, make_settings_modal
+from ui import UIManager
 import scale_screen
 
 DEBUG_OVERLAYS = False
@@ -52,13 +51,13 @@ strawberries = spawn_berries_for_bushes(
     strawberry_bushes,
     per_bush=3,
     sprite="strawberry",
-    height_px=scale_screen.GAME_HEIGHT*0.04
+    height_px=scale_screen.GAME_HEIGHT * 0.04
 )
 blueberries = spawn_berries_for_bushes(
     blueberry_bushes,
     per_bush=1,
     sprite="blueberry",
-    height_px=scale_screen.GAME_HEIGHT*0.04
+    height_px=scale_screen.GAME_HEIGHT * 0.04
 )
 
 

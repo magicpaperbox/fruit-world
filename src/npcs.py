@@ -78,7 +78,7 @@ class Npc:
     def scale(npc_sprite: pygame.surface.Surface) -> pygame.Surface:
         original_height = npc_sprite.get_height()
         original_width = npc_sprite.get_width()
-        target_height = scale_screen.GAME_HEIGHT*0.1
+        target_height = scale_screen.GAME_HEIGHT * 0.1
         npc_scale = target_height / original_height
         target_width = int(round(npc_scale * original_width))
         return pygame.transform.smoothscale(npc_sprite, (target_width, target_height))
