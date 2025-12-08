@@ -4,7 +4,7 @@ import sys
 from bushes import spawn_berries_for_bushes, draw_bush_debug
 from player import Player
 from maps_data import load_level
-from berry import pick_berry, Berry
+from item import pick_item, Item
 from player_mobility import PlayerMobility, draw_rect_debug
 from inventory import Inventory, InventoryUI
 from dialog_box import DialogBox
@@ -24,8 +24,8 @@ game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
 raw_blueberry = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
 ICON_HEIGHT = int(GAME_HEIGHT * 0.05)
-strawberry_icon = Berry.scale(raw_strawberry, ICON_HEIGHT)
-blueberry_icon = Berry.scale(raw_blueberry, ICON_HEIGHT)
+strawberry_icon = Item.scale(raw_strawberry, ICON_HEIGHT)
+blueberry_icon = Item.scale(raw_blueberry, ICON_HEIGHT)
 
 item_icons = {
     "strawberry": strawberry_icon,
@@ -171,8 +171,8 @@ while running:
         dialog.draw(screen)
 
         # PRZEDMIOTY:
-        picked_strawberries = pick_berry(strawberries, sara.player_rect, is_pick_pressed)
-        picked_blueberries = pick_berry(blueberries, sara.player_rect, is_pick_pressed)
+        picked_strawberries = pick_item(strawberries, sara.player_rect, is_pick_pressed)
+        picked_blueberries = pick_item(blueberries, sara.player_rect, is_pick_pressed)
 
         if picked_strawberries:
             inventory.add("strawberry", picked_strawberries)

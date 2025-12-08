@@ -1,7 +1,7 @@
 import pygame
 
 
-class Berry:
+class Item:
     def __init__(self, sprite: pygame.Surface, x: int, y: int):
         self.sprite = sprite
         self.rect = sprite.get_rect(center=(x, y))
@@ -15,20 +15,20 @@ class Berry:
         return pygame.transform.smoothscale(sprite, (target_width, target_height))
 
     @classmethod
-    def load(cls, sprite_name: str, target_height: int, x: int, y: int) -> "Berry":
+    def load(cls, sprite_name: str, target_height: int, x: int, y: int) -> "Item":
         sprite = pygame.image.load(f"sprites/items/{sprite_name}.png")
         sprite = cls.scale(sprite, target_height)
-        return Berry(sprite, x, y)
+        return Item(sprite, x, y)
 
     def draw(self, screen: pygame.surface.Surface):
         screen.blit(self.sprite, self.rect)
 
 
-def pick_berry(berries: list[Berry], player_rect: pygame.Rect, is_pick_pressed: bool) -> int:
+def pick_item(items: list[Item], player_rect: pygame.Rect, is_pick_pressed: bool) -> int:
     if not is_pick_pressed:
         return 0
-    for berry in berries[:]:  # kopia, bo modyfikujemy listę
-        if berry.rect.colliderect(player_rect):
-            berries.remove(berry)
+    for item in items[:]:  # kopia, bo modyfikujemy listę
+        if item.rect.colliderect(player_rect):
+            items.remove(item)
             return 1
     return 0

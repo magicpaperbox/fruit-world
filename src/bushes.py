@@ -1,6 +1,6 @@
 import pygame
 import random
-from berry import Berry
+from item import Item
 import scale_screen
 
 SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
@@ -45,7 +45,7 @@ def spawn_berries_for_bushes(
             base_x = x_min + (i + 0.5) * slot_w
             x = base_x + (rnd.randint(-jx_max, jx_max) if jx_max > 0 else 0)
             y = rnd.uniform(y_min, y_max)
-            berries.append(Berry.load(sprite, height_px, x, y))
+            berries.append(Item.load(sprite, height_px, x, y))
 
     return berries
 
