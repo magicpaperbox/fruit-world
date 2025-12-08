@@ -11,7 +11,7 @@ class Berry:
         original_height = sprite.get_height()
         original_width = sprite.get_width()
         object_scale = target_height / original_height
-        target_width = object_scale * original_width
+        target_width = int(object_scale * original_width)
         return pygame.transform.smoothscale(sprite, (target_width, target_height))
 
     @classmethod

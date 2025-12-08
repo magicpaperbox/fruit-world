@@ -4,8 +4,9 @@ import sys
 from bushes import spawn_berries_for_bushes, draw_bush_debug
 from player import Player
 from maps_data import load_level
-from berry import pick_berry
+from berry import pick_berry, Berry
 from player_mobility import PlayerMobility, draw_rect_debug
+from inventory import Inventory, InventoryUI
 from dialog_box import DialogBox
 from ui import UIManager, Action
 from settings_menu import toggle_settings, make_settings_modal
@@ -21,6 +22,16 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 GAME_WIDTH = scale_screen.GAME_WIDTH
 GAME_HEIGHT = scale_screen.GAME_HEIGHT
 game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
+raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
+raw_blueberry  = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
+ICON_HEIGHT = int(GAME_HEIGHT * 0.05)
+strawberry_icon = Berry.scale(raw_strawberry, ICON_HEIGHT)
+blueberry_icon  = Berry.scale(raw_blueberry,  ICON_HEIGHT)
+
+item_icons = {
+    "strawberry": strawberry_icon,
+    "blueberry":  blueberry_icon,
+}
 
 clock = pygame.time.Clock()
 gravity = 0.001*GAME_HEIGHT*0.001
@@ -32,6 +43,8 @@ move_player = PlayerMobility(gravity)
 background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
 strawberries_collected = 0
 blueberries_collected = 0
+inventory = Inventory()
+inventory_ui = InventoryUI(font, item_icons)
 away = True
 colliding_npc = None
 
@@ -78,9 +91,6 @@ while running:
         keys = pygame.key.get_pressed()
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
-
-        strawberries_collected += pick_berry(strawberries, sara.player_rect, is_pick_pressed)
-        blueberries_collected += pick_berry(blueberries, sara.player_rect, is_pick_pressed)
 
 
         for npc in npcs:
@@ -134,10 +144,7 @@ while running:
             for platform in platforms:
                 draw_rect_debug(game_surface, small_font, platform.rect, (10, 30, 200), f"{platform.rect.left}x{platform.rect.top}")
 
-        counter_text1 = font.render(f"Truskawki: {strawberries_collected}", True, (255, 255, 255))
-        counter_text2 = font.render(f"Borówki: {blueberries_collected}", True, (255, 255, 255))
-        game_surface.blit(counter_text1, (10, 550))
-        game_surface.blit(counter_text2, (10, 570))
+
 
         screen_w, screen_h = screen.get_size()
         offset_x = (screen_w - GAME_WIDTH) // 2
@@ -146,10 +153,23 @@ while running:
         # WYŚRODKOWANA gra:
         screen.blit(game_surface, (offset_x, offset_y))
 
-        # RYSUJEMY DIALOG NA DOLE:
+        # DIALOGI:
         dialog.rect.y = GAME_HEIGHT
         dialog.rect.x = (SCREEN_WIDTH - GAME_WIDTH)//2
         dialog.draw(screen)
+
+        # PRZEDMIOTY:
+        picked_strawberries = pick_berry(strawberries, sara.player_rect, is_pick_pressed)
+        picked_blueberries = pick_berry(blueberries, sara.player_rect, is_pick_pressed)
+
+        if picked_strawberries:
+            inventory.add("strawberry", picked_strawberries)
+
+        if picked_blueberries:
+            inventory.add("blueberry", picked_blueberries)
+
+        inventory_ui.draw(screen, inventory, x=10, y=20)
+
 
         pygame.display.flip()
 
