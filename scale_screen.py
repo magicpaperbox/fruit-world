@@ -1,10 +1,10 @@
 SIZE_360p = 640, 360
-size_720p = 1280, 720
-size_HD = 1600, 900
-size_1080p = 1920, 1080
-size_2K = 2048, 1152
+SIZE_720p = 1280, 720
+SIZE_HD = 1600, 900
+SIZE_1080p = 1920, 1080
+SIZE_2K = 2048, 1152
 
-chosen_size = size_HD
+chosen_size = SIZE_720p
 
 DIALOG_HEIGHT = 100
 SCREEN_WIDTH, SCREEN_HEIGHT = chosen_size

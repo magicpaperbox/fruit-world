@@ -23,7 +23,7 @@ GAME_HEIGHT = scale_screen.GAME_HEIGHT
 game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 
 clock = pygame.time.Clock()
-gravity = 0.001
+gravity = 0.001*GAME_HEIGHT*0.001
 font = pygame.font.SysFont("comicsansms", 18)
 dialog = DialogBox(GAME_WIDTH, SCREEN_HEIGHT, font,
                    text_color=(61,43,31), bg_color=(255,255,247), margin=0)

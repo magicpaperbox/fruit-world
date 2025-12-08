@@ -83,7 +83,7 @@ class PlayerMobility:
     def jump(self):
         if self.jumps_left > 0:
             self.jumps_left -= 1
-            self.player_velocity_y = -0.4
+            self.player_velocity_y = -0.0005*Y
             self._on_ground = False
 
 
