@@ -4,6 +4,70 @@ from typing import List
 from npcs import Npc
 import scale_screen
 
+class TalkToNPC:
+    def __init__(self):
+        self.queue: List[str] = []
+        self.current: str = ""
+        self._blink_timer = 0.0
+        self._blink_on = True
+        self.visible = False
+        self._away_time = 0.0
+        self._away_timeout_s = 2.0
+        self._farewell_shown = False
+        self._active_npc = None
+
+    def show(self, text: str, npc: Npc | None = None):
+        self.queue.clear()
+        self.current = ""
+        self.visible = True
+        if npc is not None:
+            self._active_npc = npc
+        return self.enqueue(text)
+
+    def enqueue(self, text: str):
+        self.queue.append(text)
+        if not self.current:
+            self._take_next()
+        return self
+
+    def _hide(self):
+        self.visible = False
+        self.current = ""
+        self.queue.clear()
+        self._away_counter = 0
+        self._active_npc = None
+
+    def _take_next(self):
+        self.current = self.queue.pop(0)
+        self._typed_len = 0
+        self._time_acc = 0.0
+        self._finished = False
+
+    def handle_event(self, is_pick_pressed, is_exit_pressed, away, now_ms, dt_ms):
+        dt = dt_ms / 1000.0
+        if is_pick_pressed:
+            self._away_time = 0.0
+            self._farewell_shown = False
+            if self.queue:
+                self._take_next()
+            else:
+                self._hide()
+            return
+        if is_exit_pressed:
+            self._hide()
+        if away:
+            if not self._farewell_shown and self._active_npc is not None:
+                farewell_msg = self._active_npc.end_interaction(now_ms)
+                if farewell_msg:
+                    self.show(farewell_msg)
+                self._farewell_shown = True
+                self._away_time = 0.0
+            self._away_time += dt
+            if self._away_time >= self._away_timeout_s:
+                self._hide()
+        else:
+            self._away_time = 0.0
+            self._farewell_shown = False
 
 class DialogBox:
     def __init__(

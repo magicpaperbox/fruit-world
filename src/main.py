@@ -9,11 +9,11 @@ from item import pick_item, Item
 from maps_data import load_level
 from player import Player
 from player_mobility import PlayerMobility, draw_rect_debug
-from scale_screen import chosen_size, GAME_WIDTH, GAME_HEIGHT, relative_y_to_game_units_px, game_units_to_decimal
+from scale_screen import GAME_WIDTH, GAME_HEIGHT, relative_y_to_game_units_px, game_units_to_decimal, SCREEN_WIDTH, \
+    SCREEN_HEIGHT
 from ui import UIManager
 
 DEBUG_OVERLAYS = False
-SCREEN_WIDTH, SCREEN_HEIGHT = chosen_size
 FPS = 60
 pygame.init()
 ui = UIManager()
