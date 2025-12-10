@@ -2,9 +2,8 @@ import enum
 
 import pygame
 from animation import Animation
-import scale_screen
+from scale_screen import relative_y_to_game_units_px
 
-SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
 
 
 class Status(str, enum.Enum):
@@ -77,7 +76,7 @@ class Npc:
     def scale(npc_sprite: pygame.surface.Surface) -> pygame.Surface:
         original_height = npc_sprite.get_height()
         original_width = npc_sprite.get_width()
-        target_height = scale_screen.GAME_HEIGHT * 0.1
+        target_height = relative_y_to_game_units_px(0.1)
         npc_scale = target_height / original_height
         target_width = int(round(npc_scale * original_width))
         return pygame.transform.smoothscale(npc_sprite, (target_width, target_height))

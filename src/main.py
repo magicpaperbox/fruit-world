@@ -1,29 +1,28 @@
-import pygame
 import sys
 
+import pygame
+
 from bushes import spawn_berries_for_bushes, draw_bush_debug
-from player import Player
-from maps_data import load_level
-from item import pick_item, Item
-from player_mobility import PlayerMobility, draw_rect_debug
-from inventory import Inventory, InventoryUI
 from dialog_box import DialogBox
+from inventory import Inventory, InventoryUI
+from item import pick_item, Item
+from maps_data import load_level
+from player import Player
+from player_mobility import PlayerMobility, draw_rect_debug
+from scale_screen import chosen_size, GAME_WIDTH, GAME_HEIGHT, relative_y_to_game_units_px, game_units_to_decimal
 from ui import UIManager
-import scale_screen
 
 DEBUG_OVERLAYS = False
-SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.chosen_size
+SCREEN_WIDTH, SCREEN_HEIGHT = chosen_size
 FPS = 60
 pygame.init()
 ui = UIManager()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-GAME_WIDTH = scale_screen.GAME_WIDTH
-GAME_HEIGHT = scale_screen.GAME_HEIGHT
 game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
 raw_blueberry = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
-ICON_HEIGHT = int(GAME_HEIGHT * 0.05)
+ICON_HEIGHT = relative_y_to_game_units_px(0.05)
 strawberry_icon = Item.scale(raw_strawberry, ICON_HEIGHT)
 blueberry_icon = Item.scale(raw_blueberry, ICON_HEIGHT)
 
@@ -33,7 +32,7 @@ item_icons = {
 }
 
 clock = pygame.time.Clock()
-gravity = 0.001 * GAME_HEIGHT * 0.001
+gravity = game_units_to_decimal(0.001)
 font = pygame.font.SysFont("comicsansms", 18)
 dialog = DialogBox(
     GAME_WIDTH,
@@ -89,7 +88,7 @@ while running:
                 is_exit_pressed = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_TAB:
                 settings_pressed = True
-            dialog.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms)
+        dialog.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms, dt)
 
         keys = pygame.key.get_pressed()
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
@@ -106,8 +105,8 @@ while running:
                 away = True
             npc.update_sprite(now_ms)
 
-        prev_left = move_player.player_rect2.left
-        prev_right = move_player.player_rect2.right
+        prev_left = move_player.collision_rect_x.left
+        prev_right = move_player.collision_rect_x.right
 
         if is_right_pressed:
             move_player.move_right(platforms, dt)
@@ -145,8 +144,8 @@ while running:
             draw_bush_debug(game_surface, font, strawberry_bushes, (0, 200, 0), "TRUS")
             draw_bush_debug(game_surface, font, blueberry_bushes, (60, 120, 255), "BOR")
             small_font = pygame.font.SysFont("comicsansms", 10)
-            draw_rect_debug(game_surface, small_font, move_player.player_rect2, (0, 200, 0), "HIT")
-            draw_rect_debug(game_surface, small_font, move_player.player_rect3, (0, 0, 200), "HIT")
+            draw_rect_debug(game_surface, small_font, move_player.collision_rect_x, (0, 200, 0), "HIT")
+            draw_rect_debug(game_surface, small_font, move_player.collision_rect_y, (0, 0, 200), "HIT")
             for platform in platforms:
                 draw_rect_debug(
                     game_surface,

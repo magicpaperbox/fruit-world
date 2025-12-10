@@ -4,7 +4,7 @@ draw_bush_debug
 
 dialog_box - rozdzielić logikę wyświetlania tekstu w okienku od logiki rozmowy z npc
 
-przejść z scale_screen.GAME_HEIGHT na scale_screen.GAME_HEIGHT
+przejść z scale_screen.GAME_HEIGHT na GAME_HEIGHT
 
 GAME_HEIGHT jest przypisywane do SCREEN_HEIGHT -> użyć GAME_HEIGHT bezpośrednio
 to samo GAME_WIDTH

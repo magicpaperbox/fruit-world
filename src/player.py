@@ -1,8 +1,7 @@
 import pygame
 from animation import Animation
-import scale_screen
+from scale_screen import relative_y_to_game_units_px, relative_coords_to_game_units_px
 
-SCREEN_WIDTH, SCREEN_HEIGHT = scale_screen.GAME_WIDTH, scale_screen.GAME_HEIGHT
 
 
 class Player:
@@ -21,14 +20,13 @@ class Player:
         self._left_animation = left_animation
 
         self._sprite = self._static
-        self.player_rect = self._sprite.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        # self.player_rect = pygame.Rect(0, 0, self._sprite.get_width(), self._sprite.get_height())
+        self.player_rect = self._sprite.get_rect(center=(relative_coords_to_game_units_px(0.5, 0.5)))
 
     @staticmethod
     def scale(player_sprite: pygame.surface.Surface) -> pygame.surface.Surface:
         original_height = player_sprite.get_height()
         original_width = player_sprite.get_width()
-        target_height = scale_screen.GAME_HEIGHT * 0.1
+        target_height = relative_y_to_game_units_px(0.1)
         player_scale = target_height / original_height
         target_width = player_scale * original_width
         return pygame.transform.smoothscale(player_sprite, (target_width, target_height))

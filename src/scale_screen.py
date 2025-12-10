@@ -14,14 +14,17 @@ GAME_HEIGHT = SCREEN_HEIGHT - DIALOG_HEIGHT
 
 CANONICAL_SCREEN_HEIGHT = 1080
 
-def game_units_to_px(units: int) -> int:
+def game_units_to_px(units: int) -> int: #Skalowanie stałych jednostek gry na piksele
     return int(units * SCREEN_HEIGHT / CANONICAL_SCREEN_HEIGHT)
 
-def relative_x_to_game_units_px(horizontal_pos: float) -> int:
-    return int(horizontal_pos * GAME_HEIGHT)
+def game_units_to_decimal(units: float) -> float: #Skalowanie stałych jednostek gry na piksele
+    return units * SCREEN_HEIGHT / CANONICAL_SCREEN_HEIGHT
+
+def relative_x_to_game_units_px(horizontal_pos: float) -> int: #zachowanie proporcji świata niezależnie od okna
+    return int(horizontal_pos * GAME_WIDTH)
 
 def relative_y_to_game_units_px(vertical_pos: float) -> int:
-    return int(vertical_pos * GAME_WIDTH)
+    return int(vertical_pos * GAME_HEIGHT)
 
 def relative_coords_to_game_units_px(horizontal_pos: float, vertical_pos: float) -> tuple[int, int]:
-    return int(horizontal_pos * GAME_HEIGHT), int(vertical_pos * GAME_WIDTH)
+    return int(horizontal_pos * GAME_WIDTH), int(vertical_pos * GAME_HEIGHT)

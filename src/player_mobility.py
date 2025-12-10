@@ -1,29 +1,27 @@
 import pygame
 from collisions import collision_x, collision_y
 from platforms import Platform
-from scale_screen import GAME_WIDTH as X, GAME_HEIGHT as Y
+from scale_screen import relative_coords_to_game_units_px, relative_x_to_game_units_px, relative_y_to_game_units_px, game_units_to_decimal
 
-SCREEN_WIDTH, SCREEN_HEIGHT = X, Y
 
 
 class PlayerMobility:
     def __init__(self, gravity: float):
         self._gravity = gravity
+        self._anchor = (relative_coords_to_game_units_px(0.5, 0.5))
 
-        self._anchor = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-
-        self.player_rect = pygame.Rect(0, 0, X * 0.037, Y * 0.1)  # do rysowania
-        self.player_rect2 = pygame.Rect(0, 0, X * 0.032, Y * 0.07)  # do kolizji w X
-        self.player_rect3 = pygame.Rect(0, 0, X * 0.013, Y * 0.1)  # do kolizji w Y
+        self.visual_rect = pygame.Rect((0, 0), relative_coords_to_game_units_px(0.037, 0.1))
+        self.collision_rect_x = pygame.Rect((0, 0), relative_coords_to_game_units_px(0.032, 0.07))
+        self.collision_rect_y = pygame.Rect((0, 0), relative_coords_to_game_units_px(0.013, 0.1))
 
         self._render_offset = 0
-        self._belly_offset = -15
+        self._belly_offset = -relative_y_to_game_units_px(0.02)
         self._legs_offset = 0
 
         self.player_velocity_y = 0
         self.jumps_left = 2
         self._on_ground = False
-        self._horizontal_speed_px_per_s = 0.15 * SCREEN_WIDTH
+        self._horizontal_speed_px_per_s = relative_x_to_game_units_px(0.15)
 
         self._sync_all()
 
@@ -32,16 +30,16 @@ class PlayerMobility:
         rect.midbottom = ax, ay + y_offset
 
     def _sync_all(self):
-        self._place_rect(self.player_rect, self._render_offset)
-        self._place_rect(self.player_rect2, self._belly_offset)
-        self._place_rect(self.player_rect3, self._legs_offset)
+        self._place_rect(self.visual_rect, self._render_offset)
+        self._place_rect(self.collision_rect_x, self._belly_offset)
+        self._place_rect(self.collision_rect_y, self._legs_offset)
 
-    def _anchor_from_rect2(self):
-        ax, ay = self.player_rect2.midbottom
+    def _anchor_from_rect_x_collision(self):
+        ax, ay = self.collision_rect_x.midbottom
         return ax, ay - self._belly_offset
 
-    def _anchor_from_rect3(self):
-        ax, ay = self.player_rect3.midbottom
+    def _anchor_from_rect_y_collision(self):
+        ax, ay = self.collision_rect_y.midbottom
         return ax, ay - self._legs_offset
 
     @property
@@ -50,7 +48,7 @@ class PlayerMobility:
 
     @property
     def coordinates(self) -> tuple[int, int]:
-        return self.player_rect.x, self.player_rect.y
+        return self.visual_rect.x, self.visual_rect.y
 
     def move_right(self, platforms: list[Platform], dt: int):
         self._move_horizontally(platforms, dt, direction=+1)
@@ -60,18 +58,18 @@ class PlayerMobility:
 
     def _move_horizontally(self, platforms: list[Platform], dt: int, direction: int):
         offset = direction * self._horizontal_speed_px_per_s * (dt / 1000.0)
-        self.player_rect2.x += offset
-        collision_x(platforms, self.player_rect2)
-        self._anchor = self._anchor_from_rect2()
+        self.collision_rect_x.x += offset
+        collision_x(platforms, self.collision_rect_x)
+        self._anchor = self._anchor_from_rect_x_collision()
         self._sync_all()
 
     def move_vertically(self, platforms: list[Platform], dt: int):
-        self.player_rect3.y += self.player_velocity_y * dt  # y
+        self.collision_rect_y.y += self.player_velocity_y * dt  # y
         self.player_velocity_y += self._gravity * dt  # dy
-        player_velocity_y, on_ground = collision_y(platforms, self.player_rect3, self.player_velocity_y)
+        player_velocity_y, on_ground = collision_y(platforms, self.collision_rect_y, self.player_velocity_y)
         self.player_velocity_y = player_velocity_y
         self._on_ground = on_ground
-        self._anchor = self._anchor_from_rect3()
+        self._anchor = self._anchor_from_rect_y_collision()
         self._sync_all()
         if self._on_ground:
             self.jumps_left = 2
@@ -79,7 +77,8 @@ class PlayerMobility:
     def jump(self):
         if self.jumps_left > 0:
             self.jumps_left -= 1
-            self.player_velocity_y = -0.0005 * Y
+            self.player_velocity_y = game_units_to_decimal(-0.5)
+            print(self.player_velocity_y)
             self._on_ground = False
 
 
@@ -93,7 +92,7 @@ def draw_rect_debug(
     border_width: int = 2,
     show_anchors: bool = True,
 ):
-    """Rysuje półprzezroczyste wypełnienie, obrys i etykietę dla pojedynczego recta."""
+    """Rysuje recty"""
     # półprzezroczyste wypełnienie
     overlay = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
     r, g, b = color

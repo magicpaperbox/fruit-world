@@ -18,6 +18,7 @@ class DialogBox:
         margin=12,
         padding=16,
         cps=45,  # chars per second (efekt pisania)
+
     ):
         self.font = font
         self.text_color = text_color
@@ -35,12 +36,12 @@ class DialogBox:
         self._typed_len = 0
         self._time_acc = 0.0
         self._finished = False
-        # continue
+        # # continue
         self._blink_timer = 0.0
         self._blink_on = True
 
-        self._away_counter = 0
-        self._away_threshold = 20
+        self._away_time = 0.0
+        self._away_timeout_s = 2.0
         self._farewell_shown = False
         self._active_npc = None
 
@@ -65,9 +66,10 @@ class DialogBox:
         self._away_counter = 0
         self._active_npc = None
 
-    def handle_event(self, is_pick_pressed, is_exit_pressed, away, now_ms):
+    def handle_event(self, is_pick_pressed, is_exit_pressed, away, now_ms, dt_ms):
+        dt = dt_ms / 1000.0
         if is_pick_pressed:
-            self._away_counter = 0
+            self._away_time = 0.0
             self._farewell_shown = False
             if self.queue:
                 self._take_next()
@@ -82,12 +84,12 @@ class DialogBox:
                 if farewell_msg:
                     self.show(farewell_msg)
                 self._farewell_shown = True
-                self._away_counter = 0
-            self._away_counter += 1
-            if self._away_counter >= self._away_threshold:
+                self._away_time = 0.0
+            self._away_time += dt
+            if self._away_time >= self._away_timeout_s:
                 self._hide()
         else:
-            self._away_counter = 0
+            self._away_time = 0.0
             self._farewell_shown = False
 
     def update(self, dt_ms: int):
