@@ -13,7 +13,7 @@ draw_bush_debug
 unify loading and scaling sprite for item.py, map_loading.py, npcs.py, player.py static_objects.py
 think of shared code that can be used everwhere consistently
 ```python
-surface = SpriteManager.load("objects/domek.png", target_height=GameUnit(40))
+surface = SpriteManager.load("objects/domek.png", target_height=40) # the number should be in game units
 ```
 
 # TASK-4
