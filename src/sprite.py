@@ -4,10 +4,10 @@ from typing import Self
 class SpriteObject:
     def __init__(self, sprite: pygame.Surface, x: int, y: int):
         self.sprite = sprite
-        self.rect = sprite.get_rect(center=(x, y))
+        self.rect = sprite.get_rect(topleft=(x, y))
 
     @classmethod
-    def load(cls, sprite_path: str, target_height: int, x: int, y: int) -> Self:
+    def load(cls, sprite_path: str, target_height: int, x: int=0, y: int=0) -> Self:
         sprite = pygame.image.load(sprite_path)
         sprite = cls.scale(sprite, target_height)
         return cls(sprite, x, y)

@@ -158,15 +158,13 @@ while running:
         sara.draw(game_surface)
 
         if DEBUG_OVERLAYS:
-            small_font = pygame.font.SysFont("comicsansms", 9)
-            draw_area(game_surface, small_font, strawberry_bushes, (190, 20, 40), "TRUS")
-            draw_area(game_surface, small_font, blueberry_bushes, (60, 120, 255), "BOR")
-            draw_rect(game_surface, small_font, move_player.collision_rect_x, (250, 250, 0), "HIT")
-            draw_rect(game_surface, small_font, move_player.collision_rect_y, (250, 165, 20), "HIT")
+            draw_area(game_surface, strawberry_bushes, (190, 20, 40), "TRUS")
+            draw_area(game_surface, blueberry_bushes, (60, 120, 255), "BOR")
+            draw_rect(game_surface, move_player.collision_rect_x, (250, 250, 0), "HIT")
+            draw_rect(game_surface, move_player.collision_rect_y, (250, 165, 20), "HIT")
             for platform in platforms:
                 draw_rect(
                     game_surface,
-                    small_font,
                     platform.rect,
                     (0, 230, 0),
                     f"{platform.rect.left}x{platform.rect.top}",

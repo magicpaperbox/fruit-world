@@ -1,15 +1,15 @@
 import pygame
 
+font = pygame.font.SysFont("comicsansms", 9)
 
-def _draw_single_rect(
-        screen: pygame.Surface,
-        font: pygame.font.Font,
-        rect: pygame.Rect,
-        color: tuple[int, int, int],
-        label: str,
-        alpha: int = 50,
-        border_width: int = 2,
-        show_anchors: bool = True
+def draw_rect(
+    screen: pygame.Surface,
+    rect: pygame.Rect,
+    color: tuple[int, int, int],
+    label: str = "RECT",
+    alpha: int = 50,
+    border_width: int = 2,
+    show_anchors: bool = True,
 ):
         r, g, b = color
 
@@ -28,8 +28,7 @@ def _draw_single_rect(
 
 def draw_area(
     screen: pygame.Surface,
-    font: pygame.font.Font,
-    items_to_draw,
+    items_to_draw: list,
     color: tuple[int, int, int],
     label: str = "RECT",
     alpha: int = 80,
@@ -40,9 +39,8 @@ def draw_area(
     for index, item in enumerate(items_to_draw, start=1):
         rect = pygame.Rect(item.x, item.y, item.width, item.height)
         item_label = f"{label} {index}"
-        _draw_single_rect(
+        draw_rect(
             screen=screen,
-            font=font,
             rect=rect,
             color=color,
             label=item_label,
@@ -50,24 +48,3 @@ def draw_area(
             border_width=border_width,
             show_anchors=show_anchors,
         )
-
-def draw_rect(
-    screen: pygame.Surface,
-    font: pygame.font.Font,
-    rect: pygame.Rect,
-    color: tuple[int, int, int],
-    label: str = "RECT",
-    alpha: int = 50,
-    border_width: int = 2,
-    show_anchors: bool = True,
-):
-    _draw_single_rect(
-        screen=screen,
-        font=font,
-        rect=rect,
-        color=color,
-        label=label,
-        alpha=alpha,
-        border_width=border_width,
-        show_anchors=show_anchors
-    )
