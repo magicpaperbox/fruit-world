@@ -1,12 +1,12 @@
 # TASK-1
 # Difficulty: 1
-StaticObject powinien używać pozycji top left corner a nie center
+StaticObject powinien używać pozycji top left corner a nie center ✅
 
 # TASK-2
 # Difficulty: 2
 draw_bush_debug
-- zunifikować sposób rysowania wszystkich prostokątów debugowych
-- brak typów
+- zunifikować sposób rysowania wszystkich prostokątów debugowych ✅
+- brak typów ✅
 
 # TASK-3
 # Difficulty: 3
