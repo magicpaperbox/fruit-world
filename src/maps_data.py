@@ -74,7 +74,7 @@ MAP_SPECS: dict[str, MapSpec] = {
         },
         blueberry_bushes={"krzak 4": ObjectSpec(1322, 706, 137, 88)},
         npcs={"mouse": ObjectSpec(1125, 907, 389, 251)},
-        static_objects={"domek": ObjectSpec(1132, 809, 389, 251)},
+        static_objects={"domek": ObjectSpec(1000, 680, 389, 251)},
     ),
     "map2": MapSpec(
         background="background_2",

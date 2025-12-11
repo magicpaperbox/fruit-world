@@ -9,15 +9,25 @@ from item import pick_item, Item
 from maps_data import load_level
 from player import Player
 from player_mobility import PlayerMobility, draw_rect_debug
-from scale_screen import GAME_WIDTH, GAME_HEIGHT, relative_y_to_game_units_px, game_units_to_decimal, SCREEN_WIDTH, \
-    SCREEN_HEIGHT
+from scale_screen import (
+    init_display,
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    GAME_WIDTH,
+    GAME_HEIGHT,
+    relative_y_to_game_units_px,
+    game_units_to_decimal
+)
 from ui import UIManager
 
 DEBUG_OVERLAYS = False
 FPS = 60
 pygame.init()
 ui = UIManager()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+fullscreen = False
+# screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = init_display(SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen)
 
 game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
@@ -30,6 +40,9 @@ item_icons = {
     "strawberry": strawberry_icon,
     "blueberry": blueberry_icon,
 }
+
+pygame.display.set_icon(strawberry_icon)
+pygame.display.set_caption("Fruit world")
 
 clock = pygame.time.Clock()
 gravity = game_units_to_decimal(0.001)
@@ -63,7 +76,6 @@ blueberries = spawn_berries_for_bushes(
     sprite="blueberry",
 )
 
-
 running = True
 while running:
     try:
@@ -77,6 +89,10 @@ while running:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 running = False
+
+            elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
+                fullscreen = not fullscreen
+                screen = init_display(SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen)
 
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True

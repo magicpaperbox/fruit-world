@@ -2,9 +2,9 @@ import pygame
 
 
 class StaticObject:
-    def __init__(self, sprite: pygame.Surface, center_x: int, center_y: int):
+    def __init__(self, sprite: pygame.Surface, x: int, y: int):
         self.sprite = sprite
-        self.rect = self.sprite.get_rect(center=(center_x, center_y))
+        self.rect = self.sprite.get_rect(topleft=(x, y))
 
     @staticmethod
     def load_sprite(name: str) -> pygame.Surface:
