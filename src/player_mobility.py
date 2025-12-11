@@ -80,34 +80,3 @@ class PlayerMobility:
             self.player_velocity_y = game_units_to_decimal(-0.5)
             print(self.player_velocity_y)
             self._on_ground = False
-
-
-def draw_rect_debug(
-    screen: pygame.Surface,
-    font: pygame.font.Font,
-    rect: pygame.Rect,
-    color: tuple[int, int, int],
-    label: str = "RECT",
-    alpha: int = 50,
-    border_width: int = 2,
-    show_anchors: bool = True,
-):
-    """Rysuje recty"""
-    # półprzezroczyste wypełnienie
-    overlay = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
-    r, g, b = color
-    overlay.fill((r, g, b, max(0, min(alpha, 255))))
-    screen.blit(overlay, (rect.x, rect.y))
-
-    # obrys
-    pygame.draw.rect(screen, color, rect, width=border_width)
-
-    # etykieta
-    text = font.render(label, True, color)
-    screen.blit(text, (rect.x + 4, rect.y + 4))
-
-    if show_anchors:
-        # środek
-        pygame.draw.circle(screen, color, rect.center, 2)
-        # „stopy” (midbottom)
-        pygame.draw.circle(screen, color, rect.midbottom, 3)

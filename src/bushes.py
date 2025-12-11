@@ -46,18 +46,3 @@ def spawn_berries_for_bushes(
             berries.append(Item.load(sprite, height_px, x, y))
 
     return berries
-
-
-def draw_bush_debug(screen, font, bushes, color, label_prefix):
-    # półprzezroczysta warstwa
-    for idx, b in enumerate(bushes, start=1):
-        overlay = pygame.Surface((b.width, b.height), pygame.SRCALPHA)
-        # np. zielony/niebieski z alfą ~80/255
-        r, g, bcol = color
-        overlay.fill((r, g, bcol, 80))
-        screen.blit(overlay, (b.x, b.y))
-        # obrys
-        pygame.draw.rect(screen, color, pygame.Rect(b.x, b.y, b.width, b.height), width=2)
-        # etykieta
-        label = font.render(f"{label_prefix} {idx}", True, color)
-        screen.blit(label, (b.x + 4, b.y + 4))

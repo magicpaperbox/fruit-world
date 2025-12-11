@@ -2,13 +2,14 @@ import sys
 
 import pygame
 
-from bushes import spawn_berries_for_bushes, draw_bush_debug
+from bushes import spawn_berries_for_bushes
+from debug import draw_rect, draw_area
 from dialog_box import DialogBox
 from inventory import Inventory, InventoryUI
 from item import pick_item, Item
 from maps_data import load_level
 from player import Player
-from player_mobility import PlayerMobility, draw_rect_debug
+from player_mobility import PlayerMobility
 from scale_screen import (
     init_display,
     SCREEN_WIDTH,
@@ -157,17 +158,17 @@ while running:
         sara.draw(game_surface)
 
         if DEBUG_OVERLAYS:
-            draw_bush_debug(game_surface, font, strawberry_bushes, (0, 200, 0), "TRUS")
-            draw_bush_debug(game_surface, font, blueberry_bushes, (60, 120, 255), "BOR")
-            small_font = pygame.font.SysFont("comicsansms", 10)
-            draw_rect_debug(game_surface, small_font, move_player.collision_rect_x, (0, 200, 0), "HIT")
-            draw_rect_debug(game_surface, small_font, move_player.collision_rect_y, (0, 0, 200), "HIT")
+            small_font = pygame.font.SysFont("comicsansms", 9)
+            draw_area(game_surface, small_font, strawberry_bushes, (190, 20, 40), "TRUS")
+            draw_area(game_surface, small_font, blueberry_bushes, (60, 120, 255), "BOR")
+            draw_rect(game_surface, small_font, move_player.collision_rect_x, (250, 250, 0), "HIT")
+            draw_rect(game_surface, small_font, move_player.collision_rect_y, (250, 165, 20), "HIT")
             for platform in platforms:
-                draw_rect_debug(
+                draw_rect(
                     game_surface,
                     small_font,
                     platform.rect,
-                    (10, 30, 200),
+                    (0, 230, 0),
                     f"{platform.rect.left}x{platform.rect.top}",
                 )
 
