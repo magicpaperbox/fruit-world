@@ -4,7 +4,7 @@ import pygame
 from layout import Layout
 from bushes import spawn_berries_for_bushes
 from debug import draw_rect, draw_area
-from dialog_box import DialogBox
+from dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from inventory import Inventory, InventoryUI
 from item import pick_item, Item
 from maps_data import load_level
@@ -44,12 +44,10 @@ pygame.display.set_caption("Fruit world")
 clock = pygame.time.Clock()
 gravity = ss.game_units_to_decimal(0.001)
 font = pygame.font.SysFont("comicsansms", 18)
-dialog = DialogBox(
-    ss.GAME_WIDTH,
-    ss.SCREEN_HEIGHT,
-    font,
-    margin=0
-)
+rect = make_dialog_rect(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, margin=10)
+dialog_vm = DialogBox(rect=rect, cps=45, padding=16)
+dialog_view = DialogBoxView(font=font)
+
 sara = Player.load()
 move_player = PlayerMobility(gravity)
 background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
@@ -91,10 +89,10 @@ while running:
                 layout = Layout()
                 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
 
-                # dialog też ma rect zależny od szerokości
-                dialog.rect.width = ss.GAME_WIDTH
-                dialog.rect.x = 0
-                dialog.rect.y = ss.GAME_HEIGHT
+                # # dialog też ma rect zależny od szerokości
+                # dialog.rect.width = ss.GAME_WIDTH
+                # dialog.rect.x = 0
+                # dialog.rect.y = ss.GAME_HEIGHT
 
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
@@ -107,8 +105,8 @@ while running:
                 is_exit_pressed = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_TAB:
                 settings_pressed = True
-        dialog.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms, dt)
-
+        dialog_vm.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms, dt)
+        dialog_vm.update(dt)
         keys = pygame.key.get_pressed()
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
@@ -120,7 +118,7 @@ while running:
                 if is_pick_pressed:
                     pygame.mixer.Sound("sounds/npc_mmhm.wav").play()
                     message = npc.interaction(now_ms)
-                    dialog.show(message, npc=npc)
+                    dialog_vm.show(message, npc=npc)
             else:
                 away = True
             npc.update_sprite(now_ms)
@@ -136,7 +134,7 @@ while running:
         if space_down_this_frame:
             move_player.jump()
 
-        dialog.update(dt)
+        dialog_vm.update(dt)
         move_player.move_vertically(platforms, dt)
         sara.update_sprite(
             move_player.is_on_ground,
@@ -182,12 +180,8 @@ while running:
         screen.blit(game_surface, layout.game_view.topleft)
         layout.draw_panel(screen)
         layout.draw_panel_windows(screen)
-
-        # DIALOGI:
-        dialog.rect.y = ss.GAME_HEIGHT
-        dialog.rect.x = (ss.SCREEN_WIDTH - ss.GAME_WIDTH) // 2
-        dialog.draw(screen)
-
+        #DIALOG:
+        dialog_view.draw(screen, dialog_vm)
         # PRZEDMIOTY:
         picked_strawberries = pick_item(strawberries, sara.player_rect, is_pick_pressed)
         picked_blueberries = pick_item(blueberries, sara.player_rect, is_pick_pressed)
