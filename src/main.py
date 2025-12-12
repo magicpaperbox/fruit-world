@@ -54,9 +54,6 @@ dialog = DialogBox(
     GAME_WIDTH,
     SCREEN_HEIGHT,
     font,
-    text_color=(61, 43, 31),
-    bg_color=(255, 255, 247),
-    margin=0,
 )
 sara = Player.load()
 move_player = PlayerMobility(gravity)
@@ -146,7 +143,7 @@ while running:
             move_player.coordinates,
         )
 
-        screen.fill((67, 39, 15))  # tło gry
+        screen.fill((53, 71, 46))  # tło gry
 
         background.draw(game_surface)
         for platform in platforms:
