@@ -15,6 +15,7 @@ def pick_item(items: list[Item], player_rect: pygame.Rect, is_pick_pressed: bool
         return 0
     for item in items[:]:  # kopia, bo modyfikujemy listę
         if item.rect.colliderect(player_rect):
+            pygame.mixer.Sound("sounds/npc_soft_cue.wav").play()
             items.remove(item)
             return 1
     return 0

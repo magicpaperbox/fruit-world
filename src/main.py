@@ -25,7 +25,9 @@ DEBUG_OVERLAYS = False
 FPS = 60
 pygame.init()
 ui = UIManager()
-
+pygame.mixer.init()
+jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
+fall = pygame.mixer.Sound("sounds/jump_rustle.wav").play()
 fullscreen = False
 # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen = init_display(SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen)
@@ -97,6 +99,7 @@ while running:
 
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
+                jump_sound.play().set_volume(0.9)
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_1:
                 is_pick_pressed = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_0:
@@ -116,6 +119,7 @@ while running:
                 away = False
                 colliding_npc = npc
                 if is_pick_pressed:
+                    pygame.mixer.Sound("sounds/npc_mmhm.wav").play()
                     message = npc.interaction(now_ms)
                     dialog.show(message, npc=npc)
             else:

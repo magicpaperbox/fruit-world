@@ -53,6 +53,7 @@ class Npc:
         if self._status == Status.HELLO:
             self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
             message = "Bye bye!"
+            pygame.mixer.Sound("sounds/npc_hmhm.wav").play()
         self._status = Status.STANDBY
         return message
 
