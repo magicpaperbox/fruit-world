@@ -1,7 +1,7 @@
 import sys
 
 import pygame
-
+from layout import Layout
 from bushes import spawn_berries_for_bushes
 from debug import draw_rect, draw_area
 from dialog_box import DialogBox
@@ -29,10 +29,11 @@ pygame.mixer.init()
 jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
 fall = pygame.mixer.Sound("sounds/jump_rustle.wav").play()
 fullscreen = False
+layout = Layout(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH)
 # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen = init_display(SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen)
-
-game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
+game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT)).convert()
+# game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
 raw_blueberry = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
 ICON_HEIGHT = relative_y_to_game_units_px(0.05)
@@ -54,6 +55,7 @@ dialog = DialogBox(
     GAME_WIDTH,
     SCREEN_HEIGHT,
     font,
+    margin=0
 )
 sara = Player.load()
 move_player = PlayerMobility(gravity)
@@ -142,7 +144,7 @@ while running:
             is_left_pressed,
             move_player.coordinates,
         )
-
+        layout.draw_panels(screen)
         screen.fill((53, 71, 46))  # tło gry
 
         background.draw(game_surface)
@@ -176,8 +178,9 @@ while running:
         offset_y = 0
 
         # WYŚRODKOWANA gra:
-        screen.blit(game_surface, (offset_x, offset_y))
-
+        # screen.blit(game_surface, (offset_x, offset_y))
+        screen.blit(game_surface, layout.game_view.topleft)
+        layout.draw_panel_windows(screen)
         # DIALOGI:
         dialog.rect.y = GAME_HEIGHT
         dialog.rect.x = (SCREEN_WIDTH - GAME_WIDTH) // 2
