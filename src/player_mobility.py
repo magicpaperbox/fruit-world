@@ -1,27 +1,27 @@
 import pygame
 from collisions import collision_x, collision_y
 from platforms import Platform
-from scale_screen import relative_coords_to_game_units_px, relative_x_to_game_units_px, relative_y_to_game_units_px, game_units_to_decimal
+import scale_screen as ss
 
 
 
 class PlayerMobility:
     def __init__(self, gravity: float):
         self._gravity = gravity
-        self._anchor = (relative_coords_to_game_units_px(0.5, 0.5))
+        self._anchor = (ss.relative_coords_to_game_units_px(0.5, 0.5))
 
-        self.visual_rect = pygame.Rect((0, 0), relative_coords_to_game_units_px(0.037, 0.1))
-        self.collision_rect_x = pygame.Rect((0, 0), relative_coords_to_game_units_px(0.032, 0.07))
-        self.collision_rect_y = pygame.Rect((0, 0), relative_coords_to_game_units_px(0.013, 0.1))
+        self.visual_rect = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.037, 0.1))
+        self.collision_rect_x = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.032, 0.07))
+        self.collision_rect_y = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.013, 0.1))
 
         self._render_offset = 0
-        self._belly_offset = -relative_y_to_game_units_px(0.02)
+        self._belly_offset = -ss.relative_y_to_game_units_px(0.02)
         self._legs_offset = 0
 
         self.player_velocity_y = 0
         self.jumps_left = 2
         self._on_ground = False
-        self._horizontal_speed_px_per_s = relative_x_to_game_units_px(0.15)
+        self._horizontal_speed_px_per_s = ss.relative_x_to_game_units_px(0.15)
 
         self._sync_all()
 
@@ -77,6 +77,6 @@ class PlayerMobility:
     def jump(self):
         if self.jumps_left > 0:
             self.jumps_left -= 1
-            self.player_velocity_y = game_units_to_decimal(-0.5)
+            self.player_velocity_y = ss.game_units_to_decimal(-0.5)
             print(self.player_velocity_y)
             self._on_ground = False

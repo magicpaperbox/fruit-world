@@ -1,16 +1,16 @@
 import pygame
-from scale_screen import GAME_WIDTH, GAME_HEIGHT, relative_coords_to_game_units_px
+import scale_screen as ss
 from sprite import SpriteObject
 
 
 class Map:
     def __init__(self, sprite: pygame.surface.Surface):
         self.sprite = sprite
-        self.rect = sprite.get_rect(center=relative_coords_to_game_units_px(0.5, 0.5))
+        self.rect = sprite.get_rect(center=ss.relative_coords_to_game_units_px(0.5, 0.5))
 
     @staticmethod
     def scale(direction_image: pygame.surface.Surface) -> pygame.surface.Surface:
-        return pygame.transform.smoothscale(direction_image, (GAME_WIDTH, GAME_HEIGHT))
+        return pygame.transform.smoothscale(direction_image, (ss.GAME_WIDTH, ss.GAME_HEIGHT))
 
     @classmethod
     def load(cls, sprite_name: str) -> "Map":

@@ -2,7 +2,7 @@ import pygame
 from typing import List
 
 from npcs import Npc
-from scale_screen import SCREEN_WIDTH, DIALOG_HEIGHT
+import scale_screen as ss
 
 # MVVM
 # M - Model (domain)
@@ -20,7 +20,7 @@ class DialogBox:
         bg_color=(80, 100, 75),
         border_light=(140, 165, 135),
         border_dark = (65, 85, 60),
-        box_height=DIALOG_HEIGHT,
+        box_height=ss.DIALOG_HEIGHT,
         margin=10,
         padding=16,
         cps=45,  # chars per second (efekt pisania)
@@ -32,7 +32,7 @@ class DialogBox:
         self.border_dark = border_dark
         self.padding = padding
         self.cps = cps
-        offset_x = (SCREEN_WIDTH - screen_w) // 2
+        offset_x = (ss.SCREEN_WIDTH - screen_w) // 2
         width = screen_w - 2 * margin
         self.rect = pygame.Rect(
             offset_x + margin,

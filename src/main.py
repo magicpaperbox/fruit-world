@@ -88,6 +88,13 @@ while running:
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
                 fullscreen = not fullscreen
                 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
+                layout = Layout()
+                game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
+
+                # dialog też ma rect zależny od szerokości
+                dialog.rect.width = ss.GAME_WIDTH
+                dialog.rect.x = 0
+                dialog.rect.y = ss.GAME_HEIGHT
 
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
@@ -192,10 +199,6 @@ while running:
             inventory.add("blueberry", picked_blueberries)
 
         inventory_ui.draw(screen, inventory, x=10, y=20)
-        print("SCREEN", ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT)
-        print("GAME", ss.GAME_WIDTH, ss.GAME_HEIGHT)
-        print("SIDE", ss.SIDE_PANEL_W)
-        print("layout.right_panel", layout.right_panel)
 
         pygame.display.flip()
 

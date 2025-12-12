@@ -2,15 +2,15 @@ from map_loading import Map
 from platforms import Platform
 from bushes import Bush
 from npcs import Npc
-from src.scale_screen import game_units_to_px
+import src.scale_screen as ss
 from static_objects import StaticObject
 
 class ObjectSpec:
     def __init__(self, x: int, y: int, width: int, height: int):
-        self.x = game_units_to_px(x)
-        self.y = game_units_to_px(y)
-        self.width = game_units_to_px(width)
-        self.height = game_units_to_px(height)
+        self.x = ss.game_units_to_px(x)
+        self.y = ss.game_units_to_px(y)
+        self.width = ss.game_units_to_px(width)
+        self.height = ss.game_units_to_px(height)
 
 
 class MapSpec:

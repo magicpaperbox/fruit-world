@@ -1,7 +1,7 @@
 import pygame
 import random
 from item import Item
-from scale_screen import game_units_to_px
+import scale_screen as ss
 
 
 class Bush:
@@ -22,9 +22,9 @@ def spawn_berries_for_bushes(
     bushes: list,
     per_bush: int,
     sprite: str,
-    height_px: int = game_units_to_px(42),
+    height_px: int = ss.game_units_to_px(42),
 ):
-    jitter_px = game_units_to_px(36)
+    jitter_px = ss.game_units_to_px(36)
     rnd = random.Random()
     berries = []
     if per_bush <= 0:

@@ -1,6 +1,6 @@
 import pygame
 
-from scale_screen import game_units_to_px
+import scale_screen as ss
 
 
 class Inventory:
@@ -27,8 +27,8 @@ class InventoryUI:
         self,
         font: pygame.font.Font,
         item_icons: dict[str, pygame.Surface],
-        padding: float = game_units_to_px(5),
-        line_space: float = game_units_to_px(5),
+        padding: float = ss.game_units_to_px(5),
+        line_space: float = ss.game_units_to_px(5),
     ):
         self.font = font
         self.item_icons = item_icons
