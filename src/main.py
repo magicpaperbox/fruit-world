@@ -10,15 +10,7 @@ from item import pick_item, Item
 from maps_data import load_level
 from player import Player
 from player_mobility import PlayerMobility
-from scale_screen import (
-    init_display,
-    SCREEN_WIDTH,
-    SCREEN_HEIGHT,
-    GAME_WIDTH,
-    GAME_HEIGHT,
-    relative_y_to_game_units_px,
-    game_units_to_decimal
-)
+import scale_screen as ss
 from ui import UIManager
 
 DEBUG_OVERLAYS = False
@@ -29,14 +21,15 @@ pygame.mixer.init()
 jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
 fall = pygame.mixer.Sound("sounds/jump_rustle.wav").play()
 fullscreen = False
-layout = Layout(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH)
+
 # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-screen = init_display(SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen)
-game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT)).convert()
+screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
+layout = Layout()
+game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
 # game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
 raw_blueberry = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
-ICON_HEIGHT = relative_y_to_game_units_px(0.05)
+ICON_HEIGHT = ss.relative_y_to_game_units_px(0.05)
 strawberry_icon = Item.scale(raw_strawberry, ICON_HEIGHT)
 blueberry_icon = Item.scale(raw_blueberry, ICON_HEIGHT)
 
@@ -49,11 +42,11 @@ pygame.display.set_icon(strawberry_icon)
 pygame.display.set_caption("Fruit world")
 
 clock = pygame.time.Clock()
-gravity = game_units_to_decimal(0.001)
+gravity = ss.game_units_to_decimal(0.001)
 font = pygame.font.SysFont("comicsansms", 18)
 dialog = DialogBox(
-    GAME_WIDTH,
-    SCREEN_HEIGHT,
+    ss.GAME_WIDTH,
+    ss.SCREEN_HEIGHT,
     font,
     margin=0
 )
@@ -94,7 +87,7 @@ while running:
 
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
                 fullscreen = not fullscreen
-                screen = init_display(SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen)
+                screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
 
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
@@ -144,7 +137,7 @@ while running:
             is_left_pressed,
             move_player.coordinates,
         )
-        layout.draw_panels(screen)
+
         screen.fill((53, 71, 46))  # tło gry
 
         background.draw(game_surface)
@@ -174,16 +167,18 @@ while running:
                 )
 
         screen_w, screen_h = screen.get_size()
-        offset_x = (screen_w - GAME_WIDTH) // 2
+        offset_x = (screen_w - ss.GAME_WIDTH) // 2
         offset_y = 0
 
         # WYŚRODKOWANA gra:
         # screen.blit(game_surface, (offset_x, offset_y))
         screen.blit(game_surface, layout.game_view.topleft)
+        layout.draw_panel(screen)
         layout.draw_panel_windows(screen)
+
         # DIALOGI:
-        dialog.rect.y = GAME_HEIGHT
-        dialog.rect.x = (SCREEN_WIDTH - GAME_WIDTH) // 2
+        dialog.rect.y = ss.GAME_HEIGHT
+        dialog.rect.x = (ss.SCREEN_WIDTH - ss.GAME_WIDTH) // 2
         dialog.draw(screen)
 
         # PRZEDMIOTY:
@@ -197,6 +192,10 @@ while running:
             inventory.add("blueberry", picked_blueberries)
 
         inventory_ui.draw(screen, inventory, x=10, y=20)
+        print("SCREEN", ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT)
+        print("GAME", ss.GAME_WIDTH, ss.GAME_HEIGHT)
+        print("SIDE", ss.SIDE_PANEL_W)
+        print("layout.right_panel", layout.right_panel)
 
         pygame.display.flip()
 
