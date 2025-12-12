@@ -43,8 +43,18 @@ class Layout:
 
     def draw_panel_windows(self, screen: pygame.Surface):
         fill = (80, 100, 75)
-        stroke = (140, 165, 135)
+        light = (140, 165, 135)
+        dark = (65, 85, 60)
 
-        pygame.draw.rect(screen, fill, self.right_window, border_radius=10)
-        pygame.draw.rect(screen, stroke, self.right_window, width=2, border_radius=10)
+        r = self.right_window
+
+        # tło
+        pygame.draw.rect(screen, fill, r, border_radius=10)
+
+        # jasny obrys
+        pygame.draw.rect(screen, light, r, width=2, border_radius=10)
+
+        # cień
+        shadow_rect = r.inflate(2, 2).move(1, 1)
+        pygame.draw.rect(screen, dark, shadow_rect, width=2, border_radius=10)
 
