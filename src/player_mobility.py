@@ -78,5 +78,4 @@ class PlayerMobility:
         if self.jumps_left > 0:
             self.jumps_left -= 1
             self.player_velocity_y = ss.game_units_to_decimal(-0.5)
-            print(self.player_velocity_y)
             self._on_ground = False

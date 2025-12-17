@@ -17,7 +17,7 @@ _AVAILABLE_RESOLUTIONS = [
 
 _GUI_HEIGHT_RATIO = 0.1
 # _chosen_size = RES_HD
-_chosen_res = _AVAILABLE_RESOLUTIONS[3]
+_chosen_res = _AVAILABLE_RESOLUTIONS[2]
 
 SIDE_PANEL_RATIO = 0.15
 SIDE_PANEL_MIN = 10
@@ -69,3 +69,9 @@ def relative_y_to_game_units_px(vertical_pos: float) -> int:
 
 def relative_coords_to_game_units_px(horizontal_pos: float, vertical_pos: float) -> tuple[int, int]:
     return int(horizontal_pos * GAME_WIDTH), int(vertical_pos * GAME_HEIGHT)
+
+def relative_x_to_screen_units(horizontal_pos: float) -> int:
+    return int(horizontal_pos * SCREEN_WIDTH)
+
+def relative_y_to_screen_units(vertical_pos: float) -> int:
+    return int(vertical_pos * SCREEN_HEIGHT)

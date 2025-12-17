@@ -11,6 +11,7 @@ from maps_data import load_level
 from player import Player
 from player_mobility import PlayerMobility
 import scale_screen as ss
+from scale_screen import SCREEN_WIDTH
 from ui import UIManager
 
 DEBUG_OVERLAYS = False
@@ -88,12 +89,6 @@ while running:
                 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
                 layout = Layout()
                 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
-
-                # # dialog też ma rect zależny od szerokości
-                # dialog.rect.width = ss.GAME_WIDTH
-                # dialog.rect.x = 0
-                # dialog.rect.y = ss.GAME_HEIGHT
-
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
                 jump_sound.play().set_volume(0.9)
@@ -106,7 +101,6 @@ while running:
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_TAB:
                 settings_pressed = True
         dialog_vm.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms, dt)
-        dialog_vm.update(dt)
         keys = pygame.key.get_pressed()
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
@@ -192,7 +186,7 @@ while running:
         if picked_blueberries:
             inventory.add("blueberry", picked_blueberries)
 
-        inventory_ui.draw(screen, inventory, x=10, y=20)
+        inventory_ui.draw(screen, inventory, x=ss.relative_x_to_screen_units(0.9), y=20)
 
         pygame.display.flip()
 

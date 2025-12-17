@@ -1,6 +1,5 @@
 import pygame
 import scale_screen as ss
-from sprite import SpriteObject
 
 
 class Map:
