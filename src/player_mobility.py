@@ -10,7 +10,7 @@ class PlayerMobility:
         self._gravity = gravity
         self._anchor = (ss.relative_coords_to_game_units_px(0.5, 0.5))
 
-        self.visual_rect = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.037, 0.1))
+        self.visual_rect = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.033, 0.1))
         self.collision_rect_x = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.032, 0.07))
         self.collision_rect_y = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.013, 0.1))
 

@@ -60,12 +60,12 @@ MAP_SPECS: dict[str, MapSpec] = {
     "map1": MapSpec(
         background="background_1",
         platforms={
-            "lewy gorny krzak": ObjectSpec(300, 428, 350, 98),
-            "prawy dolny krzak": ObjectSpec(872, 602, 385, 95),
-            "maly gorny krzak": ObjectSpec(630, 126, 226, 90),
-            "lewa dolna": ObjectSpec(-38, 797, 740, 101),
-            "prawa dolna": ObjectSpec(1200, 797, 285, 101),
-            "srodkowa dolna": ObjectSpec(0, 900, 1520, 98),
+            "lewy gorny krzak": ObjectSpec(300, 430, 350, 98),
+            "prawy dolny krzak": ObjectSpec(872, 604, 385, 95),
+            "maly gorny krzak": ObjectSpec(630, 128, 226, 90),
+            "lewa dolna": ObjectSpec(-38, 799, 740, 101),
+            "prawa dolna": ObjectSpec(1200, 799, 285, 101),
+            "srodkowa dolna": ObjectSpec(0, 912, 1520, 98),
         },
         strawberry_bushes={
             "krzak 1": ObjectSpec(365, 343, 220, 82),
@@ -73,8 +73,8 @@ MAP_SPECS: dict[str, MapSpec] = {
             "krzak 3": ObjectSpec(165, 711, 209, 82),
         },
         blueberry_bushes={"krzak 4": ObjectSpec(1270, 706, 137, 88)},
-        npcs={"mouse": ObjectSpec(1100, 907, 389, 251)},
-        static_objects={"domek": ObjectSpec(970, 680, 389, 251)},
+        npcs={"mouse": ObjectSpec(1100, 905, 389, 251)},
+        static_objects={"domek": ObjectSpec(970, 676, 389, 251)},
     ),
     "map2": MapSpec(
         background="background_2",
