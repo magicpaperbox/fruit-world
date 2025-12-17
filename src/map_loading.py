@@ -9,7 +9,8 @@ class Map:
 
     @staticmethod
     def scale(direction_image: pygame.surface.Surface) -> pygame.surface.Surface:
-        return pygame.transform.smoothscale(direction_image, (ss.GAME_WIDTH, ss.GAME_HEIGHT))
+        game_width = direction_image.get_width()*ss.GAME_HEIGHT//direction_image.get_height()
+        return pygame.transform.smoothscale(direction_image, (game_width, ss.GAME_HEIGHT))
 
     @classmethod
     def load(cls, sprite_name: str) -> "Map":
