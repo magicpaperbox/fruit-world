@@ -1,7 +1,8 @@
 import pygame
 import random
-from item import Item
 import scale_screen as ss
+from render.sprite_factory import SPRITE_FACTORY
+from render.sprite_object import SpriteObject
 
 
 class Bush:
@@ -21,9 +22,10 @@ class Bush:
 def spawn_berries_for_bushes(
     bushes: list,
     per_bush: int,
-    sprite: str,
+    sprite_path: str,
     height_px: int = ss.game_units_to_px(42),
 ):
+    sprite = SPRITE_FACTORY.load(sprite_path, height_px)
     jitter_px = ss.game_units_to_px(36)
     rnd = random.Random()
     berries = []
@@ -43,8 +45,7 @@ def spawn_berries_for_bushes(
             base_x = x_min + (i + 0.5) * slot_w
             x = base_x + (rnd.randint(-jx_max, jx_max) if jx_max > 0 else 0)
             y = rnd.randint(y_min, y_max)
-            berry = Item.load(sprite, height_px)
-            berry.rect.center = (x, y)
+            berry = SpriteObject.create(sprite, center=(x, y))
             berries.append(berry)
 
     return berries

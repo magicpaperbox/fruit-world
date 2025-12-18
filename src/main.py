@@ -2,16 +2,18 @@ import sys
 import traceback
 
 import pygame
-from layout import Layout
+
+import scale_screen as ss
 from bushes import spawn_berries_for_bushes
 from debug import draw_rect, draw_area
 from dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from inventory import Inventory, InventoryUI
-from item import pick_item, Item
-from maps_data import LoadLevel, MapSpec
+from item import pick_item
+from layout import Layout
+from maps_data import LoadLevel
 from player import Player
 from player_mobility import PlayerMobility
-import scale_screen as ss
+from render.sprite_factory import SPRITE_FACTORY
 from scale_screen import font_size
 from ui import UIManager
 
@@ -28,11 +30,9 @@ fullscreen = False
 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
 # game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
-raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
-raw_blueberry = pygame.image.load("sprites/items/blueberry.png").convert_alpha()
 ICON_HEIGHT = ss.relative_y_to_game_units_px(0.05)
-strawberry_icon = Item.scale(raw_strawberry, ICON_HEIGHT)
-blueberry_icon = Item.scale(raw_blueberry, ICON_HEIGHT)
+strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", ICON_HEIGHT)
+blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", ICON_HEIGHT)
 
 item_icons = {
     "strawberry": strawberry_icon,
@@ -66,12 +66,12 @@ colliding_npc = None
 strawberries = spawn_berries_for_bushes(
     level.strawberry_bushes,
     per_bush=3,
-    sprite="strawberry",
+    sprite_path="sprites/items/strawberry.png",
 )
 blueberries = spawn_berries_for_bushes(
     level.blueberry_bushes,
     per_bush=1,
-    sprite="blueberry",
+    sprite_path="sprites/items/blueberry.png",
 )
 
 running = True
