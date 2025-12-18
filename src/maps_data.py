@@ -4,8 +4,8 @@ from map_loading import Map
 from bushes import Bush
 from npcs import Npc
 import src.scale_screen as ss
+from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
-from static_objects import StaticObject
 
 class ObjectSpec:
     def __init__(self, x: int, y: int, width: int, height: int):
@@ -56,7 +56,9 @@ class LoadLevel:
 
         self.static_objects = []
         for key, value in self.current_screen.static_objects.items():
-            self.static_objects.append(StaticObject.load(key, value.height, value.x, value.y))
+            sprite = SPRITE_FACTORY.load(f"sprites/objects/{key}.png", value.height)
+            sprite_obj = SpriteObject.create(sprite, topleft=(value.x, value.y))
+            self.static_objects.append(sprite_obj)
 
 
 
