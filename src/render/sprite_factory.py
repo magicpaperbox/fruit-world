@@ -1,10 +1,21 @@
 import pygame
 
+type _CacheKey = tuple[str, int]
 
 class SpriteFactory:
 
+    def __init__(self):
+        self._sprite_cache: dict[_CacheKey, pygame.Surface] = {}
+
     def load(self, sprite_path: str, target_height: int) -> pygame.Surface:
-        sprite = pygame.image.load(sprite_path)
+        key: _CacheKey = (sprite_path, target_height)
+        if key not in self._sprite_cache:
+            self._sprite_cache[key] = SpriteFactory._load_uncached(sprite_path, target_height)
+        return self._sprite_cache[key]
+
+    @staticmethod
+    def _load_uncached(sprite_path: str, target_height: int) -> pygame.Surface:
+        sprite = pygame.image.load(sprite_path).convert_alpha()
         sprite = SpriteFactory._scale(sprite, target_height)
         return sprite
 
