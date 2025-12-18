@@ -4,7 +4,7 @@ import scale_screen as ss
 
 
 class Layout:
-    def __init__(self, *, pad: int = 10, gap: int = 10):
+    def __init__(self, pad: int, gap: int):
         self.screen = pygame.Rect(0, 0, ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT)
 
         game_top = 0

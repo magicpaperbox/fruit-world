@@ -27,7 +27,7 @@ class InventoryUI:
         self,
         font: pygame.font.Font,
         item_icons: dict[str, pygame.Surface],
-        padding: float = ss.game_units_to_px(5),
+        padding: float = ss.game_units_to_px(3),
         line_space: float = ss.game_units_to_px(5),
     ):
         self.font = font

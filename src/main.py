@@ -25,7 +25,6 @@ fullscreen = False
 
 # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
-layout = Layout()
 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
 # game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 raw_strawberry = pygame.image.load("sprites/items/strawberry.png").convert_alpha()
@@ -47,6 +46,7 @@ gravity = ss.game_units_to_decimal(0.001)
 
 font, _ = font_size()
 _, font_size = font_size()
+layout = Layout(0.4*font_size, 0.4*font_size)
 rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=1)
 dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size-3)
 dialog_view = DialogBoxView(font=font)
@@ -89,7 +89,7 @@ while running:
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
                 fullscreen = not fullscreen
                 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
-                layout = Layout()
+                layout = Layout(16, 16)
                 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
@@ -188,7 +188,7 @@ while running:
         if picked_blueberries:
             inventory.add("blueberry", picked_blueberries)
 
-        inventory_ui.draw(screen, inventory, x=ss.relative_x_to_screen_units(0.9), y=20)
+        inventory_ui.draw(screen, inventory, x=ss.relative_x_to_screen_units(0.87), y=ss.relative_y_to_screen_units(0.02))
 
         pygame.display.flip()
 
