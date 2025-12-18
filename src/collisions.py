@@ -1,9 +1,9 @@
 import pygame
 
-from platforms import Platform
+from render.sprite_object import SpriteObject
 
 
-def collision_x(solids: list[Platform], player_rect):
+def collision_x(solids: list[SpriteObject], player_rect):
     for s in solids:
         if player_rect.colliderect(s.rect):
             distance_from_right_platform = abs(player_rect.left - s.rect.right)
@@ -16,7 +16,7 @@ def collision_x(solids: list[Platform], player_rect):
 
 
 def collision_y(
-    solids: list[Platform],
+    solids: list[SpriteObject],
     player_rect: pygame.Rect,
     player_velocity_y: float,
 ) -> tuple[float, bool]:

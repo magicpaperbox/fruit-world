@@ -1,8 +1,7 @@
 import pygame
 from collisions import collision_x, collision_y
-from platforms import Platform
 import scale_screen as ss
-
+from render.sprite_object import SpriteObject
 
 
 class PlayerMobility:
@@ -50,20 +49,20 @@ class PlayerMobility:
     def coordinates(self) -> tuple[int, int]:
         return self.visual_rect.x, self.visual_rect.y
 
-    def move_right(self, platforms: list[Platform], dt: int):
+    def move_right(self, platforms: list[SpriteObject], dt: int):
         self._move_horizontally(platforms, dt, direction=+1)
 
-    def move_left(self, platforms: list[Platform], dt: int):
+    def move_left(self, platforms: list[SpriteObject], dt: int):
         self._move_horizontally(platforms, dt, direction=-1)
 
-    def _move_horizontally(self, platforms: list[Platform], dt: int, direction: int):
+    def _move_horizontally(self, platforms: list[SpriteObject], dt: int, direction: int):
         offset = direction * self._horizontal_speed_px_per_s * (dt / 1000.0)
         self.collision_rect_x.x += offset
         collision_x(platforms, self.collision_rect_x)
         self._anchor = self._anchor_from_rect_x_collision()
         self._sync_all()
 
-    def move_vertically(self, platforms: list[Platform], dt: int):
+    def move_vertically(self, platforms: list[SpriteObject], dt: int):
         self.collision_rect_y.y += self.player_velocity_y * dt  # y
         self.player_velocity_y += self._gravity * dt  # dy
         player_velocity_y, on_ground = collision_y(platforms, self.collision_rect_y, self.player_velocity_y)

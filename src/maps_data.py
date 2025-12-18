@@ -1,8 +1,10 @@
+import pygame
+
 from map_loading import Map
-from platforms import Platform
 from bushes import Bush
 from npcs import Npc
 import src.scale_screen as ss
+from render.sprite_object import SpriteObject
 from static_objects import StaticObject
 
 class ObjectSpec:
@@ -44,7 +46,7 @@ class LoadLevel:
     def load_level(self, map_id: str):
         self.current_screen = MAP_SPECS[map_id]
         self.background_img = Map.load(self.current_screen.background)
-        self.platforms = [Platform(p.x, p.y, p.width, p.height) for p in self.current_screen.platforms.values()]
+        self.platforms = [SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height)) for p in self.current_screen.platforms.values()]
         self.strawberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.strawberry_bushes.values()]
         self.blueberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.blueberry_bushes.values()]
         self.npcs = []
