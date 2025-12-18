@@ -1,5 +1,4 @@
 import pygame
-import layout
 
 _RES_360p = 640, 360
 _RES_720p = 1280, 720
@@ -17,14 +16,14 @@ _AVAILABLE_RESOLUTIONS = [
 
 _GUI_HEIGHT_RATIO = 0.1
 # _chosen_size = RES_HD
-_chosen_res = _AVAILABLE_RESOLUTIONS[3]
+_chosen_res = _AVAILABLE_RESOLUTIONS[1]
 
 _SIDE_PANEL_RATIO = 0.140625
 SCREEN_WIDTH, SCREEN_HEIGHT = _chosen_res
 SIDE_PANEL_W = None
 DIALOG_HEIGHT = None
-GAME_WIDTH: None|float = None
-GAME_HEIGHT: None|float = None
+GAME_WIDTH: int | None = None
+GAME_HEIGHT: int | None = None
 
 _CANONICAL_SCREEN_HEIGHT = 1080
 

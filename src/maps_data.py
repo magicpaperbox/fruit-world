@@ -30,30 +30,32 @@ class MapSpec:
         self.npcs = npcs
         self.static_objects = static_objects
 
+class LoadLevel:
+    def __init__(self):
+        self.current_screen = None
+        self.background_img = None
+        self.platforms = []
+        self.strawberry_bushes = []
+        self.blueberry_bushes = []
+        self.npcs = []
+        self.static_objects = []
 
-def load_level(map_id: str):
-    current_screen = MAP_SPECS[map_id]
-    background_img = Map.load(current_screen.background)
-    platforms = [Platform(p.x, p.y, p.width, p.height) for p in current_screen.platforms.values()]
-    strawberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.strawberry_bushes.values()]
-    blueberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in current_screen.blueberry_bushes.values()]
-    npcs = []
-    for key, value in MAP_SPECS[map_id].npcs.items():
-        if key == "mouse":
-            npcs.append(Npc.load_mouse(value.x, value.y))
 
-    static_objects = []
-    for key, value in current_screen.static_objects.items():
-        static_objects.append(StaticObject.load(key, value.height, value.x, value.y))
+    def load_level(self, map_id: str):
+        self.current_screen = MAP_SPECS[map_id]
+        self.background_img = Map.load(self.current_screen.background)
+        self.platforms = [Platform(p.x, p.y, p.width, p.height) for p in self.current_screen.platforms.values()]
+        self.strawberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.strawberry_bushes.values()]
+        self.blueberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.blueberry_bushes.values()]
+        self.npcs = []
+        for key, value in MAP_SPECS[map_id].npcs.items():
+            if key == "mouse":
+                self.npcs.append(Npc.load_mouse(value.x, value.y))
 
-    return (
-        background_img,
-        platforms,
-        strawberry_bushes,
-        blueberry_bushes,
-        npcs,
-        static_objects,
-    )
+        self.static_objects = []
+        for key, value in self.current_screen.static_objects.items():
+            self.static_objects.append(StaticObject.load(key, value.height, value.x, value.y))
+
 
 
 MAP_SPECS: dict[str, MapSpec] = {
@@ -78,7 +80,14 @@ MAP_SPECS: dict[str, MapSpec] = {
     ),
     "map2": MapSpec(
         background="background_2",
-        platforms={},
+        platforms={
+            "lewy gorny krzak": ObjectSpec(300, 430, 350, 98),
+            "prawy dolny krzak": ObjectSpec(872, 604, 385, 95),
+            "maly gorny krzak": ObjectSpec(630, 128, 226, 90),
+            "lewa dolna": ObjectSpec(-38, 799, 740, 101),
+            "prawa dolna": ObjectSpec(1200, 799, 285, 101),
+            "srodkowa dolna": ObjectSpec(0, 912, 1520, 98),
+        },
         strawberry_bushes={},
         blueberry_bushes={},
         npcs={},

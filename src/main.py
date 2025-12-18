@@ -1,4 +1,5 @@
 import sys
+import traceback
 
 import pygame
 from layout import Layout
@@ -7,7 +8,7 @@ from debug import draw_rect, draw_area
 from dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from inventory import Inventory, InventoryUI
 from item import pick_item, Item
-from maps_data import load_level
+from maps_data import LoadLevel, MapSpec
 from player import Player
 from player_mobility import PlayerMobility
 import scale_screen as ss
@@ -53,7 +54,8 @@ dialog_view = DialogBoxView(font=font)
 
 sara = Player.load()
 move_player = PlayerMobility(gravity)
-background, platforms, strawberry_bushes, blueberry_bushes, npcs, static_objects = load_level("map1")
+level = LoadLevel()
+level.load_level("map1")
 strawberries_collected = 0
 blueberries_collected = 0
 inventory = Inventory()
@@ -62,12 +64,12 @@ away = True
 colliding_npc = None
 
 strawberries = spawn_berries_for_bushes(
-    strawberry_bushes,
+    level.strawberry_bushes,
     per_bush=3,
     sprite="strawberry",
 )
 blueberries = spawn_berries_for_bushes(
-    blueberry_bushes,
+    level.blueberry_bushes,
     per_bush=1,
     sprite="blueberry",
 )
@@ -107,7 +109,7 @@ while running:
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
 
-        for npc in npcs:
+        for npc in level.npcs:
             if sara.player_rect.colliderect(npc.npc_rect):
                 away = False
                 colliding_npc = npc
@@ -119,19 +121,21 @@ while running:
                 away = True
             npc.update_sprite(now_ms)
 
-        prev_left = move_player.collision_rect_x.left
-        prev_right = move_player.collision_rect_x.right
-
         if is_right_pressed:
-            move_player.move_right(platforms, dt)
+            move_player.move_right(level.platforms, dt)
         elif is_left_pressed:
-            move_player.move_left(platforms, dt)
+            move_player.move_left(level.platforms, dt)
 
         if space_down_this_frame:
             move_player.jump()
 
         dialog_vm.update(dt)
-        move_player.move_vertically(platforms, dt)
+        move_player.move_vertically(level.platforms, dt)
+        if move_player.visual_rect.centerx > ss.GAME_WIDTH:
+            level.load_level("map2")
+            move_player.set_x_position(0)
+
+
         sara.update_sprite(
             move_player.is_on_ground,
             is_right_pressed,
@@ -141,25 +145,25 @@ while running:
 
         screen.fill((53, 71, 46))  # tło gry
 
-        background.draw(game_surface)
-        for platform in platforms:
+        level.background_img.draw(game_surface)
+        for platform in level.platforms:
             platform.draw(game_surface)
         for strawberry in strawberries:
             strawberry.draw(game_surface)
         for blueberry in blueberries:
             blueberry.draw(game_surface)
-        for obj in static_objects:
+        for obj in level.static_objects:
             obj.draw(game_surface)
-        for npc in npcs:
+        for npc in level.npcs:
             npc.draw(game_surface)
         sara.draw(game_surface)
 
         if DEBUG_OVERLAYS:
-            draw_area(game_surface, strawberry_bushes, (190, 20, 40), "TRUS")
-            draw_area(game_surface, blueberry_bushes, (60, 120, 255), "BOR")
+            draw_area(game_surface, level.strawberry_bushes, (190, 20, 40), "TRUS")
+            draw_area(game_surface, level.blueberry_bushes, (60, 120, 255), "BOR")
             draw_rect(game_surface, move_player.collision_rect_x, (250, 250, 0), "HIT")
             draw_rect(game_surface, move_player.collision_rect_y, (250, 165, 20), "HIT")
-            for platform in platforms:
+            for platform in level.platforms:
                 draw_rect(
                     game_surface,
                     platform.rect,
@@ -194,6 +198,7 @@ while running:
 
     except Exception as e:
         print(e)
+        traceback.print_tb(e)
         input("czekamy")
 
 pygame.quit()

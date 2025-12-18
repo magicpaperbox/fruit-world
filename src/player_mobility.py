@@ -79,3 +79,8 @@ class PlayerMobility:
             self.jumps_left -= 1
             self.player_velocity_y = ss.game_units_to_decimal(-0.5)
             self._on_ground = False
+
+    def set_x_position(self, x: int) -> None:
+        self.collision_rect_x.x = x
+        self._anchor = self._anchor_from_rect_x_collision()
+        self._sync_all()
