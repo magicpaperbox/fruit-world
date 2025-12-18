@@ -28,6 +28,18 @@ GAME_HEIGHT: None|float = None
 
 _CANONICAL_SCREEN_HEIGHT = 1080
 
+def font_size():
+    if _chosen_res == _AVAILABLE_RESOLUTIONS[0]:
+        size = 8
+    elif _chosen_res == _AVAILABLE_RESOLUTIONS[1]:
+        size = 10
+    elif _chosen_res == _AVAILABLE_RESOLUTIONS[2]:
+        size = 12
+    else:
+        size = 16
+    return pygame.font.SysFont("comicsansms", size), size
+
+
 
 def recalc_sizes(width: int, height: int):
     global SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT, DIALOG_HEIGHT, SIDE_PANEL_W

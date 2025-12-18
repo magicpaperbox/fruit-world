@@ -11,7 +11,7 @@ from maps_data import load_level
 from player import Player
 from player_mobility import PlayerMobility
 import scale_screen as ss
-from scale_screen import SCREEN_WIDTH
+from scale_screen import font_size
 from ui import UIManager
 
 DEBUG_OVERLAYS = False
@@ -44,9 +44,11 @@ pygame.display.set_caption("Fruit world")
 
 clock = pygame.time.Clock()
 gravity = ss.game_units_to_decimal(0.001)
-font = pygame.font.SysFont("comicsansms", 18)
-rect = make_dialog_rect(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, margin=10)
-dialog_vm = DialogBox(rect=rect, cps=45, padding=16)
+
+font, _ = font_size()
+_, font_size = font_size()
+rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=1)
+dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size-3)
 dialog_view = DialogBoxView(font=font)
 
 sara = Player.load()

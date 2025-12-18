@@ -9,7 +9,7 @@ import scale_screen as ss
 # VM - ViewModel
 # V - View
 class DialogBox:
-    def __init__(self, *, rect, cps: int = 45, padding: int = 16):
+    def __init__(self, *, rect, cps: int, padding: int):
         self.rect = rect
         self.cps = cps
         self.padding = padding
@@ -30,6 +30,7 @@ class DialogBox:
         self._away_timeout_s = 2.0
         self._farewell_shown = False
         self._active_npc: Npc | None = None
+
 
     def show(self, text: str, npc: Npc | None = None):
         self.queue.clear()
@@ -151,7 +152,7 @@ class DialogBoxView:
         rect = vm.rect
         padding = vm.padding
 
-#         # tło (białe) + ramka
+#         # tło  + ramka
         pygame.draw.rect(screen, self.bg_color, rect, border_radius=self.radius)
         pygame.draw.rect(screen, self.border_light, rect, width=self.border_w, border_radius=self.radius)
         shadow_rect = rect.inflate(2, 2).move(1, 1)
@@ -207,12 +208,12 @@ class DialogBoxView:
         return lines
 
 
-def make_dialog_rect(screen_w: int, screen_h: int, box_height: int, margin: int) -> pygame.Rect:
+def make_dialog_rect(screen_w: int, screen_h: int, box_height: int, screen_bottom_border_margin: int) -> pygame.Rect:
     offset_x = (ss.SCREEN_WIDTH - screen_w) // 2
-    width = screen_w - 2 * margin
+    width = screen_w - 2 * screen_bottom_border_margin
     return pygame.Rect(
-        offset_x + margin,
-        screen_h - box_height - margin,
+        offset_x + screen_bottom_border_margin,
+        screen_h - box_height - screen_bottom_border_margin,
         width,
         box_height,
     )
