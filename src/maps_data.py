@@ -97,8 +97,11 @@ MAP_SPECS: dict[str, MapSpec] = {
             "prawa dolna 2": ObjectSpec(1170, 890, 130, 201),
 
         },
-        strawberry_bushes={},
-        blueberry_bushes={},
+        strawberry_bushes={
+            "krzak 1": ObjectSpec(770, 280, 270, 86),
+            "krzak 3": ObjectSpec(245, 711, 209, 82),
+        },
+        blueberry_bushes={"krzak 4": ObjectSpec(1370, 706, 137, 88)},
         npcs={},
         static_objects={},
     ),

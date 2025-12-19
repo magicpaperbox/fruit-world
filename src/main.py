@@ -137,6 +137,7 @@ while running:
             reset_player = 0
             level.load_level(map)
             move_player.set_x_position(reset_player)
+
         if map == "map2" and move_player.visual_rect.centerx <= 0:
             map = "map1"
             reset_player = ss.GAME_WIDTH - sara.player_rect.width
