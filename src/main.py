@@ -55,7 +55,8 @@ dialog_view = DialogBoxView(font=font)
 sara = Player.load()
 move_player = PlayerMobility(gravity)
 level = LoadLevel()
-level.load_level("map1")
+map = "map1"
+level.load_level(map)
 strawberries_collected = 0
 blueberries_collected = 0
 inventory = Inventory()
@@ -131,9 +132,16 @@ while running:
 
         dialog_vm.update(dt)
         move_player.move_vertically(level.platforms, dt)
-        if move_player.visual_rect.centerx > ss.GAME_WIDTH:
-            level.load_level("map2")
-            move_player.set_x_position(0)
+        if map == "map1" and move_player.visual_rect.centerx > ss.GAME_WIDTH:
+            map = "map2"
+            reset_player = 0
+            level.load_level(map)
+            move_player.set_x_position(reset_player)
+        if map == "map2" and move_player.visual_rect.centerx <= 0:
+            map = "map1"
+            reset_player = ss.GAME_WIDTH - sara.player_rect.width
+            level.load_level(map)
+            move_player.set_x_position(reset_player)
 
 
         sara.update_sprite(

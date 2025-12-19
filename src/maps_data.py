@@ -66,6 +66,7 @@ MAP_SPECS: dict[str, MapSpec] = {
     "map1": MapSpec(
         background="background_1",
         platforms={
+            "start": ObjectSpec(-5, 0, 5, 1000),
             "lewy gorny krzak": ObjectSpec(300, 430, 350, 98),
             "prawy dolny krzak": ObjectSpec(872, 604, 385, 95),
             "maly gorny krzak": ObjectSpec(630, 128, 226, 90),
