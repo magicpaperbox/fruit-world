@@ -26,6 +26,30 @@ jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
 fall = pygame.mixer.Sound("sounds/jump_rustle.wav").play()
 fullscreen = False
 
+berry_remaining = {
+    "strawberry": {},  # bush_key -> ile zostało
+    "blueberry": {},
+}
+
+def respawn_berries(map_id: str):
+    strawberries = spawn_berries_for_bushes(
+        map_id=map_id,
+        berry_id="strawberry",
+        bushes=level.strawberry_bushes,
+        per_bush=3,
+        sprite_path="sprites/items/strawberry.png",
+        remaining_by_key=berry_remaining["strawberry"],
+    )
+    blueberries = spawn_berries_for_bushes(
+        map_id=map_id,
+        berry_id="blueberry",
+        bushes=level.blueberry_bushes,
+        per_bush=1,
+        sprite_path="sprites/items/blueberry.png",
+        remaining_by_key=berry_remaining["blueberry"],
+    )
+    return strawberries, blueberries
+
 # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
@@ -33,7 +57,8 @@ game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
 ICON_HEIGHT = ss.relative_y_to_game_units_px(0.05)
 strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", ICON_HEIGHT)
 blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", ICON_HEIGHT)
-
+picked_strawberries = 0
+picked_blueberries = 0
 item_icons = {
     "strawberry": strawberry_icon,
     "blueberry": blueberry_icon,
@@ -57,23 +82,14 @@ move_player = PlayerMobility(gravity)
 level = LoadLevel()
 map = "map1"
 level.load_level(map)
-strawberries_collected = 0
-blueberries_collected = 0
+strawberries, blueberries = respawn_berries(map)
 inventory = Inventory()
 inventory_ui = InventoryUI(font, item_icons)
 away = True
 colliding_npc = None
 
-strawberries = spawn_berries_for_bushes(
-    level.strawberry_bushes,
-    per_bush=3,
-    sprite_path="sprites/items/strawberry.png",
-)
-blueberries = spawn_berries_for_bushes(
-    level.blueberry_bushes,
-    per_bush=1,
-    sprite_path="sprites/items/blueberry.png",
-)
+
+
 
 running = True
 while running:
@@ -136,12 +152,14 @@ while running:
             map = "map2"
             reset_player = 0
             level.load_level(map)
+            strawberries, blueberries = respawn_berries(map)
             move_player.set_x_position(reset_player)
 
         if map == "map2" and move_player.visual_rect.centerx <= 0:
             map = "map1"
             reset_player = ss.GAME_WIDTH - sara.player_rect.width
             level.load_level(map)
+            strawberries, blueberries = respawn_berries(map)
             move_player.set_x_position(reset_player)
 
 
@@ -192,8 +210,8 @@ while running:
         #DIALOG:
         dialog_view.draw(screen, dialog_vm)
         # PRZEDMIOTY:
-        picked_strawberries = pick_item(strawberries, sara.player_rect, is_pick_pressed)
-        picked_blueberries = pick_item(blueberries, sara.player_rect, is_pick_pressed)
+        picked_strawberries = pick_item(strawberries, sara.player_rect, is_pick_pressed, berry_remaining["strawberry"])
+        picked_blueberries = pick_item(blueberries, sara.player_rect, is_pick_pressed, berry_remaining["blueberry"])
 
         if picked_strawberries:
             inventory.add("strawberry", picked_strawberries)
