@@ -29,7 +29,8 @@ class Npc:
         self._interaction = interaction
         self._quest_update = quest_update
         self._bye_bye_animation = bye_bye_animation
-
+        self._dialog_index = 0
+        self._dialog = []
         self._sprite = self._static.surface()
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
 
@@ -41,12 +42,32 @@ class Npc:
         self._override_anim_until_ms: int = 0
         self._status = Status.STANDBY
 
+    def set_dialog(self, dialog_steps: list[dict]): # step = {"text": "Hello", "frame": "hello", "ms": 800}
+        self._dialog = dialog_steps
+        self._dialog_index = 0
+
     def interaction(self, now_ms: int) -> str | None:
-        if self._status == Status.STANDBY:
-            self.show_frame("hello", ms=800, now_ms=now_ms)
-            message = "Hello my friend!"
+        if not self._dialog:
+            return None
+        step = self._dialog[self._dialog_index]
+        frame = step.get("frame")
+        ms = step.get("ms", 800)
+        text = step.get("text")
+
+        if frame:
+            self.show_frame(frame, ms=ms, now_ms=now_ms)
+            mode = step.get("mode", "next")
+            if mode == "next":
+                if self._dialog_index < len(self._dialog) - 1:
+                    self._dialog_index += 1
+                elif mode == "stay":
+                    pass
+                elif mode == "end":
+                    self._dialog_index = 0
+                else:
+                    pass
             self._status = Status.HELLO
-            return message
+            return text
 
     def end_interaction(self, now_ms: int) -> str | None:
         message = None
@@ -54,6 +75,7 @@ class Npc:
             self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
             message = "Bye bye!"
             pygame.mixer.Sound("sounds/npc_hmhm.wav").play()
+            self._dialog_index = 0
         self._status = Status.STANDBY
         return message
 
@@ -95,7 +117,14 @@ class Npc:
         standby_animation = Animation(duration=10, frames=frames)
         bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("npc_mouse_bye"), mouse])
 
-        return Npc(x, y, standby_animation, hello, happy, thinking, bye_animation)
+        npc = Npc(x, y, standby_animation, hello, happy, thinking, bye_animation)
+        npc.set_dialog([
+            {"text": "Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0},
+            {"text": "I need your help.", "frame": "thinking", "ms": 800, "mode": "next", "quest": 1},
+            {"text": "Bring me 3 strawberries.", "frame": "happy", "ms": 800, "mode": "stay", "quest": 1},
+        ])
+
+        return npc
 
     @staticmethod
     def load_npc_sprite(sprite_name: str) -> pygame.Surface:
