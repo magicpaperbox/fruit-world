@@ -14,7 +14,7 @@ from maps_data import LoadLevel
 from player import Player
 from player_mobility import PlayerMobility
 from render.sprite_factory import SPRITE_FACTORY
-from scale_screen import font_size
+from scale_screen import get_font_size
 from ui import UIManager
 
 DEBUG_OVERLAYS = False
@@ -30,6 +30,7 @@ berry_remaining = {
     "strawberry": {},  # bush_key -> ile zostało
     "blueberry": {},
 }
+
 
 def respawn_berries(map_id: str):
     strawberries = spawn_berries_for_bushes(
@@ -50,10 +51,9 @@ def respawn_berries(map_id: str):
     )
     return strawberries, blueberries
 
-# screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
-# game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 ICON_HEIGHT = ss.relative_y_to_game_units_px(0.05)
 strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", ICON_HEIGHT)
 blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", ICON_HEIGHT)
@@ -70,11 +70,10 @@ pygame.display.set_caption("Fruit world")
 clock = pygame.time.Clock()
 gravity = ss.game_units_to_decimal(0.001)
 
-font, _ = font_size()
-_, font_size = font_size()
-layout = Layout(0.4*font_size, 0.4*font_size)
+font, font_size = get_font_size()
+layout = Layout(0.4 * font_size, 0.4 * font_size)
 rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=1)
-dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size-3)
+dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size - 3)
 dialog_view = DialogBoxView(font=font)
 
 sara = Player.load()
@@ -87,9 +86,6 @@ inventory = Inventory()
 inventory_ui = InventoryUI(font, item_icons)
 away = True
 colliding_npc = None
-
-
-
 
 running = True
 while running:
@@ -162,7 +158,6 @@ while running:
             strawberries, blueberries = respawn_berries(map)
             move_player.set_x_position(reset_player)
 
-
         sara.update_sprite(
             move_player.is_on_ground,
             is_right_pressed,
@@ -207,7 +202,7 @@ while running:
         screen.blit(game_surface, layout.game_view.topleft)
         layout.draw_panel(screen)
         layout.draw_panel_windows(screen)
-        #DIALOG:
+        # DIALOG:
         dialog_view.draw(screen, dialog_vm)
         # PRZEDMIOTY:
         picked_strawberries = pick_item(strawberries, sara.player_rect, is_pick_pressed, berry_remaining["strawberry"])
@@ -219,7 +214,8 @@ while running:
         if picked_blueberries:
             inventory.add("blueberry", picked_blueberries)
 
-        inventory_ui.draw(screen, inventory, x=ss.relative_x_to_screen_units(0.87), y=ss.relative_y_to_screen_units(0.02))
+        inventory_ui.draw(screen, inventory, x=ss.relative_x_to_screen_units(0.87),
+                          y=ss.relative_y_to_screen_units(0.02))
 
         pygame.display.flip()
 

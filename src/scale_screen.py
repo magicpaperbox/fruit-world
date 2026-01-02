@@ -27,7 +27,7 @@ GAME_HEIGHT: int | None = None
 
 _CANONICAL_SCREEN_HEIGHT = 1080
 
-def font_size():
+def get_font_size():
     if _chosen_res == _AVAILABLE_RESOLUTIONS[0]:
         size = 8
     elif _chosen_res == _AVAILABLE_RESOLUTIONS[1]:

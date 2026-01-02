@@ -217,3 +217,17 @@ def make_dialog_rect(screen_w: int, screen_h: int, box_height: int, screen_botto
         width,
         box_height,
     )
+
+
+class Button:
+    def __init__(self, font, text, width, height, pos):
+        self.top_rect = pygame.Rect(pos, (width, height))
+        self.top_color = (140, 165, 135)
+        self.text_color = (245, 245, 235)
+        self.font = font
+        self.text_surface = self.font.render(text, True, self.text_color)
+        self.text_rect = self.text_surface.get_rect(center=self.top_rect.center)
+
+    def draw(self, screen: pygame.Surface):
+        pygame.draw.rect(screen, self.top_color, self.top_rect)
+        screen.blit(self.text_surface, self.text_rect)

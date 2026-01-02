@@ -119,9 +119,7 @@ class Npc:
 
         npc = Npc(x, y, standby_animation, hello, happy, thinking, bye_animation)
         npc.set_dialog([
-            {"text": "Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0},
-            {"text": "I need your help.", "frame": "thinking", "ms": 800, "mode": "next", "quest": 1},
-            {"text": "Bring me 3 strawberries.", "frame": "happy", "ms": 800, "mode": "stay", "quest": 1},
+            {"text": "Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0, "react": False},
         ])
 
         return npc
