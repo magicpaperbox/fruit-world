@@ -6,12 +6,12 @@ import pygame
 
 from screen import scale_screen as ss
 from render.debug import draw_rect, draw_area
-from dialog_box import DialogBox, DialogBoxView, make_dialog_rect
-from inventory import Inventory, InventoryUI
+from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
+from gameplay.player.inventory import Inventory, InventoryUI
 from screen.layout import Layout
-from maps_data import Level
-from player.player import Player
-from player.player_mobility import PlayerMobility
+from gameplay.levels.maps_data import Level
+from gameplay.player.player import Player
+from gameplay.player.player_mobility import PlayerMobility
 from render.sprite_factory import SPRITE_FACTORY
 from screen.scale_screen import get_font_size
 from menu.ui import UIManager

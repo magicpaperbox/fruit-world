@@ -1,9 +1,9 @@
 import enum
 
-from inventory import Inventory
+from gameplay.player.inventory import Inventory
 
-from npcs import Npc
-from quest import Quest
+from gameplay.levels.npcs import Npc
+from gameplay.levels.quest import Quest
 
 
 # dialogs = ([

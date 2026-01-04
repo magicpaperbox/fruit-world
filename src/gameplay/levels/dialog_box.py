@@ -1,7 +1,7 @@
 import pygame
 from typing import List
 
-from npcs import Npc
+from gameplay.levels.npcs import Npc
 from screen import scale_screen as ss
 
 

@@ -1,9 +1,9 @@
 import pygame
 
-from inventory import Inventory
-from map_loading import Map
-from berry_bush import BerryBush
-from npcs import Npc
+from gameplay.player.inventory import Inventory
+from gameplay.levels.map_loading import Map
+from gameplay.levels.berry_bush import BerryBush
+from gameplay.levels.npcs import Npc
 import screen.scale_screen as ss
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject

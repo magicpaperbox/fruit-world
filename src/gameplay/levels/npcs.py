@@ -3,7 +3,7 @@ import enum
 import pygame
 from render.animation import Animation
 from screen import scale_screen as ss
-from quest import Quest
+from gameplay.levels.quest import Quest
 
 
 class Status(str, enum.Enum):
