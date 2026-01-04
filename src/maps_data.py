@@ -1,5 +1,6 @@
 import pygame
 
+from inventory import Inventory
 from map_loading import Map
 from bushes import Bush
 from npcs import Npc
@@ -32,7 +33,7 @@ class MapSpec:
         self.npcs = npcs
         self.static_objects = static_objects
 
-class LoadLevel:
+class Level:
     def __init__(self):
         self.current_screen = None
         self.background_img = None
@@ -41,24 +42,27 @@ class LoadLevel:
         self.blueberry_bushes = []
         self.npcs = []
         self.static_objects = []
+        self.quests = []
 
+    def load_level(self, inventory: Inventory):
+        pass
 
-    def load_level(self, map_id: str):
+    def load_map(self, map_id: str):
         self.current_screen = MAP_SPECS[map_id]
         self.background_img = Map.load(self.current_screen.background)
         self.platforms = [SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height)) for p in self.current_screen.platforms.values()]
         self.strawberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.strawberry_bushes.values()]
         self.blueberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.blueberry_bushes.values()]
-        self.npcs = []
-        for key, value in MAP_SPECS[map_id].npcs.items():
-            if key == "mouse":
-                self.npcs.append(Npc.load_mouse(value.x, value.y))
-
         self.static_objects = []
         for key, value in self.current_screen.static_objects.items():
             sprite = SPRITE_FACTORY.load(f"sprites/objects/{key}.png", value.height)
             sprite_obj = SpriteObject.create(sprite, topleft=(value.x, value.y))
             self.static_objects.append(sprite_obj)
+        self.npcs = []
+        for key, value in MAP_SPECS[map_id].npcs.items():
+            if key == "mouse":
+                mouse = Npc.load_mouse(value.x, value.y)
+                self.npcs.append(mouse)
 
 
 

@@ -3,7 +3,7 @@ import enum
 import pygame
 from animation import Animation
 import scale_screen as ss
-
+from quests import StrawberryQuest
 
 
 class Status(str, enum.Enum):
@@ -16,6 +16,7 @@ class Npc:
 
     def __init__(
         self,
+        npc_id: str,
         x: int,
         y: int,
         static: Animation,
@@ -23,7 +24,10 @@ class Npc:
         interaction: pygame.Surface,
         quest_update: pygame.Surface,
         bye_bye_animation: Animation,
+        default_dialog: list[dict]
     ):
+        self.npc_id = npc_id
+        self._current_quest: StrawberryQuest | None = None
         self._static = static
         self._hello = hello
         self._interaction = interaction
@@ -32,6 +36,7 @@ class Npc:
         self._dialog_index = 0
         self._dialog = []
         self._sprite = self._static.surface()
+        self._default_dialog = default_dialog
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
 
         # tymczasowa podmiana animacji
@@ -41,12 +46,32 @@ class Npc:
         self._override_anim: Animation | None = None
         self._override_anim_until_ms: int = 0
         self._status = Status.STANDBY
+        self._is_in_dialog = False
+        self.set_dialog(default_dialog)
+
+    def set_quest(self, quest: StrawberryQuest):
+        self._current_quest = quest
+
+    def clear_quest(self):
+        self._current_quest = None
 
     def set_dialog(self, dialog_steps: list[dict]): # step = {"text": "Hello", "frame": "hello", "ms": 800}
         self._dialog = dialog_steps
         self._dialog_index = 0
+        self._is_in_dialog = False
 
     def interaction(self, now_ms: int) -> str | None:
+        if not self._is_in_dialog:
+            if self._current_quest is not None:
+                dialog = self._current_quest.get_current_dialog(self.npc_id)
+                if dialog:
+                    self.set_dialog(dialog)
+                else:
+                    self.set_dialog(self._default_dialog)
+            else:
+                self.set_dialog(self._default_dialog)
+            self._is_in_dialog = True
+
         if not self._dialog:
             return None
         step = self._dialog[self._dialog_index]
@@ -64,8 +89,7 @@ class Npc:
                     pass
                 elif mode == "end":
                     self._dialog_index = 0
-                else:
-                    pass
+                    self._is_in_dialog = False
             self._status = Status.HELLO
             return text
 
@@ -117,8 +141,7 @@ class Npc:
         standby_animation = Animation(duration=10, frames=frames)
         bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("npc_mouse_bye"), mouse])
 
-        npc = Npc(x, y, standby_animation, hello, happy, thinking, bye_animation)
-        npc.set_dialog([
+        npc = Npc("mouse", x, y, standby_animation, hello, happy, thinking, bye_animation, [
             {"text": "Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0, "react": False},
         ])
 

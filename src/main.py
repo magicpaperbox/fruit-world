@@ -10,7 +10,7 @@ from dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from inventory import Inventory, InventoryUI
 from item import pick_item
 from layout import Layout
-from maps_data import LoadLevel
+from maps_data import Level
 from player import Player
 from player_mobility import PlayerMobility
 from render.sprite_factory import SPRITE_FACTORY
@@ -76,14 +76,15 @@ rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, 
 dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size - 3)
 dialog_view = DialogBoxView(font=font)
 
-sara = Player.load()
-move_player = PlayerMobility(gravity)
-level = LoadLevel()
-map = "map1"
-level.load_level(map)
-strawberries, blueberries = respawn_berries(map)
 inventory = Inventory()
 inventory_ui = InventoryUI(font, item_icons)
+sara = Player.load()
+move_player = PlayerMobility(gravity)
+level = Level()
+level.load_level(inventory)
+map = "map1"
+level.load_map(map)
+strawberries, blueberries = respawn_berries(map)
 away = True
 colliding_npc = None
 
@@ -147,14 +148,14 @@ while running:
         if map == "map1" and move_player.visual_rect.centerx > ss.GAME_WIDTH:
             map = "map2"
             reset_player = 0
-            level.load_level(map)
+            level.load_map(map)
             strawberries, blueberries = respawn_berries(map)
             move_player.set_x_position(reset_player)
 
         if map == "map2" and move_player.visual_rect.centerx <= 0:
             map = "map1"
             reset_player = ss.GAME_WIDTH - sara.player_rect.width
-            level.load_level(map)
+            level.load_map(map)
             strawberries, blueberries = respawn_berries(map)
             move_player.set_x_position(reset_player)
 
