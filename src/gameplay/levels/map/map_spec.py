@@ -12,7 +12,7 @@ class MapSpec:
         blueberry_bushes: dict[str, ObjectSpec],
         npcs: dict[str, ObjectSpec],
         static_objects: dict[str, ObjectSpec],
-        neighbours: dict[Direction, str]
+        neighbours: dict[Direction, str],
     ):
         self.map_id = map_id
         self.background = background

@@ -12,7 +12,7 @@ class Quest:
         self.quest_state = QuestState.NOT_STARTED
 
     def start(self):
-        pass
+        self.quest_state = QuestState.IN_PROGRESS
 
     def get_current_dialog(self, npc_id: str) -> list[dict] | None:
         pass

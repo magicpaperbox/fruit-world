@@ -13,8 +13,7 @@ class Map:
     def __init__(self, spec: MapSpec):
         self.background_img = self._load_map_background(spec.background)
         self.platforms = [
-            SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height))
-            for p in spec.platforms.values()
+            SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height)) for p in spec.platforms.values()
         ]
         self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes.values()), 1, "blueberry")
         self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes.values()), 3, "strawberry")
@@ -44,5 +43,6 @@ class Map:
         sprite = SPRITE_FACTORY.load(f"sprites/map/{sprite_name}.png", ss.GAME_HEIGHT)
         rect = sprite.get_rect(center=ss.relative_coords_to_game_units_px(0.5, 0.5))
         return SpriteObject(sprite, rect)
+
 
 __all__ = ["Map"]

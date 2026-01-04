@@ -81,17 +81,17 @@ class Npc:
 
         if frame:
             self.show_frame(frame, ms=ms, now_ms=now_ms)
-            mode = step.get("mode", "next")
-            if mode == "next":
-                if self._dialog_index < len(self._dialog) - 1:
-                    self._dialog_index += 1
-                elif mode == "stay":
-                    pass
-                elif mode == "end":
-                    self._dialog_index = 0
-                    self._is_in_dialog = False
+        mode = step.get("mode", "next")
+        if mode == "next":
+            if self._dialog_index < len(self._dialog) - 1:
+                self._dialog_index += 1
+        elif mode == "stay":
+            pass
+        elif mode == "end":
+            self._dialog_index = 0
+            self._is_in_dialog = False
             self._status = Status.HELLO
-            return text
+        return text
 
     def end_interaction(self, now_ms: int) -> str | None:
         message = None
@@ -100,6 +100,7 @@ class Npc:
             message = "Bye bye!"
             pygame.mixer.Sound("sounds/npc_hmhm.wav").play()
             self._dialog_index = 0
+            self._is_in_dialog = False
         self._status = Status.STANDBY
         return message
 
