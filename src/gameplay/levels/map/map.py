@@ -1,0 +1,48 @@
+import pygame
+
+import screen.scale_screen as ss
+from gameplay.levels.berry_bush import BerryBush
+from gameplay.levels.map.map_spec import MapSpec
+from gameplay.levels.map.object_spec import ObjectSpec
+from gameplay.levels.npcs import Npc
+from render.sprite_factory import SPRITE_FACTORY
+from render.sprite_object import SpriteObject
+
+
+class Map:
+    def __init__(self, spec: MapSpec):
+        self.background_img = self._load_map_background(spec.background)
+        self.platforms = [
+            SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height))
+            for p in spec.platforms.values()
+        ]
+        self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes.values()), 1, "blueberry")
+        self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes.values()), 3, "strawberry")
+        self.static_objects = self._load_static_objects(spec.static_objects)
+        self.npcs = []
+        for key, value in spec.npcs.items():
+            if key == "mouse":
+                mouse = Npc.load_mouse(value.x, value.y)
+                self.npcs.append(mouse)
+        self.neighbours = spec.neighbours
+
+    def _load_static_objects(self, specs: dict[str, ObjectSpec]):
+        static_objects = []
+        for key, value in specs.items():
+            sprite = SPRITE_FACTORY.load(f"sprites/objects/{key}.png", value.height)
+            sprite_obj = SpriteObject.create(sprite, topleft=(value.x, value.y))
+            static_objects.append(sprite_obj)
+        return static_objects
+
+    def _load_bushes(self, specs: list[ObjectSpec], count: int, item_id: str):
+        return [
+            BerryBush(pygame.Rect(p.x, p.y, p.width, p.height), f"sprites/items/{item_id}.png", count, item_id)
+            for p in specs
+        ]
+
+    def _load_map_background(self, sprite_name: str) -> SpriteObject:
+        sprite = SPRITE_FACTORY.load(f"sprites/map/{sprite_name}.png", ss.GAME_HEIGHT)
+        rect = sprite.get_rect(center=ss.relative_coords_to_game_units_px(0.5, 0.5))
+        return SpriteObject(sprite, rect)
+
+__all__ = ["Map"]

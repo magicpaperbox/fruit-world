@@ -4,12 +4,14 @@ import traceback
 
 import pygame
 
+from gameplay.levels.level import Level
+from gameplay.levels.levels_data import LEVEL_1_SPEC
+from gameplay.levels.map.direction import Direction
 from screen import scale_screen as ss
 from render.debug import draw_rect, draw_area
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.player.inventory import Inventory, InventoryUI
 from screen.layout import Layout
-from gameplay.levels.maps_data import Level
 from gameplay.player.player import Player
 from gameplay.player.player_mobility import PlayerMobility
 from render.sprite_factory import SPRITE_FACTORY
@@ -51,10 +53,7 @@ inventory = Inventory()
 inventory_ui = InventoryUI(font, item_icons)
 sara = Player.load()
 move_player = PlayerMobility(gravity)
-level = Level()
-level.load_level(inventory)
-map = "map1"
-level.load_map(map)
+level = Level(inventory, LEVEL_1_SPEC)
 away = True
 colliding_npc = None
 
@@ -93,7 +92,7 @@ while running:
         is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
 
-        for npc in level.npcs:
+        for npc in level.current_map.npcs:
             if sara.player_rect.colliderect(npc.npc_rect):
                 away = False
                 colliding_npc = npc
@@ -106,26 +105,28 @@ while running:
             npc.update_sprite(now_ms)
 
         if is_right_pressed:
-            move_player.move_right(level.platforms, dt)
+            move_player.move_right(level.current_map.platforms, dt)
         elif is_left_pressed:
-            move_player.move_left(level.platforms, dt)
+            move_player.move_left(level.current_map.platforms, dt)
 
         if space_down_this_frame:
             move_player.jump()
 
         dialog_vm.update(dt)
-        move_player.move_vertically(level.platforms, dt)
-        if map == "map1" and move_player.visual_rect.centerx > ss.GAME_WIDTH:
-            map = "map2"
-            reset_player = 0
-            level.load_map(map)
-            move_player.set_x_position(reset_player)
+        move_player.move_vertically(level.current_map.platforms, dt)
 
-        if map == "map2" and move_player.visual_rect.centerx <= 0:
-            map = "map1"
-            reset_player = ss.GAME_WIDTH - sara.player_rect.width
-            level.load_map(map)
-            move_player.set_x_position(reset_player)
+        if move_player.visual_rect.centerx > ss.GAME_WIDTH:
+            if level.try_load_map(Direction.RIGHT):
+                move_player.set_x_position(0)
+            else:
+                reset_player = ss.GAME_WIDTH - sara.player_rect.width
+                move_player.set_x_position(reset_player)
+        elif move_player.visual_rect.centerx <= 0:
+            if level.try_load_map(Direction.LEFT):
+                reset_player = ss.GAME_WIDTH - sara.player_rect.width
+                move_player.set_x_position(reset_player)
+            else:
+                move_player.set_x_position(0)
 
         sara.update_sprite(
             move_player.is_on_ground,
@@ -136,25 +137,25 @@ while running:
 
         screen.fill((53, 71, 46))  # tło gry
 
-        level.background_img.draw(game_surface)
-        for platform in level.platforms:
+        level.current_map.background_img.draw(game_surface)
+        for platform in level.current_map.platforms:
             platform.draw(game_surface)
-        for bush in level.blueberry_bushes:
+        for bush in level.current_map.blueberry_bushes:
             bush.draw(game_surface)
-        for bush in level.strawberry_bushes:
+        for bush in level.current_map.strawberry_bushes:
             bush.draw(game_surface)
-        for obj in level.static_objects:
+        for obj in level.current_map.static_objects:
             obj.draw(game_surface)
-        for npc in level.npcs:
+        for npc in level.current_map.npcs:
             npc.draw(game_surface)
         sara.draw(game_surface)
 
         if DEBUG_OVERLAYS:
-            draw_area(game_surface, level.strawberry_bushes, (190, 20, 40), "TRUS")
-            draw_area(game_surface, level.blueberry_bushes, (60, 120, 255), "BOR")
+            draw_area(game_surface, level.current_map.strawberry_bushes, (190, 20, 40), "TRUS")
+            draw_area(game_surface, level.current_map.blueberry_bushes, (60, 120, 255), "BOR")
             draw_rect(game_surface, move_player.collision_rect_x, (250, 250, 0), "HIT")
             draw_rect(game_surface, move_player.collision_rect_y, (250, 165, 20), "HIT")
-            for platform in level.platforms:
+            for platform in level.current_map.platforms:
                 draw_rect(
                     game_surface,
                     platform.rect,
@@ -175,7 +176,7 @@ while running:
         dialog_view.draw(screen, dialog_vm)
         # PRZEDMIOTY:
         if is_pick_pressed:
-            for bush in itertools.chain(level.strawberry_bushes, level.blueberry_bushes):
+            for bush in itertools.chain(level.current_map.strawberry_bushes, level.current_map.blueberry_bushes):
                 picked_items = bush.try_pick_berries(sara.player_rect)
                 if picked_items > 0:
                     inventory.add(bush.berry_item_id, picked_items)
@@ -188,7 +189,7 @@ while running:
 
     except Exception as e:
         print(e)
-        traceback.print_tb(None)
+        traceback.print_tb(e)
         input("czekamy")
 
 pygame.quit()
