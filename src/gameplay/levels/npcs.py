@@ -82,12 +82,12 @@ class Npc:
         if frame:
             self.show_frame(frame, ms=ms, now_ms=now_ms)
         mode = step.get("mode", "next")
-        if mode == "next":
-            if self._dialog_index < len(self._dialog) - 1:
-                self._dialog_index += 1
-        elif mode == "stay":
+        has_next = self._dialog_index < len(self._dialog) - 1
+        if mode == "stay":
             pass
-        elif mode == "end":
+        elif mode == "next" and has_next:
+            self._dialog_index += 1
+        else:
             self._dialog_index = 0
             self._is_in_dialog = False
             self._status = Status.HELLO
@@ -152,7 +152,7 @@ class Npc:
             thinking,
             bye_animation,
             [
-                {"text": "Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0, "react": False},
+                {"text": "Hello my friend!", "frame": "hello"},
             ],
         )
 

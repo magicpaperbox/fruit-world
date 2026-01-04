@@ -7,53 +7,37 @@ from gameplay.levels.quest import Quest, QuestState
 
 
 _WELCOME_DIALOG = [
-    {"text": "Mouse: Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0, "react": False},
+    {"text": "Mouse: Hello my friend!", "frame": "hello"},
     {
         "text": "Mouse: I need your help. I'm starving, but I can't leave my house.",
         "frame": "thinking",
-        "ms": 800,
-        "mode": "next",
-        "quest": 1,
-        "react": False,
     },
     {
         "text": "Mouse:  Please, bring me 3 strawberries.",
         "frame": "thinking",
-        "ms": 800,
-        "mode": "next",
-        "quest": 1,
-        "react": True,
     },
     {
         "text": "Sara: Oki",
         "frame": "happy",
-        "ms": 800,
-        "mode": "end",
-        "quest": 1,
-        "react": True,
     },
 ]
+
 
 def search_in_progress_dialog(amount: int):
     return [
         {
-            "text": "Mouse: I can't believe that you agreed to help me! I need {amount} more of this.".format(amount=amount),
+            "text": "Mouse: I can't believe that you agreed to help me! I need {amount} more of this.".format(
+                amount=amount
+            ),
             "frame": "happy",
-            "ms": 800,
-            "mode": "end",
-            "quest": 1,
-            "react": True,
         },
     ]
+
 
 _SEARCH_DONE_DIALOG = [
     {
         "text": "Mouse: Thank you I never forget your help",
         "frame": "happy",
-        "ms": 800,
-        "mode": "end",
-        "quest": 1,
-        "react": True,
     },
 ]
 
@@ -61,10 +45,6 @@ _COLLECTED_ALL_STRAWBERRIES_DIALOG = [
     {
         "text": "Mouse: Oh great! Now I have all strawberries I needed",
         "frame": "happy",
-        "ms": 800,
-        "mode": "end",
-        "quest": 1,
-        "react": True,
     },
 ]
 
@@ -75,10 +55,6 @@ def received_items_dialog(received_count: int, remaining_count: int):
         {
             "text": f"Mouse: Thanks you for these {received_count} {strawberry_word}! I need {remaining_count} more!",
             "frame": "happy",
-            "ms": 800,
-            "mode": "end",
-            "quest": 1,
-            "react": True,
         },
     ]
 
