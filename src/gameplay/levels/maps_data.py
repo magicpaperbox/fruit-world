@@ -1,7 +1,6 @@
 import pygame
 
 from gameplay.player.inventory import Inventory
-from gameplay.levels.map_loading import Map
 from gameplay.levels.berry_bush import BerryBush
 from gameplay.levels.npcs import Npc
 import screen.scale_screen as ss
@@ -51,7 +50,7 @@ class Level:
 
     def load_map(self, map_id: str):
         self.current_screen = MAP_SPECS[map_id]
-        self.background_img = Map.load(self.current_screen.background)
+        self.background_img = self._load_map_background(self.current_screen.background)
         self.platforms = [
             SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height))
             for p in self.current_screen.platforms.values()
@@ -74,6 +73,11 @@ class Level:
             if key == "mouse":
                 mouse = Npc.load_mouse(value.x, value.y)
                 self.npcs.append(mouse)
+
+    def _load_map_background(self, sprite_name: str) -> SpriteObject:
+        sprite = SPRITE_FACTORY.load(f"sprites/map/{sprite_name}.png", ss.GAME_HEIGHT)
+        rect = sprite.get_rect(center=ss.relative_coords_to_game_units_px(0.5, 0.5))
+        return SpriteObject(sprite, rect)
 
 
 MAP_SPECS: dict[str, MapSpec] = {

@@ -7,10 +7,10 @@ class SpriteFactory:
     def __init__(self):
         self._sprite_cache: dict[_CacheKey, pygame.Surface] = {}
 
-    def load(self, sprite_path: str, target_height: int) -> pygame.Surface:
-        key: _CacheKey = (sprite_path, target_height)
+    def load(self, sprite_path: str, target_height_px: int) -> pygame.Surface:
+        key: _CacheKey = (sprite_path, target_height_px)
         if key not in self._sprite_cache:
-            self._sprite_cache[key] = SpriteFactory._load_uncached(sprite_path, target_height)
+            self._sprite_cache[key] = SpriteFactory._load_uncached(sprite_path, target_height_px)
         return self._sprite_cache[key]
 
     @staticmethod
