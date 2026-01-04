@@ -10,8 +10,8 @@ from dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from inventory import Inventory, InventoryUI
 from layout import Layout
 from maps_data import Level
-from player import Player
-from player_mobility import PlayerMobility
+from player.player import Player
+from player.player_mobility import PlayerMobility
 from render.sprite_factory import SPRITE_FACTORY
 from scale_screen import get_font_size
 from ui import UIManager
@@ -30,8 +30,6 @@ game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
 ICON_HEIGHT = ss.relative_y_to_game_units_px(0.05)
 strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", ICON_HEIGHT)
 blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", ICON_HEIGHT)
-picked_strawberries = 0
-picked_blueberries = 0
 item_icons = {
     "strawberry": strawberry_icon,
     "blueberry": blueberry_icon,

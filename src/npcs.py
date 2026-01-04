@@ -1,7 +1,7 @@
 import enum
 
 import pygame
-from animation import Animation
+from render.animation import Animation
 import scale_screen as ss
 from quest import Quest
 
