@@ -3,7 +3,7 @@ import enum
 import pygame
 from animation import Animation
 import scale_screen as ss
-from quests import StrawberryQuest
+from quest import Quest
 
 
 class Status(str, enum.Enum):
@@ -27,7 +27,7 @@ class Npc:
         default_dialog: list[dict]
     ):
         self.npc_id = npc_id
-        self._current_quest: StrawberryQuest | None = None
+        self._current_quest: Quest | None = None
         self._static = static
         self._hello = hello
         self._interaction = interaction
@@ -49,7 +49,7 @@ class Npc:
         self._is_in_dialog = False
         self.set_dialog(default_dialog)
 
-    def set_quest(self, quest: StrawberryQuest):
+    def set_quest(self, quest: Quest):
         self._current_quest = quest
 
     def clear_quest(self):

@@ -1,8 +1,9 @@
-import pygame
 import enum
 
 from inventory import Inventory
+
 from npcs import Npc
+from quest import Quest
 
 
 # dialogs = ([
@@ -17,8 +18,9 @@ class QuestState(enum.Enum):
     IN_PROGRESS = 2
     COMPLETED = 3
 
-class StrawberryQuest:
+class StrawberryQuest(Quest):
     def __init__(self, mouse: Npc, inventory: Inventory):
+        super().__init__()
         self._mouse = mouse
         self._inventory = inventory
         self.quest_state = QuestState.NOT_STARTED
