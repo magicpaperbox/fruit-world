@@ -1,5 +1,5 @@
 import pygame
-import scale_screen as ss
+from screen import scale_screen as ss
 
 
 class Map:

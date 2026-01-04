@@ -1,6 +1,6 @@
 import pygame
 from player.collisions import collision_x, collision_y
-import scale_screen as ss
+from screen import scale_screen as ss
 from render.sprite_object import SpriteObject
 
 

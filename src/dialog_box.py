@@ -2,7 +2,7 @@ import pygame
 from typing import List
 
 from npcs import Npc
-import scale_screen as ss
+from screen import scale_screen as ss
 
 
 # MVVM

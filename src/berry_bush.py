@@ -1,6 +1,6 @@
 import pygame
 import random
-import scale_screen as ss
+from screen import scale_screen as ss
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
 
