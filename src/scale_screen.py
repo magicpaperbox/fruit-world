@@ -27,6 +27,7 @@ GAME_HEIGHT: int | None = None
 
 _CANONICAL_SCREEN_HEIGHT = 1080
 
+
 def get_font_size():
     if _chosen_res == _AVAILABLE_RESOLUTIONS[0]:
         size = 8
@@ -37,7 +38,6 @@ def get_font_size():
     else:
         size = 16
     return pygame.font.SysFont("comicsansms", size), size
-
 
 
 def recalc_sizes(width: int, height: int):
@@ -78,8 +78,10 @@ def relative_y_to_game_units_px(vertical_pos: float) -> int:
 def relative_coords_to_game_units_px(horizontal_pos: float, vertical_pos: float) -> tuple[int, int]:
     return int(horizontal_pos * GAME_WIDTH), int(vertical_pos * GAME_HEIGHT)
 
+
 def relative_x_to_screen_units(horizontal_pos: float) -> int:
     return int(horizontal_pos * SCREEN_WIDTH)
+
 
 def relative_y_to_screen_units(vertical_pos: float) -> int:
     return int(vertical_pos * SCREEN_HEIGHT)

@@ -15,7 +15,6 @@ class SpriteObject:
     def __str__(self):
         return f"SpriteObj(left: {self.rect.left}, right: {self.rect.right}, top: {self.rect.top}, bottom: {self.rect.bottom})"
 
-
     @classmethod
     def create(cls, sprite: pygame.Surface, **kwargs) -> Self:
         rect = sprite.get_rect(**kwargs)

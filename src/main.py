@@ -1,14 +1,13 @@
+import itertools
 import sys
 import traceback
 
 import pygame
 
 import scale_screen as ss
-from bushes import spawn_berries_for_bushes
 from debug import draw_rect, draw_area
 from dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from inventory import Inventory, InventoryUI
-from item import pick_item
 from layout import Layout
 from maps_data import Level
 from player import Player
@@ -25,32 +24,6 @@ pygame.mixer.init()
 jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
 fall = pygame.mixer.Sound("sounds/jump_rustle.wav").play()
 fullscreen = False
-
-berry_remaining = {
-    "strawberry": {},  # bush_key -> ile zostało
-    "blueberry": {},
-}
-
-
-def respawn_berries(map_id: str):
-    strawberries = spawn_berries_for_bushes(
-        map_id=map_id,
-        berry_id="strawberry",
-        bushes=level.strawberry_bushes,
-        per_bush=3,
-        sprite_path="sprites/items/strawberry.png",
-        remaining_by_key=berry_remaining["strawberry"],
-    )
-    blueberries = spawn_berries_for_bushes(
-        map_id=map_id,
-        berry_id="blueberry",
-        bushes=level.blueberry_bushes,
-        per_bush=1,
-        sprite_path="sprites/items/blueberry.png",
-        remaining_by_key=berry_remaining["blueberry"],
-    )
-    return strawberries, blueberries
-
 
 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
@@ -84,7 +57,6 @@ level = Level()
 level.load_level(inventory)
 map = "map1"
 level.load_map(map)
-strawberries, blueberries = respawn_berries(map)
 away = True
 colliding_npc = None
 
@@ -149,14 +121,12 @@ while running:
             map = "map2"
             reset_player = 0
             level.load_map(map)
-            strawberries, blueberries = respawn_berries(map)
             move_player.set_x_position(reset_player)
 
         if map == "map2" and move_player.visual_rect.centerx <= 0:
             map = "map1"
             reset_player = ss.GAME_WIDTH - sara.player_rect.width
             level.load_map(map)
-            strawberries, blueberries = respawn_berries(map)
             move_player.set_x_position(reset_player)
 
         sara.update_sprite(
@@ -171,10 +141,10 @@ while running:
         level.background_img.draw(game_surface)
         for platform in level.platforms:
             platform.draw(game_surface)
-        for strawberry in strawberries:
-            strawberry.draw(game_surface)
-        for blueberry in blueberries:
-            blueberry.draw(game_surface)
+        for bush in level.blueberry_bushes:
+            bush.draw(game_surface)
+        for bush in level.strawberry_bushes:
+            bush.draw(game_surface)
         for obj in level.static_objects:
             obj.draw(game_surface)
         for npc in level.npcs:
@@ -206,23 +176,21 @@ while running:
         # DIALOG:
         dialog_view.draw(screen, dialog_vm)
         # PRZEDMIOTY:
-        picked_strawberries = pick_item(strawberries, sara.player_rect, is_pick_pressed, berry_remaining["strawberry"])
-        picked_blueberries = pick_item(blueberries, sara.player_rect, is_pick_pressed, berry_remaining["blueberry"])
+        if is_pick_pressed:
+            for bush in itertools.chain(level.strawberry_bushes, level.blueberry_bushes):
+                picked_items = bush.try_pick_berries(sara.player_rect)
+                if picked_items > 0:
+                    inventory.add(bush.berry_item_id, picked_items)
 
-        if picked_strawberries:
-            inventory.add("strawberry", picked_strawberries)
-
-        if picked_blueberries:
-            inventory.add("blueberry", picked_blueberries)
-
-        inventory_ui.draw(screen, inventory, x=ss.relative_x_to_screen_units(0.87),
-                          y=ss.relative_y_to_screen_units(0.02))
+        inventory_ui.draw(
+            screen, inventory, x=ss.relative_x_to_screen_units(0.87), y=ss.relative_y_to_screen_units(0.02)
+        )
 
         pygame.display.flip()
 
     except Exception as e:
         print(e)
-        traceback.print_tb(e)
+        traceback.print_tb(None)
         input("czekamy")
 
 pygame.quit()

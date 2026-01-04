@@ -24,7 +24,7 @@ class Npc:
         interaction: pygame.Surface,
         quest_update: pygame.Surface,
         bye_bye_animation: Animation,
-        default_dialog: list[dict]
+        default_dialog: list[dict],
     ):
         self.npc_id = npc_id
         self._current_quest: Quest | None = None
@@ -55,7 +55,7 @@ class Npc:
     def clear_quest(self):
         self._current_quest = None
 
-    def set_dialog(self, dialog_steps: list[dict]): # step = {"text": "Hello", "frame": "hello", "ms": 800}
+    def set_dialog(self, dialog_steps: list[dict]):  # step = {"text": "Hello", "frame": "hello", "ms": 800}
         self._dialog = dialog_steps
         self._dialog_index = 0
         self._is_in_dialog = False
@@ -141,9 +141,19 @@ class Npc:
         standby_animation = Animation(duration=10, frames=frames)
         bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("npc_mouse_bye"), mouse])
 
-        npc = Npc("mouse", x, y, standby_animation, hello, happy, thinking, bye_animation, [
-            {"text": "Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0, "react": False},
-        ])
+        npc = Npc(
+            "mouse",
+            x,
+            y,
+            standby_animation,
+            hello,
+            happy,
+            thinking,
+            bye_animation,
+            [
+                {"text": "Hello my friend!", "frame": "hello", "ms": 800, "mode": "next", "quest": 0, "react": False},
+            ],
+        )
 
         return npc
 

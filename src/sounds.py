@@ -30,7 +30,6 @@ VOLUME = 0.5
 # print("jump.wav wygenerowany")
 
 
-
 # # biały szum
 # noise = np.random.normal(0, 1, int(SAMPLE_RATE * DURATION))
 #
@@ -55,7 +54,6 @@ VOLUME = 0.5
 #     f.writeframes(audio.tobytes())
 #
 # print("jump_rustle.wav wygenerowany")
-
 
 
 # FREQ = 880       # przyjemne, nie za wysokie
@@ -84,7 +82,6 @@ VOLUME = 0.5
 # print("npc_talk.wav wygenerowany")
 
 
-
 # def tone(freq, duration):
 #     t = np.linspace(0, duration, int(SAMPLE_RATE * duration), False)
 #     return np.sin(2 * np.pi * freq * t)
@@ -107,7 +104,6 @@ VOLUME = 0.5
 #     f.writeframes(audio.tobytes())
 #
 # print("npc_talk.wav wygenerowany")
-
 
 
 # t = np.linspace(0, DURATION, int(SAMPLE_RATE * DURATION), False)
@@ -140,7 +136,6 @@ VOLUME = 0.5
 #     f.writeframes(audio.tobytes())
 #
 # print("npc_soft_cue.wav wygenerowany")
-
 
 
 # def hm_sound(freq, duration):
@@ -180,7 +175,6 @@ VOLUME = 0.5
 #     f.writeframes(audio.tobytes())
 #
 # print("npc_hmhm.wav wygenerowany")
-
 
 
 # def mmh(duration, strength=1.0):

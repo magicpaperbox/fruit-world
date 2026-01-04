@@ -4,6 +4,7 @@ from typing import List
 from npcs import Npc
 import scale_screen as ss
 
+
 # MVVM
 # M - Model (domain)
 # VM - ViewModel
@@ -30,7 +31,6 @@ class DialogBox:
         self._away_timeout_s = 2.0
         self._farewell_shown = False
         self._active_npc: Npc | None = None
-
 
     def show(self, text: str, npc: Npc | None = None):
         self.queue.clear()
@@ -100,7 +100,7 @@ class DialogBox:
             self._blink_timer = 0.0
             self._blink_on = not self._blink_on
 
-# getters
+    # getters
     def should_draw(self) -> bool:
         return self.visible and bool(self.current)
 
@@ -116,7 +116,7 @@ class DialogBox:
     def is_blink_on(self) -> bool:
         return self._blink_on
 
-# private
+    # private
     def _take_next(self):
         self.current = self.queue.pop(0)
         self._typed_len = 0
@@ -132,10 +132,9 @@ class DialogBoxView:
         text_color=(245, 245, 235),
         bg_color=(80, 100, 75),
         border_light=(140, 165, 135),
-        border_dark = (65, 85, 60),
+        border_dark=(65, 85, 60),
         radius: int = 12,
         border_w: int = 2,
-
     ):
         self.font = font
         self.text_color = text_color
@@ -152,13 +151,13 @@ class DialogBoxView:
         rect = vm.rect
         padding = vm.padding
 
-#         # tło  + ramka
+        #         # tło  + ramka
         pygame.draw.rect(screen, self.bg_color, rect, border_radius=self.radius)
         pygame.draw.rect(screen, self.border_light, rect, width=self.border_w, border_radius=self.radius)
         shadow_rect = rect.inflate(2, 2).move(1, 1)
         pygame.draw.rect(screen, self.border_dark, shadow_rect, width=self.border_w, border_radius=self.radius)
 
-#         # tekst
+        #         # tekst
         inner_w = rect.width - 2 * padding
         inner_h = rect.height - 2 * padding
         x = rect.x + padding
@@ -169,7 +168,6 @@ class DialogBoxView:
         line_h = self.font.get_linesize()
         max_lines = inner_h // line_h
         lines = lines[:max_lines]  # obetnij jakby było za dużo
-
 
         for i, ln in enumerate(lines):
             surf = self.font.render(ln, True, self.text_color)

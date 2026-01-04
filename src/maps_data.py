@@ -2,11 +2,12 @@ import pygame
 
 from inventory import Inventory
 from map_loading import Map
-from bushes import Bush
+from berry_bush import BerryBush
 from npcs import Npc
 import src.scale_screen as ss
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
+
 
 class ObjectSpec:
     def __init__(self, x: int, y: int, width: int, height: int):
@@ -33,6 +34,7 @@ class MapSpec:
         self.npcs = npcs
         self.static_objects = static_objects
 
+
 class Level:
     def __init__(self):
         self.current_screen = None
@@ -50,9 +52,18 @@ class Level:
     def load_map(self, map_id: str):
         self.current_screen = MAP_SPECS[map_id]
         self.background_img = Map.load(self.current_screen.background)
-        self.platforms = [SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height)) for p in self.current_screen.platforms.values()]
-        self.strawberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.strawberry_bushes.values()]
-        self.blueberry_bushes = [Bush(p.x, p.y, p.width, p.height) for p in self.current_screen.blueberry_bushes.values()]
+        self.platforms = [
+            SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height))
+            for p in self.current_screen.platforms.values()
+        ]
+        self.strawberry_bushes = [
+            BerryBush(pygame.Rect(p.x, p.y, p.width, p.height), "sprites/items/strawberry.png", 3, "strawberry")
+            for p in self.current_screen.strawberry_bushes.values()
+        ]
+        self.blueberry_bushes = [
+            BerryBush(pygame.Rect(p.x, p.y, p.width, p.height), "sprites/items/blueberry.png", 1, "blueberry")
+            for p in self.current_screen.blueberry_bushes.values()
+        ]
         self.static_objects = []
         for key, value in self.current_screen.static_objects.items():
             sprite = SPRITE_FACTORY.load(f"sprites/objects/{key}.png", value.height)
@@ -63,7 +74,6 @@ class Level:
             if key == "mouse":
                 mouse = Npc.load_mouse(value.x, value.y)
                 self.npcs.append(mouse)
-
 
 
 MAP_SPECS: dict[str, MapSpec] = {
@@ -99,7 +109,6 @@ MAP_SPECS: dict[str, MapSpec] = {
             "lewa dolna 2": ObjectSpec(785, 890, 120, 201),
             "prawa dolna": ObjectSpec(1300, 799, 1520, 200),
             "prawa dolna 2": ObjectSpec(1170, 890, 130, 201),
-
         },
         strawberry_bushes={
             "krzak 1": ObjectSpec(770, 280, 270, 86),

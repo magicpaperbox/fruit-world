@@ -21,8 +21,6 @@ class Layout:
         self.gap = gap
         self.right_window = self._inner_rect(self.right_panel)
 
-
-
     def _inner_rect(self, panel: pygame.Rect) -> pygame.Rect:
         return panel.inflate(-3 * self.pad, -3 * self.pad)
 
@@ -57,4 +55,3 @@ class Layout:
         # cień
         shadow_rect = r.inflate(2, 2).move(1, 1)
         pygame.draw.rect(screen, dark, shadow_rect, width=2, border_radius=10)
-

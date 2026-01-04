@@ -26,6 +26,7 @@ def draw_rect(
         pygame.draw.circle(screen, color, rect.center, 2)  # środek
         pygame.draw.circle(screen, color, rect.midbottom, 3)  # „stopy”
 
+
 def draw_area(
     screen: pygame.Surface,
     items_to_draw: list,
@@ -35,7 +36,6 @@ def draw_area(
     border_width: int = 2,
     show_anchors: bool = False,
 ):
-
     for index, item in enumerate(items_to_draw, start=1):
         rect = pygame.Rect(item.x, item.y, item.width, item.height)
         item_label = f"{label} {index}"

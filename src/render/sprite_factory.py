@@ -2,8 +2,8 @@ import pygame
 
 type _CacheKey = tuple[str, int]
 
-class SpriteFactory:
 
+class SpriteFactory:
     def __init__(self):
         self._sprite_cache: dict[_CacheKey, pygame.Surface] = {}
 
@@ -26,5 +26,6 @@ class SpriteFactory:
         object_scale = target_height / original_height
         target_width = int(object_scale * original_width)
         return pygame.transform.smoothscale(sprite, (target_width, target_height))
+
 
 SPRITE_FACTORY = SpriteFactory()
