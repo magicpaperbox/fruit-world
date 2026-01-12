@@ -1,6 +1,6 @@
 import pygame
-from typing import List
 
+from gameplay.levels.dialog import DialogStep
 from gameplay.levels.npcs import Npc
 from screen import scale_screen as ss
 
@@ -15,8 +15,8 @@ class DialogBox:
         self.cps = cps
         self.padding = padding
 
-        self.queue: List[str] = []
-        self.current: str = ""
+        self.queue: list[DialogStep] = []
+        self.current: DialogStep | None = None
         self.visible = False
 
         self._typed_len = 0
@@ -32,22 +32,22 @@ class DialogBox:
         self._farewell_shown = False
         self._active_npc: Npc | None = None
 
-    def show(self, text: str, npc: Npc | None = None):
+    def show(self, step: DialogStep, npc: Npc | None = None):
         self.queue.clear()
-        self.current = ""
+        self.current = None
         self.visible = True
         if npc is not None:
             self._active_npc = npc
-        self.enqueue(text)
+        self._enqueue(step)
 
-    def enqueue(self, text: str):
-        self.queue.append(text)
+    def _enqueue(self, step: DialogStep):
+        self.queue.append(step)
         if not self.current:
             self._take_next()
 
-    def hide(self):
+    def _hide(self):
         self.visible = False
-        self.current = ""
+        self.current = None
         self.queue.clear()
         self._active_npc = None
         self._away_time = 0.0
@@ -62,10 +62,10 @@ class DialogBox:
             if self.queue:
                 self._take_next()
             else:
-                self.hide()
+                self._hide()
             return
         if is_exit_pressed:
-            self.hide()
+            self._hide()
         if away:
             if not self._farewell_shown and self._active_npc is not None:
                 farewell_msg = self._active_npc.end_interaction(now_ms)
@@ -76,7 +76,7 @@ class DialogBox:
 
             self._away_time += dt
             if self._away_time >= self._away_timeout_s:
-                self.hide()
+                self._hide()
         else:
             self._away_time = 0.0
             self._farewell_shown = False
@@ -91,8 +91,8 @@ class DialogBox:
             self._time_acc += dt
             target_len = int(self._time_acc * self.cps)
             if target_len > self._typed_len:
-                self._typed_len = min(len(self.current), target_len)
-                if self._typed_len == len(self.current):
+                self._typed_len = min(len(self.current.text), target_len)
+                if self._typed_len == len(self.current.text):
                     self._finished = True
         # blink
         self._blink_timer += dt
@@ -105,7 +105,10 @@ class DialogBox:
         return self.visible and bool(self.current)
 
     def get_text(self) -> str:
-        return self.current
+        return self.current.text if self.current else None
+
+    def get_speaker(self) -> str | None:
+        return self.current.speaker if self.current else None
 
     def get_typed_len(self) -> int:
         return self._typed_len
@@ -135,6 +138,7 @@ class DialogBoxView:
         border_dark=(65, 85, 60),
         radius: int = 12,
         border_w: int = 2,
+        portraits: str | None = None
     ):
         self.font = font
         self.text_color = text_color
@@ -143,8 +147,12 @@ class DialogBoxView:
         self.border_dark = border_dark
         self.radius = radius
         self.border_w = border_w
+        self.portraits = {
+            "Sara": "player/sara_talk.png",
+            "Mouse": "npc/npc_talk.png",
+        }
 
-    def draw(self, screen: pygame.Surface, vm):
+    def draw(self, screen: pygame.Surface, vm: DialogBox):
         if not vm.should_draw():
             return
 
@@ -183,9 +191,9 @@ class DialogBoxView:
                 [(tri_x, tri_y), (tri_x + 12, tri_y), (tri_x + 6, tri_y + 8)],
             )
 
-    def _wrap(self, text: str, max_w: int) -> List[str]:
+    def _wrap(self, text: str, max_w: int) -> list[str]:
         words = text.split(" ")
-        lines: List[str] = []
+        lines: list[str] = []
         cur = ""
         for w in words:
             test = w if not cur else cur + " " + w

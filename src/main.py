@@ -98,8 +98,8 @@ while running:
                 colliding_npc = npc
                 if is_pick_pressed:
                     pygame.mixer.Sound("sounds/npc_mmhm.wav").play()
-                    message = npc.interaction(now_ms)
-                    dialog_vm.show(message, npc=npc)
+                    dialog_step = npc.interaction(now_ms)
+                    dialog_vm.show(dialog_step, npc=npc)
             else:
                 away = True
             npc.update_sprite(now_ms)

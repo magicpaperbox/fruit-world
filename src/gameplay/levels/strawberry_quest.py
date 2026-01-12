@@ -1,61 +1,53 @@
-import enum
-
 from gameplay.player.inventory import Inventory
 
 from gameplay.levels.npcs import Npc
 from gameplay.levels.quest import Quest, QuestState
+from gameplay.levels.dialog import DialogStep
 
 
 _WELCOME_DIALOG = [
-    {"text": "Mouse: Hello my friend!", "frame": "hello"},
-    {
-        "text": "Mouse: I need your help. I'm starving, but I can't leave my house.",
-        "frame": "thinking",
-    },
-    {
-        "text": "Mouse:  Please, bring me 3 strawberries.",
-        "frame": "thinking",
-    },
-    {
-        "text": "Sara: Oki",
-        "frame": "happy",
-    },
+    DialogStep("Hello my friend!", frame="hello", speaker="Mouse"),
+    DialogStep(
+        "I need your help. I need some food for my poor sick baby. There should be some strawberries growing somewhere nearby, but I can't leave my house. ",
+        frame="thinking",
+        speaker="Mouse",
+    ),
+    DialogStep("Can you bring me 3 strawberries?", frame="thinking", speaker="Mouse"),
+    DialogStep("Ok", frame="happy", speaker="Sara"),
 ]
 
 
 def search_in_progress_dialog(amount: int):
     return [
-        {
-            "text": "Mouse: I can't believe that you agreed to help me! I need {amount} more of this.".format(
-                amount=amount
-            ),
-            "frame": "happy",
-        },
+        DialogStep(
+            "I can't believe that you agreed to help me! I need {amount} more.".format(amount=amount),
+            frame="happy",
+            speaker="Mouse",
+        ),
     ]
 
 
 _SEARCH_DONE_DIALOG = [
-    {
-        "text": "Mouse: Thank you I never forget your help",
-        "frame": "happy",
-    },
+    DialogStep("Thank you! We will never forget your help!", frame="happy", speaker="Mouse"),
 ]
 
 _COLLECTED_ALL_STRAWBERRIES_DIALOG = [
-    {
-        "text": "Mouse: Oh great! Now I have all strawberries I needed",
-        "frame": "happy",
-    },
+    DialogStep(
+        "How wonderful! Now I have all strawberries I needed!",
+        frame="happy",
+        speaker="Mouse",
+    ),
 ]
 
 
 def received_items_dialog(received_count: int, remaining_count: int):
     strawberry_word = "strawberies" if received_count > 1 else "strawberry"
     return [
-        {
-            "text": f"Mouse: Thanks you for these {received_count} {strawberry_word}! I need {remaining_count} more!",
-            "frame": "happy",
-        },
+        DialogStep(
+            f"Thanks you for these {received_count} {strawberry_word}! I need {remaining_count} more!",
+            frame="happy",
+            speaker="Mouse",
+        ),
     ]
 
 
@@ -73,7 +65,7 @@ class StrawberryQuest(Quest):
         super().start()
         self._mouse.set_quest(self)
 
-    def get_current_dialog(self, npc_id: str) -> list[dict] | None:
+    def get_current_dialog(self, npc_id: str) -> list[DialogStep] | None:
         if npc_id != self._mouse.npc_id:
             return None
 

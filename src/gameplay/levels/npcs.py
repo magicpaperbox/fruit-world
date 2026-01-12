@@ -1,6 +1,8 @@
 import enum
 
 import pygame
+
+from gameplay.levels.dialog import DialogStep
 from render.animation import Animation
 from screen import scale_screen as ss
 from gameplay.levels.quest import Quest
@@ -24,7 +26,7 @@ class Npc:
         interaction: pygame.Surface,
         quest_update: pygame.Surface,
         bye_bye_animation: Animation,
-        default_dialog: list[dict],
+        default_dialog: list[DialogStep],
     ):
         self.npc_id = npc_id
         self._current_quest: Quest | None = None
@@ -34,7 +36,7 @@ class Npc:
         self._quest_update = quest_update
         self._bye_bye_animation = bye_bye_animation
         self._dialog_index = 0
-        self._dialog = []
+        self._dialog: list[DialogStep] = []
         self._sprite = self._static.surface()
         self._default_dialog = default_dialog
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
@@ -55,12 +57,12 @@ class Npc:
     def clear_quest(self):
         self._current_quest = None
 
-    def set_dialog(self, dialog_steps: list[dict]):  # step = {"text": "Hello", "frame": "hello", "ms": 800}
+    def set_dialog(self, dialog_steps: list[DialogStep]):  # step = {"text": "Hello", "frame": "hello", "ms": 800}
         self._dialog = dialog_steps
         self._dialog_index = 0
         self._is_in_dialog = False
 
-    def interaction(self, now_ms: int) -> str | None:
+    def interaction(self, now_ms: int) -> DialogStep | None:
         if not self._is_in_dialog:
             if self._current_quest is not None:
                 dialog = self._current_quest.get_current_dialog(self.npc_id)
@@ -75,29 +77,24 @@ class Npc:
         if not self._dialog:
             return None
         step = self._dialog[self._dialog_index]
-        frame = step.get("frame")
-        ms = step.get("ms", 800)
-        text = step.get("text")
+        frame = step.frame
 
         if frame:
-            self.show_frame(frame, ms=ms, now_ms=now_ms)
-        mode = step.get("mode", "next")
+            self.show_frame(frame, ms=800, now_ms=now_ms)
         has_next = self._dialog_index < len(self._dialog) - 1
-        if mode == "stay":
-            pass
-        elif mode == "next" and has_next:
+        if has_next:
             self._dialog_index += 1
         else:
             self._dialog_index = 0
             self._is_in_dialog = False
             self._status = Status.HELLO
-        return text
+        return step
 
-    def end_interaction(self, now_ms: int) -> str | None:
+    def end_interaction(self, now_ms: int) -> DialogStep | None:
         message = None
         if self._status == Status.HELLO:
             self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
-            message = "Bye bye!"
+            message = DialogStep("Bye bye!", "hello", speaker="Mouse")
             pygame.mixer.Sound("sounds/npc_hmhm.wav").play()
             self._dialog_index = 0
             self._is_in_dialog = False
@@ -152,7 +149,7 @@ class Npc:
             thinking,
             bye_animation,
             [
-                {"text": "Hello my friend!", "frame": "hello"},
+                DialogStep("Hello my friend!", frame="hello", speaker="Mouse"),
             ],
         )
 
