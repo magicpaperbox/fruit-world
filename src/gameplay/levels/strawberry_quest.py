@@ -12,7 +12,7 @@ _WELCOME_DIALOG = [
         frame="thinking",
         speaker="Mouse",
     ),
-    DialogStep("Can you bring me 3 strawberries?", frame="thinking", speaker="Mouse"),
+    DialogStep("Can you bring me 14 strawberries?", frame="thinking", speaker="Mouse"),
     DialogStep("Ok", frame="happy", speaker="Sara"),
 ]
 
@@ -58,7 +58,7 @@ class StrawberryQuest(Quest):
         self._inventory = inventory
 
         self._welcome_dialog_completed = False
-        self._remaining_strawberries = 3
+        self._remaining_strawberries = 14
         self._strawberry_id = "strawberry"
 
     def start(self):

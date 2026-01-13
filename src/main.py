@@ -50,7 +50,7 @@ dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size - 3)
 dialog_view = DialogBoxView(font=font)
 
 inventory = Inventory()
-inventory_ui = InventoryUI(font, item_icons)
+inventory_ui = InventoryUI(font, item_icons, layout.right_window)
 sara = Player.load()
 move_player = PlayerMobility(gravity)
 level = Level(inventory, LEVEL_1_SPEC)

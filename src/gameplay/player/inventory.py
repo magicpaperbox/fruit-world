@@ -1,4 +1,5 @@
 import pygame
+import pygame
 
 from screen import scale_screen as ss
 
@@ -13,7 +14,11 @@ class Inventory:
 
     def remove(self, item_id: str, amount: int = 1):
         if item_id in self._items:
-            self._items[item_id] = max(0, self._items[item_id] - amount)  # max(a, b) zwraca większą z dwóch wartości
+            new_amount = self._items[item_id] - amount
+            if  new_amount <= 0:
+                del self._items[item_id]
+            else:
+                self._items[item_id] = new_amount
 
     def count(self, item_id: str) -> int:
         return self._items.get(item_id, 0)  # 0 <- to co dostaniemy jeśli klucz nie istnieje
@@ -27,15 +32,40 @@ class InventoryUI:
         self,
         font: pygame.font.Font,
         item_icons: dict[str, pygame.Surface],
+        panel: pygame.Rect,
         padding: float = ss.game_units_to_px(3),
         line_space: float = ss.game_units_to_px(5),
     ):
         self.font = font
         self.item_icons = item_icons
+        self._panel = panel
         self.padding = padding
         self.line_space = line_space
 
+    def _create_slots(self, screen):
+        margin_x = ss.game_units_to_px(10)
+        margin_y = ss.game_units_to_px(20)
+        start_x = self._panel.left + margin_x
+        start_y = self._panel.top + margin_y
+        box_width = ss.game_units_to_px(75)
+        box_height = ss.game_units_to_px(75)
+        gap = ss.game_units_to_px(5)
+        dark = (65, 85, 60)
+        light = (140, 165, 135)
+        for i in range(6):
+            y = start_y + i * (box_height + gap)
+            for j in range(3):
+                x = start_x + j * (box_width + gap)
+                slot = pygame.Rect(x, y, box_width, box_height)
+                pygame.draw.rect(screen, dark, slot, width=5, border_radius=10)
+                pygame.draw.rect(screen, light, slot, width=3, border_radius=10)
+                pygame.draw.rect(screen, dark, slot, width=1, border_radius=10)
+
+
+
+
     def draw(self, screen: pygame.Surface, inventory: Inventory, x: int, y: int):
+        self._create_slots(screen)
         ox = x
         oy = y
         for item_id, count in inventory.all_items():
