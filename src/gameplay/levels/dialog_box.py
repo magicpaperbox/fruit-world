@@ -3,6 +3,7 @@ import pygame
 from gameplay.levels.dialog import DialogStep
 from gameplay.levels.npcs import Npc
 from screen import scale_screen as ss
+from render.sprite_factory import SPRITE_FACTORY
 
 
 # MVVM
@@ -138,7 +139,6 @@ class DialogBoxView:
         border_dark=(65, 85, 60),
         radius: int = 12,
         border_w: int = 2,
-        portraits: str | None = None
     ):
         self.font = font
         self.text_color = text_color
@@ -147,10 +147,12 @@ class DialogBoxView:
         self.border_dark = border_dark
         self.radius = radius
         self.border_w = border_w
+        self.portrait_height = ss.game_units_to_px(175)
         self.portraits = {
-            "Sara": "player/sara_talk.png",
-            "Mouse": "npc/npc_talk.png",
+            "Sara": SPRITE_FACTORY.load("sprites/player/sara_talk.png", self.portrait_height),
+            "Mouse": SPRITE_FACTORY.load("sprites/npc/npc_talk.png", self.portrait_height),
         }
+
 
     def draw(self, screen: pygame.Surface, vm: DialogBox):
         if not vm.should_draw():
@@ -160,10 +162,14 @@ class DialogBoxView:
         padding = vm.padding
 
         #         # tło  + ramka
+        if vm.current.speaker in self.portraits:
+            avatar = self.portraits[vm.current.speaker]
+            screen.blit(avatar, (rect.x, rect.y - self.portrait_height*0.85))
         pygame.draw.rect(screen, self.bg_color, rect, border_radius=self.radius)
         pygame.draw.rect(screen, self.border_light, rect, width=self.border_w, border_radius=self.radius)
         shadow_rect = rect.inflate(2, 2).move(1, 1)
         pygame.draw.rect(screen, self.border_dark, shadow_rect, width=self.border_w, border_radius=self.radius)
+
 
         #         # tekst
         inner_w = rect.width - 2 * padding
