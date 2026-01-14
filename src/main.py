@@ -181,10 +181,7 @@ while running:
                 if picked_items > 0:
                     inventory.add(bush.berry_item_id, picked_items)
 
-        inventory_ui.draw(
-            screen, inventory, x=ss.relative_x_to_screen_units(0.87), y=ss.relative_y_to_screen_units(0.02)
-        )
-
+        inventory_ui.draw(screen, inventory)
         pygame.display.flip()
 
     except Exception as e:
