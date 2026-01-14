@@ -51,21 +51,23 @@ class InventoryUI:
         self.light = (140, 165, 135)
         self.slot_columns = 3
         self.slot_rows = 6
+        self._slots = []
 
-
-    def _create_slots(self, screen, inventory):
-        items_list = list(inventory.all_items())
-        slot_index = 0
         for i in range(self.slot_rows):
             y = self._start_y + i * (self._box_height + self._gap)
             for j in range(self.slot_columns):
                 x = self._start_x + j * (self._box_width + self._gap)
                 slot = pygame.Rect(x, y, self._box_width, self._box_height)
-                self._draw_slot(screen, slot)
-                if slot_index < len(items_list):
-                    item_id, count = items_list[slot_index]
-                    self._draw_picked_item(screen, slot, item_id, count)
-                slot_index += 1
+                self._slots.append(slot)
+
+
+    def draw(self, screen: pygame.Surface, inventory: Inventory):
+        items_list = list(inventory.all_items())
+        for slot_index, slot in enumerate(self._slots):
+            self._draw_slot(screen, slot)
+            if slot_index < len(items_list):
+                item_id, count = items_list[slot_index]
+                self._draw_picked_item(screen, slot, item_id, count)
 
 
     def _draw_slot(self, screen, slot):
@@ -81,8 +83,4 @@ class InventoryUI:
             text = self.font.render(str(count), True, (255, 255, 255))
             text_rect = text.get_rect(bottomright=(slot.right - 4*self._padding, slot.bottom - 2*self._line_space))
             screen.blit(text, text_rect)
-        
-
-    def draw(self, screen: pygame.Surface, inventory: Inventory):
-        self._create_slots(screen, inventory)
  
