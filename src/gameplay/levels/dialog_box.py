@@ -149,8 +149,8 @@ class DialogBoxView:
         self.border_w = border_w
         self.portrait_height = ss.game_units_to_px(175)
         self.portraits = {
-            "Sara": SPRITE_FACTORY.load("sprites/player/sara_talk.png", self.portrait_height),
-            "Mouse": SPRITE_FACTORY.load("sprites/npc/npc_talk.png", self.portrait_height),
+            "Sara": SPRITE_FACTORY.load("sprites/player/portrait.png", self.portrait_height),
+            "Mouse": SPRITE_FACTORY.load("sprites/npc/mouse/portrait.png", self.portrait_height),
         }
 
 

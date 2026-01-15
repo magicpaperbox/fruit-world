@@ -128,16 +128,16 @@ class Npc:
 
     @classmethod
     def load_mouse(cls, x: int, y: int) -> "Npc":
-        thinking = Npc.load_npc_sprite("npc_mouse_thinking")
-        happy = Npc.load_npc_sprite("npc_mouse_happy")
-        hello = Npc.load_npc_sprite("npc_mouse_hi")
+        thinking = Npc.load_npc_sprite("mouse/thinking")
+        happy = Npc.load_npc_sprite("mouse/happy")
+        hello = Npc.load_npc_sprite("mouse/welcome")
 
-        mouse = Npc.load_npc_sprite("npc_mouse")
-        blink = Npc.load_npc_sprite("npc_mouse_standby")
+        mouse = Npc.load_npc_sprite("mouse/static")
+        blink = Npc.load_npc_sprite("mouse/blink")
 
         frames = [mouse] * 25 + [blink]
         standby_animation = Animation(duration=10, frames=frames)
-        bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("npc_mouse_bye"), mouse])
+        bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("mouse/bye"), mouse])
 
         npc = Npc(
             "mouse",

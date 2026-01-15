@@ -142,13 +142,11 @@ while running:
         if DEBUG_OVERLAYS:
             level.draw_debug(game_surface, move_player)
 
-
         screen_w, screen_h = screen.get_size()
         offset_x = (screen_w - ss.GAME_WIDTH) // 2
         offset_y = 0
 
         # WYŚRODKOWANA gra:
-        # screen.blit(game_surface, (offset_x, offset_y))
         screen.blit(game_surface, layout.game_view.topleft)
         layout.draw_panel(screen)
         layout.draw_panel_windows(screen)
