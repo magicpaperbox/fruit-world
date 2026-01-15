@@ -37,7 +37,7 @@ def draw_area(
     show_anchors: bool = False,
 ):
     for index, item in enumerate(items_to_draw, start=1):
-        rect = pygame.Rect(item.x, item.y, item.width, item.height)
+        rect = item.rect
         item_label = f"{label} {index}"
         draw_rect(
             screen=screen,

@@ -138,32 +138,10 @@ while running:
         )
 
         screen.fill((53, 71, 46))  # tło gry
-
-        level.current_map.background_img.draw(game_surface)
-        for platform in level.current_map.platforms:
-            platform.draw(game_surface)
-        for bush in level.current_map.blueberry_bushes:
-            bush.draw(game_surface)
-        for bush in level.current_map.strawberry_bushes:
-            bush.draw(game_surface)
-        for obj in level.current_map.static_objects:
-            obj.draw(game_surface)
-        for npc in level.current_map.npcs:
-            npc.draw(game_surface)
-        sara.draw(game_surface)
-
+        level.draw_level(game_surface, sara)
         if DEBUG_OVERLAYS:
-            draw_area(game_surface, level.current_map.strawberry_bushes, (190, 20, 40), "TRUS")
-            draw_area(game_surface, level.current_map.blueberry_bushes, (60, 120, 255), "BOR")
-            draw_rect(game_surface, move_player.collision_rect_x, (250, 250, 0), "HIT")
-            draw_rect(game_surface, move_player.collision_rect_y, (250, 165, 20), "HIT")
-            for platform in level.current_map.platforms:
-                draw_rect(
-                    game_surface,
-                    platform.rect,
-                    (0, 230, 0),
-                    f"{platform.rect.left}x{platform.rect.top}",
-                )
+            level.draw_debug(game_surface, move_player)
+
 
         screen_w, screen_h = screen.get_size()
         offset_x = (screen_w - ss.GAME_WIDTH) // 2
