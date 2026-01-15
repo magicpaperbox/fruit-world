@@ -15,7 +15,7 @@ class BerryBush(SpriteObject):
     def try_pick_berries(self, player_rect: pygame.Rect) -> int:
         for berry in self._berries[:]:  # kopia, bo modyfikujemy listę
             if player_rect.colliderect(berry.rect):
-                pygame.mixer.Sound("sounds/item_pick_up.wav").play()
+                pygame.mixer.Sound("sounds/item_pick_up.wav").play().set_volume(0.7)
                 self._berries.remove(berry)
                 return 1
         return 0

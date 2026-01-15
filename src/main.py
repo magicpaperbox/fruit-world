@@ -58,6 +58,8 @@ away = True
 colliding_npc = None
 
 running = True
+
+
 while running:
     try:
         dt = clock.tick(FPS)  # ms od poprzedniej klatki
@@ -78,7 +80,7 @@ while running:
                 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 space_down_this_frame = True
-                jump_sound.play().set_volume(0.9)
+                jump_sound.play()
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_1:
                 is_pick_pressed = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_0:
