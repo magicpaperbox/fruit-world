@@ -64,7 +64,7 @@ colliding_npc = None
 
 while control.running:
     try:
-        dt = clock.tick(FPS)
+        dt = clock.tick_busy_loop(FPS)
         fps_counter.update(dt)
         now_ms = pygame.time.get_ticks()
         control.keyboard_roles(dt, now_ms, away)
