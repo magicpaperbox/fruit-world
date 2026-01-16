@@ -17,6 +17,7 @@ from render.sprite_factory import SPRITE_FACTORY
 from screen.scale_screen import get_font_size
 from menu.ui import UIManager
 from screen.control import Control
+from screen.fps_counter import FPSCounter
 
 
 FPS = 60
@@ -38,6 +39,7 @@ jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
 mhmm = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
 control = Control(game_surface, screen, layout, fullscreen, dialog_vm, jump_sound)
+fps_counter = FPSCounter(font)
 
 ICON_HEIGHT = ss.relative_y_to_game_units_px(0.05)
 strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", ICON_HEIGHT)
@@ -63,6 +65,7 @@ colliding_npc = None
 while control.running:
     try:
         dt = clock.tick(FPS)
+        fps_counter.update(dt)
         now_ms = pygame.time.get_ticks()
         control.keyboard_roles(dt, now_ms, away)
     
@@ -132,6 +135,9 @@ while control.running:
                     inventory.add(bush.berry_item_id, picked_items)
 
         inventory_ui.draw(control.screen, inventory)
+
+        if control.DEBUG_OVERLAYS:
+            fps_counter.draw(control.screen)
         pygame.display.flip()
 
     except Exception as e:
