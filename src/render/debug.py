@@ -1,6 +1,16 @@
 import pygame
 
 
+_debug_font: pygame.font.Font | None = None
+
+
+def _get_debug_font() -> pygame.font.Font:
+    global _debug_font
+    if _debug_font is None:
+        _debug_font = pygame.font.SysFont("comicsansms", 9)
+    return _debug_font
+
+
 def draw_rect(
     screen: pygame.Surface,
     rect: pygame.Rect,
@@ -10,7 +20,7 @@ def draw_rect(
     border_width: int = 2,
     show_anchors: bool = True,
 ):
-    font = pygame.font.SysFont("comicsansms", 9)
+    font = _get_debug_font()
     r, g, b = color
 
     overlay = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
