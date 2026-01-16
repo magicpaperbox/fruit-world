@@ -8,7 +8,6 @@ from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
 from gameplay.levels.map.direction import Direction
 from screen import scale_screen as ss
-from render.debug import draw_rect, draw_area
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.player.inventory import Inventory, InventoryUI
 from screen.layout import Layout
@@ -17,18 +16,29 @@ from gameplay.player.player_mobility import PlayerMobility
 from render.sprite_factory import SPRITE_FACTORY
 from screen.scale_screen import get_font_size
 from menu.ui import UIManager
+from screen.control import Control
 
-DEBUG_OVERLAYS = False
+
 FPS = 60
 pygame.init()
-ui = UIManager()
 pygame.mixer.init()
-jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
-fall = pygame.mixer.Sound("sounds/jump_rustle.wav").play()
-fullscreen = False
+clock = pygame.time.Clock()
+gravity = ss.game_units_to_decimal(0.001)
+ui = UIManager()
 
+fullscreen = False
 screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
 game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
+font, font_size = get_font_size()
+layout = Layout(0.4 * font_size, 0.4 * font_size)
+rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=1)
+dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size - 3)
+dialog_view = DialogBoxView(font=font)
+jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
+mhmm = pygame.mixer.Sound("sounds/npc_mmhm.wav")
+
+control = Control(game_surface, screen, layout, fullscreen, dialog_vm, jump_sound)
+
 ICON_HEIGHT = ss.relative_y_to_game_units_px(0.05)
 strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", ICON_HEIGHT)
 blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", ICON_HEIGHT)
@@ -40,78 +50,40 @@ item_icons = {
 pygame.display.set_icon(strawberry_icon)
 pygame.display.set_caption("Fruit world")
 
-clock = pygame.time.Clock()
-gravity = ss.game_units_to_decimal(0.001)
-
-font, font_size = get_font_size()
-layout = Layout(0.4 * font_size, 0.4 * font_size)
-rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=1)
-dialog_vm = DialogBox(rect=rect, cps=45, padding=font_size - 3)
-dialog_view = DialogBoxView(font=font)
 
 inventory = Inventory()
-inventory_ui = InventoryUI(font, item_icons, layout.right_window)
+inventory_ui = InventoryUI(font, item_icons, control.layout.right_window)
 sara = Player.load()
 move_player = PlayerMobility(gravity)
 level = Level(inventory, LEVEL_1_SPEC)
 away = True
 colliding_npc = None
 
-running = True
 
-
-while running:
+while control.running:
     try:
-        dt = clock.tick(FPS)  # ms od poprzedniej klatki
+        dt = clock.tick(FPS)
         now_ms = pygame.time.get_ticks()
-        space_down_this_frame = False
-        is_pick_pressed = False
-        is_exit_pressed = False
-        settings_pressed = False
-
-        for e in pygame.event.get():
-            if e.type == pygame.QUIT:
-                running = False
-
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
-                fullscreen = not fullscreen
-                screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, fullscreen)
-                layout = Layout(16, 16)
-                game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
-                space_down_this_frame = True
-                jump_sound.play()
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_1:
-                is_pick_pressed = True
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_0:
-                DEBUG_OVERLAYS = not DEBUG_OVERLAYS
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_q:
-                is_exit_pressed = True
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_TAB:
-                settings_pressed = True
-        dialog_vm.handle_event(is_pick_pressed, is_exit_pressed, away, now_ms, dt)
-        keys = pygame.key.get_pressed()
-        is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
-        is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
-
+        control.keyboard_roles(dt, now_ms, away)
+    
         for npc in level.current_map.npcs:
             if sara.player_rect.colliderect(npc.npc_rect):
                 away = False
                 colliding_npc = npc
-                if is_pick_pressed:
-                    pygame.mixer.Sound("sounds/npc_mmhm.wav").play()
+                if control.is_pick_pressed:
+                    mhmm.play()
                     dialog_step = npc.interaction(now_ms)
                     dialog_vm.show(dialog_step, npc=npc)
             else:
                 away = True
             npc.update_sprite(now_ms)
 
-        if is_right_pressed:
+        if control.is_right_pressed:
             move_player.move_right(level.current_map.platforms, dt)
-        elif is_left_pressed:
+        elif control.is_left_pressed:
             move_player.move_left(level.current_map.platforms, dt)
 
-        if space_down_this_frame:
+        if control.space_down_this_frame:
             move_player.jump()
 
         dialog_vm.update(dt)
@@ -132,34 +104,34 @@ while running:
 
         sara.update_sprite(
             move_player.is_on_ground,
-            is_right_pressed,
-            is_left_pressed,
+            control.is_right_pressed,
+            control.is_left_pressed,
             move_player.coordinates,
         )
 
-        screen.fill((53, 71, 46))  # tło gry
-        level.draw_level(game_surface, sara)
-        if DEBUG_OVERLAYS:
-            level.draw_debug(game_surface, move_player)
+        control.screen.fill((53, 71, 46))  # tło gry
+        level.draw_level(control.game_surface, sara)
+        if control.DEBUG_OVERLAYS:
+            level.draw_debug(control.game_surface, move_player)
 
-        screen_w, screen_h = screen.get_size()
+        screen_w, screen_h = control.screen.get_size()
         offset_x = (screen_w - ss.GAME_WIDTH) // 2
         offset_y = 0
 
         # WYŚRODKOWANA gra:
-        screen.blit(game_surface, layout.game_view.topleft)
-        layout.draw_panel(screen)
-        layout.draw_panel_windows(screen)
+        control.screen.blit(control.game_surface, control.layout.game_view.topleft)
+        control.layout.draw_panel(control.screen)
+        control.layout.draw_panel_windows(control.screen)
         # DIALOG:
-        dialog_view.draw(screen, dialog_vm)
+        dialog_view.draw(control.screen, dialog_vm)
         # PRZEDMIOTY:
-        if is_pick_pressed:
+        if control.is_pick_pressed:
             for bush in itertools.chain(level.current_map.strawberry_bushes, level.current_map.blueberry_bushes):
                 picked_items = bush.try_pick_berries(sara.player_rect)
                 if picked_items > 0:
                     inventory.add(bush.berry_item_id, picked_items)
 
-        inventory_ui.draw(screen, inventory)
+        inventory_ui.draw(control.screen, inventory)
         pygame.display.flip()
 
     except Exception as e:

@@ -7,7 +7,7 @@ LEVEL_1_SPEC = LevelSpec(
     maps=[
         MapSpec(
             map_id="map1",
-            background="background_1",
+            background="background",
             platforms={
                 "start": ObjectSpec(-5, 0, 5, 1000),
                 "lewy gorny krzak": ObjectSpec(300, 430, 350, 98),
@@ -29,7 +29,7 @@ LEVEL_1_SPEC = LevelSpec(
         ),
         MapSpec(
             map_id="map2",
-            background="background_2",
+            background="background",
             platforms={
                 "lewy gorny krzak": ObjectSpec(298, 230, 205, 85),
                 "srodkowy gorny krzak": ObjectSpec(695, 374, 385, 90),
