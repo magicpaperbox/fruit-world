@@ -34,7 +34,7 @@ class Player:
         static = load_player_sprite("static")
 
         right_animation = Animation(
-            duration=10,
+            duration=200,
             frames=[
                 load_player_sprite("right_2"),
                 load_player_sprite("right_3"),
@@ -43,7 +43,7 @@ class Player:
         )
 
         left_animation = Animation(
-            duration=10,
+            duration=200,
             frames=[
                 load_player_sprite("left_2"),
                 load_player_sprite("left_3"),
@@ -59,6 +59,7 @@ class Player:
         is_right_pressed: bool,
         is_left_pressed: bool,
         coordinates: tuple[int, int],
+        dt_ms: int
     ) -> None:
         self.player_rect.x = coordinates[0]
         self.player_rect.y = coordinates[1]
@@ -77,10 +78,10 @@ class Player:
                 self._sprite = self._static
         else:
             if facing_dir == "right":
-                self._right_animation.advance()
+                self._right_animation.advance(dt_ms)
                 self._sprite = self._right_animation.sprite
             elif facing_dir == "left":
-                self._left_animation.advance()
+                self._left_animation.advance(dt_ms)
                 self._sprite = self._left_animation.sprite
             else:
                 self._sprite = self._static

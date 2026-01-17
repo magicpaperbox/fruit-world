@@ -80,7 +80,7 @@ class Npc:
         frame = step.frame
 
         if frame:
-            self.show_frame(frame, ms=800, now_ms=now_ms)
+            self.show_frame(frame, ms=1000, now_ms=now_ms)
         has_next = self._dialog_index < len(self._dialog) - 1
         if has_next:
             self._dialog_index += 1
@@ -93,7 +93,7 @@ class Npc:
     def end_interaction(self, now_ms: int) -> DialogStep | None:
         message = None
         if self._status == Status.HELLO:
-            self.play_once(self._bye_bye_animation, ms=800, now_ms=now_ms)
+            self.play_once(self._bye_bye_animation, ms=500, now_ms=now_ms)
             message = DialogStep("Bye bye!", "hello", speaker="Mouse")
             pygame.mixer.Sound("sounds/npc_hmhm.wav").play()
             self._dialog_index = 0
@@ -135,9 +135,9 @@ class Npc:
         mouse = Npc.load_npc_sprite("mouse/static")
         blink = Npc.load_npc_sprite("mouse/blink")
 
-        frames = [mouse] * 25 + [blink]
-        standby_animation = Animation(duration=10, frames=frames)
-        bye_animation = Animation(duration=10, frames=[cls.load_npc_sprite("mouse/bye"), mouse])
+        frames = [mouse] * 30 + [blink]
+        standby_animation = Animation(duration=100, frames=frames)
+        bye_animation = Animation(duration=200, frames=[cls.load_npc_sprite("mouse/bye"), mouse])
 
         npc = Npc(
             "mouse",
@@ -169,10 +169,10 @@ class Npc:
             self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
         self._sprite = new_frame
 
-    def update_sprite(self, now_ms: int):
+    def update_sprite(self, now_ms: int, dt_ms: int):
         # jednorazowa animacja
         if self._override_anim and now_ms < self._override_anim_until_ms:
-            self._override_anim.advance()
+            self._override_anim.advance(dt_ms)
             new_frame = self._override_anim.surface()
             self.center(new_frame)
             return
@@ -187,7 +187,7 @@ class Npc:
         else:
             self._override_surface = None
 
-        self._static.advance()
+        self._static.advance(dt_ms)
         new_frame = self._static.surface()
         self.center(new_frame)
 

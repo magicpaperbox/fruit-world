@@ -79,7 +79,7 @@ while control.running:
                     dialog_vm.show(dialog_step, npc=npc)
             else:
                 away = True
-            npc.update_sprite(now_ms)
+            npc.update_sprite(now_ms, dt)
 
         if control.is_right_pressed:
             move_player.move_right(level.current_map.platforms, dt)
@@ -110,6 +110,7 @@ while control.running:
             control.is_right_pressed,
             control.is_left_pressed,
             move_player.coordinates,
+            dt
         )
 
         control.screen.fill((53, 71, 46))  # tło gry

@@ -9,9 +9,10 @@ class Animation:
         self._current_game_frame = 0
         self._frame_index = 0
 
-    def advance(self):
-        self._current_game_frame += 1
-        if self._current_game_frame % self._duration == 0:
+    def advance(self, dt_ms: int):
+        self._current_game_frame += dt_ms
+        if self._current_game_frame >= self._duration:
+            self._current_game_frame -= self._duration
             if self._frame_index == len(self._frames) - 1:
                 self._frame_index = 0
             else:
