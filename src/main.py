@@ -20,7 +20,7 @@ from screen.control import Control
 from screen.fps_counter import FPSCounter
 
 
-FPS = 60
+FPS = 0 
 pygame.init()
 pygame.mixer.init()
 clock = pygame.time.Clock()
