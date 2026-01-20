@@ -1,22 +1,25 @@
 from gameplay.levels.level_spec import LevelSpec
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import ObjectSpec
+from gameplay.levels.map.object_spec import ObjectSpec, SpriteObjectSpec
 
 LEVEL_1_SPEC = LevelSpec(
     maps=[
         MapSpec(
             map_id="map1",
             background="background",
-            platforms={
+            old_platforms={
                 "start": ObjectSpec(-5, 0, 5, 1000),
-                "lewy gorny krzak": ObjectSpec(300, 430, 350, 98),
-                "prawy dolny krzak": ObjectSpec(872, 604, 385, 95),
                 "maly gorny krzak": ObjectSpec(630, 128, 226, 90),
                 "lewa dolna": ObjectSpec(-38, 799, 740, 101),
                 "prawa dolna": ObjectSpec(1200, 799, 450, 101),
                 "srodkowa dolna": ObjectSpec(0, 912, 1520, 98),
             },
+            platforms=[
+                SpriteObjectSpec(300, 430, 98, "sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(872, 600, 90, "sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(630, 128, 90, "sprites/objects/platform_small.png"),
+            ],
             strawberry_bushes={
                 "krzak 1": ObjectSpec(365, 343, 220, 82),
                 "krzak 2": ObjectSpec(970, 500, 228, 98),
@@ -30,7 +33,8 @@ LEVEL_1_SPEC = LevelSpec(
         MapSpec(
             map_id="map2",
             background="background",
-            platforms={
+            platforms=[],
+            old_platforms={
                 "lewy gorny krzak": ObjectSpec(298, 230, 205, 85),
                 "srodkowy gorny krzak": ObjectSpec(695, 374, 385, 90),
                 "prawy gorny krzak": ObjectSpec(1268, 260, 225, 85),

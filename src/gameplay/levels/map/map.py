@@ -12,9 +12,7 @@ from render.sprite_object import SpriteObject
 class Map:
     def __init__(self, spec: MapSpec):
         self.background_img = self._load_map_background(spec.background)
-        self.platforms = [
-            SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height)) for p in spec.platforms.values()
-        ]
+        self.platforms = self._load_platforms(spec)
         self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes.values()), 1, "blueberry")
         self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes.values()), 3, "strawberry")
         self.static_objects = self._load_static_objects(spec.static_objects)
@@ -24,6 +22,17 @@ class Map:
                 mouse = Npc.load_mouse(value.x, value.y)
                 self.npcs.append(mouse)
         self.neighbours = spec.neighbours
+
+    def _load_platforms(self, spec: MapSpec):
+        old_platforms = [
+            SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height)) for p in spec.old_platforms.values()
+        ]
+        new_platforms = []
+        for p in spec.platforms:
+            sprite = SPRITE_FACTORY.load(p.sprite_path, p.height)
+            sprite_obj = SpriteObject.create(sprite, topleft=(p.x, p.y))
+            new_platforms.append(sprite_obj)
+        return old_platforms + new_platforms
 
     def _load_static_objects(self, specs: dict[str, ObjectSpec]):
         static_objects = []

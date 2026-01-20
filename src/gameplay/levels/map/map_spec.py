@@ -1,5 +1,5 @@
 from gameplay.levels.map.direction import Direction
-from gameplay.levels.map.object_spec import ObjectSpec
+from gameplay.levels.map.object_spec import ObjectSpec, SpriteObjectSpec
 
 
 class MapSpec:
@@ -7,7 +7,8 @@ class MapSpec:
         self,
         map_id: str,
         background: str,
-        platforms: dict[str, ObjectSpec],
+        platforms: list[SpriteObjectSpec],
+        old_platforms: dict[str, ObjectSpec],
         strawberry_bushes: dict[str, ObjectSpec],
         blueberry_bushes: dict[str, ObjectSpec],
         npcs: dict[str, ObjectSpec],
@@ -17,6 +18,7 @@ class MapSpec:
         self.map_id = map_id
         self.background = background
         self.platforms = platforms
+        self.old_platforms = old_platforms
         self.strawberry_bushes = strawberry_bushes
         self.blueberry_bushes = blueberry_bushes
         self.npcs = npcs
