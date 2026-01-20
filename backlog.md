@@ -1,42 +1,32 @@
-# TASK-1
-## Difficulty: 1
-StaticObject powinien używać pozycji top left corner a nie center ✅
+# Task 1
+w npc została logika cache spriteów - zmigrować na SPRITE_FACTORY
 
-# TASK-2
-## Difficulty: 2
-draw_bush_debug
-- zunifikować sposób rysowania wszystkich prostokątów debugowych ✅
-- brak typów ✅
+# Task 2
+Zmigrować static_objects z LevelSpec na SpriteObjectSpec
 
-# TASK-3
-## Difficulty: 3
-unify loading and scaling sprite for item.py✅, map_loading.py, npcs.py, player.py static_objects.py✅
-think of shared code that can be used everwhere consistently
+# Task 3
+Do zastanowienia: Zmigrować bushes na SpriteObjectSpec
 
-```python
-surface = SpriteManager.load("objects/domek.png", target_height_px=40)  # the number should be in game units
-```
+# Task 4
+Przenieść wszystkie latające platformy z old_platforms do platforms
 
-# TASK-4
-## Difficulty: 3
-make sure sprite caching works for the SpriteManager - even if we ask for the same sprite 10 times it should only be loaded once
-> ! Depends on TASK-3
+# Task 5
+Zaimplementować PuzzlePlatform -> Bardziej złożony SpriteObject
 
-# TASK-5
-## Difficulty 2:
-Make load_level return a Level object instead of large tuple so that main code can refer to platforms like this:
-current_level.platforms
+class DynamicSpriteObjectSpec:
+  x: int
+  y: int
+  height: int # game units
+  segments_count: int
+  center_sprite_path: str
+  left_sprite_path: str | None = None
+  right_sprite_path: str | None = None
 
-# TASK-6
-## Difficulty 2:
-Notice that Item, StaticObject and Platform and even Bush are all the same rectangles with or without sprites.
-Their meaning is defined by which list in load_level they end up in.
-Create a new class and replace existing variants. Name it StaticObject/GameObject/Object/???
+class DynamicSpriteObject:
+  rect: Rect
 
-# TASK-7
-## Difficulty: 10
-dialog_box - rozdzielić logikę wyświetlania tekstu w okienku od logiki rozmowy z npc
-- separate rendering dialog selecting options, showing, hiding dialog etc. from npc logic using callbacks
-
-
-
+  def draw(self, screen: pygame.surface.Surface):
+    pass
+  
+  def __init__(???):
+    pass
