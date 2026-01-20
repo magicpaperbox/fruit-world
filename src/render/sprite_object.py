@@ -5,12 +5,12 @@ import pygame
 
 class SpriteObject:
     def __init__(self, sprite: pygame.Surface | None, rect: pygame.Rect):
-        self.sprite = sprite
+        self._sprite = sprite
         self.rect = rect
 
     def draw(self, screen: pygame.surface.Surface):
-        if self.sprite is not None:
-            screen.blit(self.sprite, self.rect)
+        if self._sprite is not None:
+            screen.blit(self._sprite, self.rect)
 
     def __str__(self):
         return f"SpriteObj(left: {self.rect.left}, right: {self.rect.right}, top: {self.rect.top}, bottom: {self.rect.bottom})"
