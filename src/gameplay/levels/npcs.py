@@ -120,20 +120,20 @@ class Npc:
     @staticmethod
     def load_npc_sprite(sprite_name: str) -> pygame.Surface:
          height = ss.relative_y_to_game_units_px(0.1)
-         return SPRITE_FACTORY.load(f"sprites/npc/mouse/{sprite_name}.png", height)
+         return SPRITE_FACTORY.load(f"sprites/npc/{sprite_name}.png", height)
 
     @classmethod
     def load_mouse(cls, x: int, y: int) -> "Npc":
-        thinking = Npc.load_npc_sprite("thinking")
-        happy = Npc.load_npc_sprite("happy")
-        hello = Npc.load_npc_sprite("welcome")
+        thinking = Npc.load_npc_sprite("mouse/thinking")
+        happy = Npc.load_npc_sprite("mouse/happy")
+        hello = Npc.load_npc_sprite("mouse/welcome")
 
-        mouse = Npc.load_npc_sprite("static")
-        blink = Npc.load_npc_sprite("blink")
+        mouse = Npc.load_npc_sprite("mouse/static")
+        blink = Npc.load_npc_sprite("mouse/blink")
 
         frames = [mouse] * 30 + [blink]
         standby_animation = Animation(duration=100, frames=frames)
-        bye_animation = Animation(duration=200, frames=[cls.load_npc_sprite("bye"), mouse])
+        bye_animation = Animation(duration=200, frames=[cls.load_npc_sprite("mouse/bye"), mouse])
 
         npc = Npc(
             "mouse",
