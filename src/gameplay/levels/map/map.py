@@ -3,7 +3,7 @@ import pygame
 import screen.scale_screen as ss
 from gameplay.levels.berry_bush import BerryBush
 from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import ObjectSpec, SpriteObjectSpec
+from gameplay.levels.map.object_spec import SpriteObjectSpec
 from gameplay.levels.npcs import Npc
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
@@ -13,8 +13,8 @@ class Map:
     def __init__(self, spec: MapSpec):
         self.background_img = self._load_map_background(spec.background)
         self.platforms = self._load_platforms(spec)
-        self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes.values()), 1, "blueberry")
-        self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes.values()), 3, "strawberry")
+        self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes), 1, "blueberry")
+        self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes), 3, "strawberry")
         self.static_objects = self._load_static_objects(spec.static_objects)
         self.npcs = []
         for key, value in spec.npcs.items():
@@ -42,11 +42,15 @@ class Map:
             static_objects.append(sprite_obj)
         return static_objects
 
-    def _load_bushes(self, specs: list[ObjectSpec], count: int, item_id: str):
-        return [
-            BerryBush(pygame.Rect(p.x, p.y, p.width, p.height), f"sprites/items/{item_id}.png", count, item_id)
-            for p in specs
-        ]
+    def _load_bushes(self, specs: list[SpriteObjectSpec], count: int, item_id: str):
+        bushes = []
+        for p in specs:
+            sprite = SPRITE_FACTORY.load(p.sprite_path, p.height)
+            width = sprite.get_width()
+            height = sprite.get_height()
+            bushes.append(BerryBush(pygame.Rect(p.x, p.y, width, height), f"sprites/items/{item_id}.png", count, item_id, sprite))
+
+        return bushes
 
     def _load_map_background(self, sprite_name: str) -> SpriteObject:
         sprite = SPRITE_FACTORY.load(f"sprites/map/{sprite_name}.png", ss.GAME_HEIGHT)

@@ -6,8 +6,8 @@ from render.sprite_object import SpriteObject
 
 
 class BerryBush(SpriteObject):
-    def __init__(self, rect: pygame.Rect, berry_sprite_path: str, berries_initial_count: int, berry_item_id: str):
-        super().__init__(sprite=None, rect=rect)
+    def __init__(self, rect: pygame.Rect, berry_sprite_path: str, berries_initial_count: int, berry_item_id: str, bush: pygame.Surface):
+        super().__init__(sprite=bush, rect=rect)
         self._berry_sprite_path = berry_sprite_path
         self._berries = self._spawn_berries(berries_initial_count)
         self.berry_item_id = berry_item_id
