@@ -6,7 +6,8 @@ from render.sprite_object import SpriteObject
 
 
 class BerryBush(SpriteObject):
-    def __init__(self, rect: pygame.Rect, berry_sprite_path: str, berries_initial_count: int, berry_item_id: str, bush: pygame.Surface):
+    def __init__(self, rect: pygame.Rect, berry_sprite_path: str, berries_initial_count: int, berry_item_id: str,
+                 bush: pygame.Surface):
         super().__init__(sprite=bush, rect=rect)
         self._berry_sprite_path = berry_sprite_path
         self._berries = self._spawn_berries(berries_initial_count)
@@ -26,8 +27,8 @@ class BerryBush(SpriteObject):
             berry.draw(screen)
 
     def _spawn_berries(self, berries_count: int):
-        height_px = ss.game_units_to_px(42)
-        sprite = SPRITE_FACTORY.load(self._berry_sprite_path, height_px)
+        berry_height_px = ss.game_units_to_px(42)
+        sprite = SPRITE_FACTORY.load(self._berry_sprite_path, berry_height_px)
         jitter_px = ss.game_units_to_px(36)
         rnd = random.Random()
         berries: list[SpriteObject] = []
@@ -36,10 +37,13 @@ class BerryBush(SpriteObject):
 
         b = self.rect
 
-        x_min = b.x + int(0.1 * b.width)
-        x_max = b.x + int(0.9 * b.width)
-        y_min = b.y + height_px // 2
-        y_max = b.y + b.height - height_px // 2
+        horizontal_margin_pct = 0.15
+        vertical_margin_px = berry_height_px // 2
+
+        x_min = b.x + int(horizontal_margin_pct * b.width)
+        x_max = b.x + int((1 - horizontal_margin_pct) * b.width)
+        y_min = b.y + vertical_margin_px * 2
+        y_max = b.y + b.height - vertical_margin_px
 
         slot_w = (x_max - x_min) / max(1, berries_count)  # nie dzieli przez 0
         jx_max = int(min(jitter_px, int(slot_w * 0.1)))

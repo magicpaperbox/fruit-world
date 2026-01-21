@@ -5,7 +5,7 @@ w npc została logika cache spriteów - zmigrować na SPRITE_FACTORY ✅
 Zmigrować static_objects z LevelSpec na SpriteObjectSpec ✅
 
 # Task 3
-Do zastanowienia: Zmigrować bushes na SpriteObjectSpec
+Do zastanowienia: Zmigrować bushes na SpriteObjectSpec ✅
 
 # Task 4
 Przenieść wszystkie latające platformy z old_platforms do platforms

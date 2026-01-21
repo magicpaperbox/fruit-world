@@ -116,7 +116,6 @@ class Npc:
         self._override_anim_until_ms = now_ms + ms
         self._override_surface = None
 
-
     @staticmethod
     def load_npc_sprite(sprite_name: str) -> pygame.Surface:
          height = ss.relative_y_to_game_units_px(0.1)
