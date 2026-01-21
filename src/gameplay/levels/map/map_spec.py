@@ -12,7 +12,7 @@ class MapSpec:
         strawberry_bushes: dict[str, ObjectSpec],
         blueberry_bushes: dict[str, ObjectSpec],
         npcs: dict[str, ObjectSpec],
-        static_objects: dict[str, ObjectSpec],
+        static_objects: list[SpriteObjectSpec],
         neighbours: dict[Direction, str],
     ):
         self.map_id = map_id

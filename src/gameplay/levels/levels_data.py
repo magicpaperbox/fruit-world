@@ -27,7 +27,7 @@ LEVEL_1_SPEC = LevelSpec(
             },
             blueberry_bushes={"krzak 4": ObjectSpec(1270, 706, 137, 88)},
             npcs={"mouse": ObjectSpec(1100, 905, 389, 251)},
-            static_objects={"domek": ObjectSpec(970, 676, 389, 251)},
+            static_objects=[SpriteObjectSpec(970, 676, 251, "sprites/objects/domek.png")],
             neighbours={Direction.RIGHT: "map2"},
         ),
         MapSpec(
@@ -51,7 +51,7 @@ LEVEL_1_SPEC = LevelSpec(
             },
             blueberry_bushes={"krzak 4": ObjectSpec(1370, 706, 137, 88)},
             npcs={},
-            static_objects={},
+            static_objects=[],
             neighbours={Direction.LEFT: "map1"},
         ),
     ],

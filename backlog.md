@@ -1,8 +1,8 @@
 # Task 1
-w npc została logika cache spriteów - zmigrować na SPRITE_FACTORY
+w npc została logika cache spriteów - zmigrować na SPRITE_FACTORY ✅
 
 # Task 2
-Zmigrować static_objects z LevelSpec na SpriteObjectSpec
+Zmigrować static_objects z LevelSpec na SpriteObjectSpec ✅
 
 # Task 3
 Do zastanowienia: Zmigrować bushes na SpriteObjectSpec

@@ -3,7 +3,7 @@ import pygame
 import screen.scale_screen as ss
 from gameplay.levels.berry_bush import BerryBush
 from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import ObjectSpec
+from gameplay.levels.map.object_spec import ObjectSpec, SpriteObjectSpec
 from gameplay.levels.npcs import Npc
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
@@ -34,11 +34,11 @@ class Map:
             new_platforms.append(sprite_obj)
         return old_platforms + new_platforms
 
-    def _load_static_objects(self, specs: dict[str, ObjectSpec]):
+    def _load_static_objects(self, specs: list[SpriteObjectSpec]):
         static_objects = []
-        for key, value in specs.items():
-            sprite = SPRITE_FACTORY.load(f"sprites/objects/{key}.png", value.height)
-            sprite_obj = SpriteObject.create(sprite, topleft=(value.x, value.y))
+        for obj in specs:
+            sprite = SPRITE_FACTORY.load(obj.sprite_path, obj.height)
+            sprite_obj = SpriteObject.create(sprite, topleft=(obj.x, obj.y))
             static_objects.append(sprite_obj)
         return static_objects
 
