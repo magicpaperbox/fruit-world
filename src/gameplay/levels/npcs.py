@@ -6,6 +6,7 @@ from gameplay.levels.dialog import DialogStep
 from render.animation import Animation
 from screen import scale_screen as ss
 from gameplay.levels.quest import Quest
+from render.sprite_factory import SPRITE_FACTORY
 
 
 class Status(str, enum.Enum):
@@ -14,8 +15,6 @@ class Status(str, enum.Enum):
 
 
 class Npc:
-    _sprite_cache: dict[tuple[str, int], pygame.Surface] = {}
-
     def __init__(
         self,
         npc_id: str,
@@ -117,27 +116,24 @@ class Npc:
         self._override_anim_until_ms = now_ms + ms
         self._override_surface = None
 
+
     @staticmethod
-    def scale(npc_sprite: pygame.surface.Surface) -> pygame.Surface:
-        original_height = npc_sprite.get_height()
-        original_width = npc_sprite.get_width()
-        target_height = ss.relative_y_to_game_units_px(0.1)
-        npc_scale = target_height / original_height
-        target_width = int(round(npc_scale * original_width))
-        return pygame.transform.smoothscale(npc_sprite, (target_width, target_height))
+    def load_npc_sprite(sprite_name: str) -> pygame.Surface:
+         height = ss.relative_y_to_game_units_px(0.1)
+         return SPRITE_FACTORY.load(f"sprites/npc/mouse/{sprite_name}.png", height)
 
     @classmethod
     def load_mouse(cls, x: int, y: int) -> "Npc":
-        thinking = Npc.load_npc_sprite("mouse/thinking")
-        happy = Npc.load_npc_sprite("mouse/happy")
-        hello = Npc.load_npc_sprite("mouse/welcome")
+        thinking = Npc.load_npc_sprite("thinking")
+        happy = Npc.load_npc_sprite("happy")
+        hello = Npc.load_npc_sprite("welcome")
 
-        mouse = Npc.load_npc_sprite("mouse/static")
-        blink = Npc.load_npc_sprite("mouse/blink")
+        mouse = Npc.load_npc_sprite("static")
+        blink = Npc.load_npc_sprite("blink")
 
         frames = [mouse] * 30 + [blink]
         standby_animation = Animation(duration=100, frames=frames)
-        bye_animation = Animation(duration=200, frames=[cls.load_npc_sprite("mouse/bye"), mouse])
+        bye_animation = Animation(duration=200, frames=[cls.load_npc_sprite("bye"), mouse])
 
         npc = Npc(
             "mouse",
@@ -155,13 +151,6 @@ class Npc:
 
         return npc
 
-    @staticmethod
-    def load_npc_sprite(sprite_name: str) -> pygame.Surface:
-        key = (sprite_name, 70)
-        if key not in Npc._sprite_cache:
-            surf = pygame.image.load(f"sprites/npc/{sprite_name}.png").convert_alpha()
-            Npc._sprite_cache[key] = Npc.scale(surf)
-        return Npc._sprite_cache[key]
 
     def center(self, new_frame):
         if new_frame.get_size() != self._sprite.get_size():
