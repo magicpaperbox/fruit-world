@@ -8,7 +8,7 @@ Zmigrować static_objects z LevelSpec na SpriteObjectSpec ✅
 Do zastanowienia: Zmigrować bushes na SpriteObjectSpec ✅
 
 # Task 4
-Przenieść wszystkie latające platformy z old_platforms do platforms
+Przenieść wszystkie latające platformy z old_platforms do platforms ✅
 
 # Task 5
 Zaimplementować PuzzlePlatform -> Bardziej złożony SpriteObject

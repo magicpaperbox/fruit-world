@@ -28,10 +28,24 @@ class Map:
             SpriteObject.create_invisible(pygame.Rect(p.x, p.y, p.width, p.height)) for p in spec.old_platforms.values()
         ]
         new_platforms = []
-        for p in spec.platforms:
+        for p in spec.floating_platforms:
             sprite = SPRITE_FACTORY.load(p.sprite_path, p.height)
             sprite_obj = SpriteObject.create(sprite, topleft=(p.x, p.y))
             new_platforms.append(sprite_obj)
+
+        for p in spec.puzzle_platforms:
+            sprite = SPRITE_FACTORY.load(p.sprite_path, p.height)
+            width = sprite.get_width()
+            if p.segments_count > 1:
+
+                for segment in range(p.segments_count):
+                    sprite_obj = SpriteObject.create(sprite, topleft=(p.x, p.y))
+                    new_platforms.append(sprite_obj)
+                    p.x = p.x + width
+            else:
+                sprite_obj = SpriteObject.create(sprite, topleft=(p.x, p.y))
+                new_platforms.append(sprite_obj)
+
         return old_platforms + new_platforms
 
     def _load_static_objects(self, specs: list[SpriteObjectSpec]):
