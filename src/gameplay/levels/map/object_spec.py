@@ -17,10 +17,6 @@ class SpriteObjectSpec:
         self.sprite_path = sprite_path
 
 
-# class DynamicSpriteObject:
-#     def __init__(self, rect: pygame.rect):
-
-
 class DynamicSpriteObjectSpec:
     def __init__(self, x: int, y: int, height_units: int, segments_count: int, sprite_path: str,
                  left_sprite_path: str | None = None, right_sprite_path: str | None = None):

@@ -14,7 +14,7 @@ class Inventory:
     def remove(self, item_id: str, amount: int = 1):
         if item_id in self._items:
             new_amount = self._items[item_id] - amount
-            if  new_amount <= 0:
+            if new_amount <= 0:
                 del self._items[item_id]
             else:
                 self._items[item_id] = new_amount
@@ -28,12 +28,12 @@ class Inventory:
 
 class InventoryUI:
     def __init__(
-        self,
-        font: pygame.font.Font,
-        item_icons: dict[str, pygame.Surface],
-        panel: pygame.Rect,
-        padding: float = ss.game_units_to_px(3),
-        line_space: float = ss.game_units_to_px(5),
+            self,
+            font: pygame.font.Font,
+            item_icons: dict[str, pygame.Surface],
+            panel: pygame.Rect,
+            padding: float = ss.game_units_to_px(3),
+            line_space: float = ss.game_units_to_px(5),
     ):
         self.font = font
         self.item_icons = item_icons
@@ -60,7 +60,6 @@ class InventoryUI:
                 slot = pygame.Rect(x, y, self._box_width, self._box_height)
                 self._slots.append(slot)
 
-
     def draw(self, screen: pygame.Surface, inventory: Inventory):
         items_list = list(inventory.all_items())
         for slot_index, slot in enumerate(self._slots):
@@ -68,7 +67,6 @@ class InventoryUI:
             if slot_index < len(items_list):
                 item_id, count = items_list[slot_index]
                 self._draw_picked_item(screen, slot, item_id, count)
-
 
     def _draw_slot(self, screen, slot):
         pygame.draw.rect(screen, self.dark, slot, width=5, border_radius=10)
@@ -81,6 +79,5 @@ class InventoryUI:
             icon_rect = icon.get_rect(center=slot.center)
             screen.blit(icon, icon_rect)
             text = self.font.render(str(count), True, (255, 255, 255))
-            text_rect = text.get_rect(bottomright=(slot.right - 4*self._padding, slot.bottom - 2*self._line_space))
+            text_rect = text.get_rect(bottomright=(slot.right - 4 * self._padding, slot.bottom - 2 * self._line_space))
             screen.blit(text, text_rect)
- 

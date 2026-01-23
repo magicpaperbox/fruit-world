@@ -1,9 +1,7 @@
 import pygame
 
-
 from screen import scale_screen as ss
 from screen.layout import Layout
-
 
 
 class Control:
@@ -52,4 +50,3 @@ class Control:
         keys = pygame.key.get_pressed()
         self.is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         self.is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
-

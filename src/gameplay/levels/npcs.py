@@ -16,16 +16,16 @@ class Status(str, enum.Enum):
 
 class Npc:
     def __init__(
-        self,
-        npc_id: str,
-        x: int,
-        y: int,
-        static: Animation,
-        hello: pygame.Surface,
-        interaction: pygame.Surface,
-        quest_update: pygame.Surface,
-        bye_bye_animation: Animation,
-        default_dialog: list[DialogStep],
+            self,
+            npc_id: str,
+            x: int,
+            y: int,
+            static: Animation,
+            hello: pygame.Surface,
+            interaction: pygame.Surface,
+            quest_update: pygame.Surface,
+            bye_bye_animation: Animation,
+            default_dialog: list[DialogStep],
     ):
         self.npc_id = npc_id
         self._current_quest: Quest | None = None
@@ -118,8 +118,8 @@ class Npc:
 
     @staticmethod
     def load_npc_sprite(sprite_name: str) -> pygame.Surface:
-         height = ss.relative_y_to_game_units_px(0.1)
-         return SPRITE_FACTORY.load(f"sprites/npc/{sprite_name}.png", height)
+        height = ss.relative_y_to_game_units_px(0.1)
+        return SPRITE_FACTORY.load(f"sprites/npc/{sprite_name}.png", height)
 
     @classmethod
     def load_mouse(cls, x: int, y: int) -> "Npc":
@@ -149,7 +149,6 @@ class Npc:
         )
 
         return npc
-
 
     def center(self, new_frame):
         if new_frame.get_size() != self._sprite.get_size():

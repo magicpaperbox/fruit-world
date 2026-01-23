@@ -47,11 +47,11 @@ class Button:
 
 class Modal:
     def __init__(
-        self,
-        rect: pygame.Rect,
-        title: str,
-        buttons: list[Button],
-        font: pygame.font.Font,
+            self,
+            rect: pygame.Rect,
+            title: str,
+            buttons: list[Button],
+            font: pygame.font.Font,
     ):
         self.rect = rect
         self.title = title
@@ -95,7 +95,7 @@ class UIManager:
 
     def pop(self):
         if self.modals:
-            self.modals.p
+            self.modals.pop()
 
     def handle_event(self, e: pygame.event.Event) -> Action:
         if self.modals:

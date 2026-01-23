@@ -130,15 +130,15 @@ class DialogBox:
 
 class DialogBoxView:
     def __init__(
-        self,
-        *,
-        font: pygame.font.Font,
-        text_color=(245, 245, 235),
-        bg_color=(80, 100, 75),
-        border_light=(140, 165, 135),
-        border_dark=(65, 85, 60),
-        radius: int = 12,
-        border_w: int = 2,
+            self,
+            *,
+            font: pygame.font.Font,
+            text_color=(245, 245, 235),
+            bg_color=(80, 100, 75),
+            border_light=(140, 165, 135),
+            border_dark=(65, 85, 60),
+            radius: int = 12,
+            border_w: int = 2,
     ):
         self.font = font
         self.text_color = text_color
@@ -153,7 +153,6 @@ class DialogBoxView:
             "Mouse": SPRITE_FACTORY.load("sprites/npc/mouse/portrait.png", self.portrait_height),
         }
 
-
     def draw(self, screen: pygame.Surface, vm: DialogBox):
         if not vm.should_draw():
             return
@@ -164,12 +163,11 @@ class DialogBoxView:
         #         # tło  + ramka
         if vm.current.speaker in self.portraits:
             avatar = self.portraits[vm.current.speaker]
-            screen.blit(avatar, (rect.x, rect.y - self.portrait_height*0.85))
+            screen.blit(avatar, (rect.x, rect.y - self.portrait_height * 0.85))
         pygame.draw.rect(screen, self.bg_color, rect, border_radius=self.radius)
         pygame.draw.rect(screen, self.border_light, rect, width=self.border_w, border_radius=self.radius)
         shadow_rect = rect.inflate(2, 2).move(1, 1)
         pygame.draw.rect(screen, self.border_dark, shadow_rect, width=self.border_w, border_radius=self.radius)
-
 
         #         # tekst
         inner_w = rect.width - 2 * padding

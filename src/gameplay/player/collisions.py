@@ -16,9 +16,9 @@ def collision_x(solids: list[SpriteObject], player_rect):
 
 
 def collision_y(
-    solids: list[SpriteObject],
-    player_rect: pygame.Rect,
-    player_velocity_y: float,
+        solids: list[SpriteObject],
+        player_rect: pygame.Rect,
+        player_velocity_y: float,
 ) -> tuple[float, bool]:
     on_ground = False
     for s in solids:

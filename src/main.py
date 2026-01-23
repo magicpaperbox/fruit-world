@@ -19,8 +19,7 @@ from menu.ui import UIManager
 from screen.control import Control
 from screen.fps_counter import FPSCounter
 
-
-FPS = 0 
+FPS = 0
 pygame.init()
 pygame.mixer.init()
 clock = pygame.time.Clock()
@@ -52,7 +51,6 @@ item_icons = {
 pygame.display.set_icon(strawberry_icon)
 pygame.display.set_caption("Fruit world")
 
-
 inventory = Inventory()
 inventory_ui = InventoryUI(font, item_icons, control.layout.right_window)
 sara = Player.load()
@@ -61,14 +59,13 @@ level = Level(inventory, LEVEL_1_SPEC)
 away = True
 colliding_npc = None
 
-
 while control.running:
     try:
         dt = clock.tick_busy_loop(FPS)
         fps_counter.update(dt)
         now_ms = pygame.time.get_ticks()
         control.keyboard_roles(dt, now_ms, away)
-    
+
         for npc in level.current_map.npcs:
             if sara.player_rect.colliderect(npc.npc_rect):
                 away = False

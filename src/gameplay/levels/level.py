@@ -32,7 +32,6 @@ class Level:
         self.current_map = self._maps[next_map_id]
         return True
 
-
     def draw_level(self, game_surface, player):
         self.current_map.background_img.draw(game_surface)
         for platform in self.current_map.platforms:

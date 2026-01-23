@@ -4,7 +4,6 @@ from gameplay.levels.npcs import Npc
 from gameplay.levels.quest import Quest, QuestState
 from gameplay.levels.dialog import DialogStep
 
-
 _WELCOME_DIALOG = [
     DialogStep("Hello my friend!", frame="hello", speaker="Mouse"),
     DialogStep(

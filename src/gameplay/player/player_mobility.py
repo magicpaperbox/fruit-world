@@ -13,9 +13,9 @@ class PlayerMobility:
 
         self.visual_rect = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.033, 0.1))
         self.collision_rect_x = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.032, 0.07))
-        self.collision_rect_y = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.013, 0.1))
+        self.collision_rect_y = pygame.Rect((0, 0), ss.relative_coords_to_game_units_px(0.013, 0.09))
 
-        self._render_offset = 0
+        self._render_offset = 8
         self._belly_offset = -ss.relative_y_to_game_units_px(0.02)
         self._legs_offset = 0
 
@@ -95,4 +95,3 @@ class PlayerMobility:
     def set_x_position(self, x: int) -> None:
         self._anchor[0] = float(x) + self.collision_rect_x.width / 2
         self._sync_all()
-

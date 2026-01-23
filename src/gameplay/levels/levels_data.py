@@ -18,8 +18,10 @@ LEVEL_1_SPEC = LevelSpec(
             ],
             puzzle_platforms=[
                 DynamicSpriteObjectSpec(660, 889, 89, 2, "sprites/objects/dirt_center.png"),
-                DynamicSpriteObjectSpec(0, 799, 175, 2, "sprites/objects/grass_ground_center.png", None, "sprites/objects/grass_ground_right.png"),
-                DynamicSpriteObjectSpec(1270, 799, 175, 2, "sprites/objects/grass_ground_center.png", "sprites/objects/grass_ground_left.png"),
+                DynamicSpriteObjectSpec(0, 799, 175, 2, "sprites/objects/grass_ground_center.png", None,
+                                        "sprites/objects/grass_ground_right.png"),
+                DynamicSpriteObjectSpec(1270, 799, 175, 2, "sprites/objects/grass_ground_center.png",
+                                        "sprites/objects/grass_ground_left.png"),
             ],
             strawberry_bushes=[
                 SpriteObjectSpec(365, 316, 120, "sprites/objects/bush_big.png"),
@@ -44,8 +46,10 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(1140, 903, 89, "sprites/objects/platform_small.png"),
             ],
             puzzle_platforms=[
-                DynamicSpriteObjectSpec(-130, 799, 175, 3, "sprites/objects/grass_ground_center.png", None, "sprites/objects/grass_ground_right.png"),
-                DynamicSpriteObjectSpec(1300, 799, 175, 2, "sprites/objects/grass_ground_center.png", "sprites/objects/grass_ground_left.png"),
+                DynamicSpriteObjectSpec(-130, 799, 175, 3, "sprites/objects/grass_ground_center.png", None,
+                                        "sprites/objects/grass_ground_right.png"),
+                DynamicSpriteObjectSpec(1300, 799, 175, 2, "sprites/objects/grass_ground_center.png",
+                                        "sprites/objects/grass_ground_left.png"),
             ],
             old_platforms={},
             strawberry_bushes=[
