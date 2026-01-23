@@ -5,12 +5,11 @@ from screen.layout import Layout
 
 
 class Control:
-    def __init__(self, game_surface, screen, layout, fullscreen, dialog_vm, jump_sound):
+    def __init__(self, game_surface, screen, layout, fullscreen, jump_sound):
         self.game_surface = game_surface
         self.screen = screen
         self.layout = layout
         self.fullscreen = fullscreen
-        self.dialog_vm = dialog_vm
         self.space_down_this_frame = False
         self.is_pick_pressed = False
         self.is_exit_pressed = False
@@ -21,7 +20,7 @@ class Control:
         self.is_left_pressed = False
         self.jump_sound = jump_sound
 
-    def keyboard_roles(self, dt, now_ms, away):
+    def keyboard_roles(self):
         self.space_down_this_frame = False
         self.is_pick_pressed = False
         self.is_exit_pressed = False
@@ -46,7 +45,7 @@ class Control:
                 self.is_exit_pressed = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_TAB:
                 self.settings_pressed = True
-        self.dialog_vm.handle_event(self.is_pick_pressed, self.is_exit_pressed, away, now_ms, dt)
+
         keys = pygame.key.get_pressed()
         self.is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         self.is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
