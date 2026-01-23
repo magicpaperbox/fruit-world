@@ -1,4 +1,4 @@
-from typing import Generator, Iterator
+from typing import Iterator
 
 import pygame
 
@@ -38,12 +38,17 @@ class Map:
             width = sprite.get_width()
             current_x = platform.x
             current_y = platform.y
-            if platform.segments_count > 1:
-                for segment in range(platform.segments_count):
-                    yield self._create_sprite_object((current_x, current_y), sprite)
-                    current_x += width
-            else:
-                yield self._create_sprite_object(platform, sprite)
+            if platform.left_sprite_path is not None:
+                left_sprite = SPRITE_FACTORY.load(platform.left_sprite_path, platform.height)
+                left_sprite_width = left_sprite.get_width()
+                yield self._create_sprite_object((current_x-left_sprite_width, current_y), left_sprite)
+            for segment in range(platform.segments_count):
+                yield self._create_sprite_object((current_x, current_y), sprite)
+                current_x += width
+            if platform.right_sprite_path is not None:
+                right_sprite = SPRITE_FACTORY.load(platform.right_sprite_path, platform.height)
+                yield self._create_sprite_object((current_x, current_y), right_sprite)
+
 
     def _load_static_objects(self, specs: list[SpriteObjectSpec]):
         static_objects = []
