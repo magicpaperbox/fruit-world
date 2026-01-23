@@ -18,10 +18,22 @@ LEVEL_1_SPEC = LevelSpec(
             ],
             puzzle_platforms=[
                 DynamicSpriteObjectSpec(660, 889, 89, 2, "sprites/objects/dirt_center.png"),
-                DynamicSpriteObjectSpec(0, 799, 175, 2, "sprites/objects/grass_ground_center.png", None,
-                                        "sprites/objects/grass_ground_right.png"),
-                DynamicSpriteObjectSpec(1270, 799, 175, 2, "sprites/objects/grass_ground_center.png",
-                                        "sprites/objects/grass_ground_left.png"),
+                DynamicSpriteObjectSpec(
+                    x=0,
+                    y=799,
+                    height_units=175,
+                    segments_count=2,
+                    sprite_path="sprites/objects/grass_ground_center.png",
+                    right_sprite_path="sprites/objects/grass_ground_right.png",
+                ),
+                DynamicSpriteObjectSpec(
+                    x=1210,
+                    y=799,
+                    height_units=175,
+                    segments_count=2,
+                    sprite_path="sprites/objects/grass_ground_center.png",
+                    left_sprite_path="sprites/objects/grass_ground_left.png",
+                ),
             ],
             strawberry_bushes=[
                 SpriteObjectSpec(365, 316, 120, "sprites/objects/bush_big.png"),
@@ -46,10 +58,22 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(1140, 903, 89, "sprites/objects/platform_small.png"),
             ],
             puzzle_platforms=[
-                DynamicSpriteObjectSpec(-130, 799, 175, 3, "sprites/objects/grass_ground_center.png", None,
-                                        "sprites/objects/grass_ground_right.png"),
-                DynamicSpriteObjectSpec(1300, 799, 175, 2, "sprites/objects/grass_ground_center.png",
-                                        "sprites/objects/grass_ground_left.png"),
+                DynamicSpriteObjectSpec(
+                    x=-130,
+                    y=799,
+                    height_units=175,
+                    segments_count=3,
+                    sprite_path="sprites/objects/grass_ground_center.png",
+                    right_sprite_path="sprites/objects/grass_ground_right.png",
+                ),
+                DynamicSpriteObjectSpec(
+                    x=1300,
+                    y=799,
+                    height_units=175,
+                    segments_count=2,
+                    sprite_path="sprites/objects/grass_ground_center.png",
+                    left_sprite_path="sprites/objects/grass_ground_left.png",
+                ),
             ],
             old_platforms={},
             strawberry_bushes=[

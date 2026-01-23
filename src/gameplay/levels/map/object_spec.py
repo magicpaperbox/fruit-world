@@ -18,8 +18,16 @@ class SpriteObjectSpec:
 
 
 class DynamicSpriteObjectSpec:
-    def __init__(self, x: int, y: int, height_units: int, segments_count: int, sprite_path: str,
-                 left_sprite_path: str | None = None, right_sprite_path: str | None = None):
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        height_units: int,
+        segments_count: int,
+        sprite_path: str,
+        left_sprite_path: str | None = None,
+        right_sprite_path: str | None = None,
+    ):
         self.x = ss.game_units_to_px(x)
         self.y = ss.game_units_to_px(y)
         self.height = ss.game_units_to_px(height_units)

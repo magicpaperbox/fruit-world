@@ -2,6 +2,7 @@
 FPS counter and frame drop warning system.
 Displays current FPS on screen and logs warnings when frames are dropped.
 """
+
 import pygame
 from collections import deque
 
@@ -16,7 +17,7 @@ class FPSCounter:
     def __init__(self, font: pygame.font.Font = None, sample_size: int = 60):
         """
         Initialize FPS counter.
-        
+
         Args:
             font: Font to use for rendering. If None, uses default.
             sample_size: Number of frames to average for FPS calculation.
@@ -33,7 +34,7 @@ class FPSCounter:
     def update(self, dt_ms: float):
         """
         Update FPS tracking with the current frame's delta time.
-        
+
         Args:
             dt_ms: Time since last frame in milliseconds.
         """
@@ -51,8 +52,10 @@ class FPSCounter:
             self.show_warning = True
             self.warning_timer = self.warning_display_ms
             frames_lost = int(dt_ms / self.FRAME_TIME_MS) - 1
-            print(f"[FPS WARNING] Frame drop detected! dt={dt_ms:.1f}ms "
-                  f"(~{frames_lost} frames lost). Total drops: {self.dropped_frames}")
+            print(
+                f"[FPS WARNING] Frame drop detected! dt={dt_ms:.1f}ms "
+                f"(~{frames_lost} frames lost). Total drops: {self.dropped_frames}"
+            )
 
         # Update warning display timer
         if self.warning_timer > 0:
@@ -63,7 +66,7 @@ class FPSCounter:
     def draw(self, screen: pygame.Surface, x: int = 10, y: int = 10):
         """
         Draw FPS counter on screen.
-        
+
         Args:
             screen: Surface to draw on.
             x: X position of the counter.

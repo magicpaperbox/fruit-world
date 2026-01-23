@@ -130,15 +130,15 @@ class DialogBox:
 
 class DialogBoxView:
     def __init__(
-            self,
-            *,
-            font: pygame.font.Font,
-            text_color=(245, 245, 235),
-            bg_color=(80, 100, 75),
-            border_light=(140, 165, 135),
-            border_dark=(65, 85, 60),
-            radius: int = 12,
-            border_w: int = 2,
+        self,
+        *,
+        font: pygame.font.Font,
+        text_color=(245, 245, 235),
+        bg_color=(80, 100, 75),
+        border_light=(140, 165, 135),
+        border_dark=(65, 85, 60),
+        radius: int = 12,
+        border_w: int = 2,
     ):
         self.font = font
         self.text_color = text_color

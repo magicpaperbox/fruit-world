@@ -34,21 +34,23 @@ class Map:
             yield self._create_sprite_object(platform, sprite)
 
         for platform in spec.puzzle_platforms:
-            sprite = SPRITE_FACTORY.load(platform.sprite_path, platform.height)
-            width = sprite.get_width()
             current_x = platform.x
             current_y = platform.y
+
             if platform.left_sprite_path is not None:
                 left_sprite = SPRITE_FACTORY.load(platform.left_sprite_path, platform.height)
-                left_sprite_width = left_sprite.get_width()
-                yield self._create_sprite_object((current_x-left_sprite_width, current_y), left_sprite)
+                yield self._create_sprite_object((current_x, current_y), left_sprite)
+                current_x += left_sprite.get_width()
+
+            sprite = SPRITE_FACTORY.load(platform.sprite_path, platform.height)
+            width = sprite.get_width()
             for segment in range(platform.segments_count):
                 yield self._create_sprite_object((current_x, current_y), sprite)
                 current_x += width
+
             if platform.right_sprite_path is not None:
                 right_sprite = SPRITE_FACTORY.load(platform.right_sprite_path, platform.height)
                 yield self._create_sprite_object((current_x, current_y), right_sprite)
-
 
     def _load_static_objects(self, specs: list[SpriteObjectSpec]):
         static_objects = []
@@ -65,7 +67,8 @@ class Map:
             width = sprite.get_width()
             height = sprite.get_height()
             bushes.append(
-                BerryBush(pygame.Rect(p.x, p.y, width, height), f"sprites/items/{item_id}.png", count, item_id, sprite))
+                BerryBush(pygame.Rect(p.x, p.y, width, height), f"sprites/items/{item_id}.png", count, item_id, sprite)
+            )
 
         return bushes
 

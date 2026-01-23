@@ -28,12 +28,12 @@ class Inventory:
 
 class InventoryUI:
     def __init__(
-            self,
-            font: pygame.font.Font,
-            item_icons: dict[str, pygame.Surface],
-            panel: pygame.Rect,
-            padding: float = ss.game_units_to_px(3),
-            line_space: float = ss.game_units_to_px(5),
+        self,
+        font: pygame.font.Font,
+        item_icons: dict[str, pygame.Surface],
+        panel: pygame.Rect,
+        padding: float = ss.game_units_to_px(3),
+        line_space: float = ss.game_units_to_px(5),
     ):
         self.font = font
         self.item_icons = item_icons

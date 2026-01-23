@@ -47,11 +47,11 @@ class Button:
 
 class Modal:
     def __init__(
-            self,
-            rect: pygame.Rect,
-            title: str,
-            buttons: list[Button],
-            font: pygame.font.Font,
+        self,
+        rect: pygame.Rect,
+        title: str,
+        buttons: list[Button],
+        font: pygame.font.Font,
     ):
         self.rect = rect
         self.title = title

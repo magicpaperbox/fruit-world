@@ -19,6 +19,7 @@ from menu.ui import UIManager
 from screen.control import Control
 from screen.fps_counter import FPSCounter
 
+
 # noinspection PyAttributeOutsideInit
 class Game:
     def __init__(self):
@@ -47,7 +48,9 @@ class Game:
         self.layout = Layout(0.4 * self.font_size, 0.4 * self.font_size)
 
     def _init_dialogs(self):
-        self.rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=1)
+        self.rect = make_dialog_rect(
+            int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=1
+        )
         self.dialog_vm = DialogBox(rect=self.rect, cps=45, padding=self.font_size - 3)
         self.dialog_view = DialogBoxView(font=self.font)
 
@@ -81,7 +84,6 @@ class Game:
         self.away = True
         self.colliding_npc = None
 
-
     def run(self):
         while self.control.running:
             try:
@@ -89,7 +91,9 @@ class Game:
                 self.fps_counter.update(dt)
                 now_ms = pygame.time.get_ticks()
                 self.control.keyboard_roles()
-                self.dialog_vm.handle_event(self.control.is_pick_pressed, self.control.is_exit_pressed, self.away, now_ms, dt)
+                self.dialog_vm.handle_event(
+                    self.control.is_pick_pressed, self.control.is_exit_pressed, self.away, now_ms, dt
+                )
 
                 for npc in self.level.current_map.npcs:
                     if self.sara.player_rect.colliderect(npc.npc_rect):
@@ -132,7 +136,7 @@ class Game:
                     self.control.is_right_pressed,
                     self.control.is_left_pressed,
                     self.move_player.coordinates,
-                    dt
+                    dt,
                 )
 
                 self.control.screen.fill((53, 71, 46))  # tło gry
@@ -152,7 +156,9 @@ class Game:
                 self.dialog_view.draw(self.control.screen, self.dialog_vm)
                 # PRZEDMIOTY:
                 if self.control.is_pick_pressed:
-                    for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
+                    for bush in itertools.chain(
+                        self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes
+                    ):
                         picked_items = bush.try_pick_berries(self.sara.player_rect)
                         if picked_items > 0:
                             self.inventory.add(bush.berry_item_id, picked_items)
@@ -171,6 +177,7 @@ class Game:
 
         pygame.quit()
         sys.exit()
+
 
 if __name__ == "__main__":
     game = Game()

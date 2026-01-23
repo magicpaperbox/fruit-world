@@ -16,16 +16,16 @@ class Status(str, enum.Enum):
 
 class Npc:
     def __init__(
-            self,
-            npc_id: str,
-            x: int,
-            y: int,
-            static: Animation,
-            hello: pygame.Surface,
-            interaction: pygame.Surface,
-            quest_update: pygame.Surface,
-            bye_bye_animation: Animation,
-            default_dialog: list[DialogStep],
+        self,
+        npc_id: str,
+        x: int,
+        y: int,
+        static: Animation,
+        hello: pygame.Surface,
+        interaction: pygame.Surface,
+        quest_update: pygame.Surface,
+        bye_bye_animation: Animation,
+        default_dialog: list[DialogStep],
     ):
         self.npc_id = npc_id
         self._current_quest: Quest | None = None

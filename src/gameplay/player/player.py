@@ -6,12 +6,12 @@ from render.sprite_factory import SPRITE_FACTORY
 
 class Player:
     def __init__(
-            self,
-            right_jump: pygame.Surface,
-            left_jump: pygame.Surface,
-            static: pygame.Surface,
-            right_animation: Animation,
-            left_animation: Animation,
+        self,
+        right_jump: pygame.Surface,
+        left_jump: pygame.Surface,
+        static: pygame.Surface,
+        right_animation: Animation,
+        left_animation: Animation,
     ):
         self._right_jump = right_jump
         self._left_jump = left_jump
@@ -54,12 +54,7 @@ class Player:
         return Player(right_jump, left_jump, static, right_animation, left_animation)
 
     def update_sprite(
-            self,
-            on_ground: bool,
-            is_right_pressed: bool,
-            is_left_pressed: bool,
-            coordinates: tuple[int, int],
-            dt_ms: int
+        self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int], dt_ms: int
     ) -> None:
         self.player_rect.x = coordinates[0]
         self.player_rect.y = coordinates[1]

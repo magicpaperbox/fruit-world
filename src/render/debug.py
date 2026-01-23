@@ -11,13 +11,13 @@ def _get_debug_font() -> pygame.font.Font:
 
 
 def draw_rect(
-        screen: pygame.Surface,
-        rect: pygame.Rect,
-        color: tuple[int, int, int],
-        label: str = "RECT",
-        alpha: int = 50,
-        border_width: int = 2,
-        show_anchors: bool = True,
+    screen: pygame.Surface,
+    rect: pygame.Rect,
+    color: tuple[int, int, int],
+    label: str = "RECT",
+    alpha: int = 50,
+    border_width: int = 2,
+    show_anchors: bool = True,
 ):
     font = _get_debug_font()
     r, g, b = color
@@ -37,13 +37,13 @@ def draw_rect(
 
 
 def draw_area(
-        screen: pygame.Surface,
-        items_to_draw: list,
-        color: tuple[int, int, int],
-        label: str = "RECT",
-        alpha: int = 80,
-        border_width: int = 2,
-        show_anchors: bool = False,
+    screen: pygame.Surface,
+    items_to_draw: list,
+    color: tuple[int, int, int],
+    label: str = "RECT",
+    alpha: int = 80,
+    border_width: int = 2,
+    show_anchors: bool = False,
 ):
     for index, item in enumerate(items_to_draw, start=1):
         rect = item.rect
