@@ -10,7 +10,6 @@ LEVEL_1_SPEC = LevelSpec(
             background="background",
             old_platforms={
                 "start": ObjectSpec(-5, 0, 5, 1000),
-                "srodkowa dolna": ObjectSpec(0, 912, 1520, 98),
             },
             floating_platforms=[
                 SpriteObjectSpec(300, 430, 98, "sprites/objects/platform_wide.png"),
@@ -18,6 +17,7 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(630, 128, 90, "sprites/objects/platform_small.png"),
             ],
             puzzle_platforms=[
+                DynamicSpriteObjectSpec(660, 889, 89, 2, "sprites/objects/dirt_center.png"),
                 DynamicSpriteObjectSpec(0, 799, 175, 2, "sprites/objects/grass_ground_center.png", None, "sprites/objects/grass_ground_right.png"),
                 DynamicSpriteObjectSpec(1270, 799, 175, 2, "sprites/objects/grass_ground_center.png", "sprites/objects/grass_ground_left.png"),
             ],
@@ -39,16 +39,15 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(298, 230, 90, "sprites/objects/platform_small.png"),
                 SpriteObjectSpec(1080, 500, 90, "sprites/objects/platform_small.png"),
                 SpriteObjectSpec(430, 535, 90, "sprites/objects/platform_small.png"),
-                SpriteObjectSpec(725, 374, 90, "sprites/objects/platform_wide.png")
+                SpriteObjectSpec(725, 374, 90, "sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(695, 903, 89, "sprites/objects/platform_small.png"),
+                SpriteObjectSpec(1140, 903, 89, "sprites/objects/platform_small.png"),
             ],
             puzzle_platforms=[
                 DynamicSpriteObjectSpec(-130, 799, 175, 3, "sprites/objects/grass_ground_center.png", None, "sprites/objects/grass_ground_right.png"),
                 DynamicSpriteObjectSpec(1300, 799, 175, 2, "sprites/objects/grass_ground_center.png", "sprites/objects/grass_ground_left.png"),
             ],
-            old_platforms={
-                "lewa dolna 2": ObjectSpec(785, 890, 120, 201),
-                "prawa dolna 2": ObjectSpec(1170, 890, 130, 201),
-            },
+            old_platforms={},
             strawberry_bushes=[
                 SpriteObjectSpec(770, 260, 120, "sprites/objects/bush_wide.png"),
                 SpriteObjectSpec(245, 680, 120, "sprites/objects/bush_wide.png"),
