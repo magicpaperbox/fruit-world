@@ -4,7 +4,7 @@ from screen import scale_screen as ss
 from screen.layout import Layout
 
 
-class Control:
+class GameInputs:
     def __init__(self, game_surface, screen, layout, fullscreen, jump_sound):
         self.game_surface = game_surface
         self.screen = screen
