@@ -24,8 +24,8 @@ from screen.scale_screen import get_font_size
 class Game:
     def __init__(self):
         self._init_pygame()
-        self._init_game_window()
         self._init_display()
+        self._init_game_window()
         self._init_dialogs()
         self._init_audio()
         self._init_game_inputs()
