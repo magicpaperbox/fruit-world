@@ -1,7 +1,7 @@
 from gameplay.levels.level_spec import LevelSpec
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import ObjectSpec, SpriteObjectSpec, DynamicSpriteObjectSpec
+from gameplay.levels.map.object_spec import DynamicSpriteObjectSpec, ObjectSpec, SpriteObjectSpec
 
 LEVEL_1_SPEC = LevelSpec(
     maps=[
@@ -9,15 +9,21 @@ LEVEL_1_SPEC = LevelSpec(
             map_id="map1",
             background="background",
             old_platforms={
-                "start": ObjectSpec(-5, 0, 5, 1000),
+                "start": ObjectSpec(x=-5, y=0, width=5, height=1000),
             },
             floating_platforms=[
-                SpriteObjectSpec(300, 430, 98, "sprites/objects/platform_wide.png"),
-                SpriteObjectSpec(872, 600, 90, "sprites/objects/platform_wide.png"),
-                SpriteObjectSpec(630, 128, 90, "sprites/objects/platform_small.png"),
+                SpriteObjectSpec(x=300, y=430, height_units=98, sprite_path="sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(x=872, y=600, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(x=630, y=128, height_units=90, sprite_path="sprites/objects/platform_small.png"),
             ],
             puzzle_platforms=[
-                DynamicSpriteObjectSpec(660, 889, 89, 2, "sprites/objects/dirt_center.png"),
+                DynamicSpriteObjectSpec(
+                    x=660,
+                    y=889,
+                    height_units=89,
+                    segments_count=2,
+                    sprite_path="sprites/objects/dirt_center.png"
+                ),
                 DynamicSpriteObjectSpec(
                     x=0,
                     y=799,
@@ -36,26 +42,28 @@ LEVEL_1_SPEC = LevelSpec(
                 ),
             ],
             strawberry_bushes=[
-                SpriteObjectSpec(365, 316, 120, "sprites/objects/bush_big.png"),
-                SpriteObjectSpec(970, 487, 120, "sprites/objects/bush_small.png"),
-                SpriteObjectSpec(165, 680, 120, "sprites/objects/bush_wide.png"),
+                SpriteObjectSpec(x=365, y=316, height_units=120, sprite_path="sprites/objects/bush_big.png"),
+                SpriteObjectSpec(x=970, y=487, height_units=120, sprite_path="sprites/objects/bush_small.png"),
+                SpriteObjectSpec(x=165, y=680, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
             ],
-            blueberry_bushes=[SpriteObjectSpec(1270, 680, 120, "sprites/objects/bush_big.png")],
-            npcs={"mouse": ObjectSpec(1100, 905, 389, 251)},
-            static_objects=[SpriteObjectSpec(970, 676, 251, "sprites/objects/domek.png")],
+            blueberry_bushes=[
+                SpriteObjectSpec(x=1270, y=680, height_units=120, sprite_path="sprites/objects/bush_big.png")
+            ],
+            npcs={"mouse": ObjectSpec(x=1100, y=905, width=389, height=251)},
+            static_objects=[SpriteObjectSpec(x=970, y=676, height_units=251, sprite_path="sprites/objects/domek.png")],
             neighbours={Direction.RIGHT: "map2"},
         ),
         MapSpec(
             map_id="map2",
             background="background",
             floating_platforms=[
-                SpriteObjectSpec(1268, 260, 90, "sprites/objects/platform_wide.png"),
-                SpriteObjectSpec(298, 230, 90, "sprites/objects/platform_small.png"),
-                SpriteObjectSpec(1080, 500, 90, "sprites/objects/platform_small.png"),
-                SpriteObjectSpec(430, 535, 90, "sprites/objects/platform_small.png"),
-                SpriteObjectSpec(725, 374, 90, "sprites/objects/platform_wide.png"),
-                SpriteObjectSpec(695, 903, 89, "sprites/objects/platform_small.png"),
-                SpriteObjectSpec(1140, 903, 89, "sprites/objects/platform_small.png"),
+                SpriteObjectSpec(x=1268, y=260, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(x=298, y=230, height_units=90, sprite_path="sprites/objects/platform_small.png"),
+                SpriteObjectSpec(x=1080, y=500, height_units=90, sprite_path="sprites/objects/platform_small.png"),
+                SpriteObjectSpec(x=430, y=535, height_units=90, sprite_path="sprites/objects/platform_small.png"),
+                SpriteObjectSpec(x=725, y=374, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(x=695, y=903, height_units=89, sprite_path="sprites/objects/platform_small.png"),
+                SpriteObjectSpec(x=1140, y=903, height_units=89, sprite_path="sprites/objects/platform_small.png"),
             ],
             puzzle_platforms=[
                 DynamicSpriteObjectSpec(
@@ -77,10 +85,12 @@ LEVEL_1_SPEC = LevelSpec(
             ],
             old_platforms={},
             strawberry_bushes=[
-                SpriteObjectSpec(770, 260, 120, "sprites/objects/bush_wide.png"),
-                SpriteObjectSpec(245, 680, 120, "sprites/objects/bush_wide.png"),
+                SpriteObjectSpec(x=770, y=260, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
+                SpriteObjectSpec(x=245, y=680, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
             ],
-            blueberry_bushes=[SpriteObjectSpec(1370, 680, 120, "sprites/objects/bush_small.png")],
+            blueberry_bushes=[
+                SpriteObjectSpec(x=1370, y=680, height_units=120, sprite_path="sprites/objects/bush_small.png")
+            ],
             npcs={},
             static_objects=[],
             neighbours={Direction.LEFT: "map1"},
