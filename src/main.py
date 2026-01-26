@@ -13,7 +13,7 @@ from gameplay.player.inventory import Inventory, InventoryUI
 from gameplay.player.player import Player
 from gameplay.player.player_mobility import PlayerMobility
 from menu.main_menu import MainMenu
-from menu.ui import Action, UIManager
+from menu.ui import UIManager
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 from screen.fps_counter import FPSCounter
@@ -32,9 +32,6 @@ class Game:
         self._init_game_inputs()
         self._init_inventory()
         self._init_gameplay()
-
-        self.main_menu = MainMenu(self.screen.get_size(), self.font)
-        self.in_menu = True
 
     def _init_pygame(self):
         pygame.init()
@@ -66,7 +63,10 @@ class Game:
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
     def _init_game_inputs(self):
-        self.inputs = GameInputs(self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound)
+        main_menu = MainMenu(self.screen.get_size(), self.font)
+        self.inputs = GameInputs(
+            self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu
+        )
 
     def _init_inventory(self):
         icon_height = ss.relative_y_to_game_units_px(0.05)
@@ -93,97 +93,85 @@ class Game:
             try:
                 dt = self.clock.tick_busy_loop(self.FPS)
                 self.fps_counter.update(dt)
+                self.inputs.process_inputs()
+                if self.inputs.in_menu:
+                    # self.inputs.screen.fill((0, 0, 0))
+                    self.inputs.main_menu.draw(self.inputs.screen)
+                else:
+                    now_ms = pygame.time.get_ticks()
 
-                if self.in_menu:
-                    for e in pygame.event.get():
-                        if e.type == pygame.QUIT:
-                            self.inputs.running = False
-                        action = self.main_menu.handle_event(e)
-                        if action == Action.START_GAME:
-                            self.in_menu = False
-                        elif action == Action.QUIT_GAME:
-                            self.inputs.running = False
-                    self.inputs.screen.fill((0, 0, 0))
-                    self.main_menu.draw(self.inputs.screen)
-                    pygame.display.flip()
+                    self.dialog_vm.handle_event(
+                        self.inputs.is_pick_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt
+                    )
 
-                    # KONIEC obiegu pętli - jeśli jesteśmy w menu, nie robimy logiki gry poniżej
-                    continue
+                    for npc in self.level.current_map.npcs:
+                        if self.sara.player_rect.colliderect(npc.npc_rect):
+                            self.away = False
+                            self.colliding_npc = npc
+                            if self.inputs.is_pick_pressed:
+                                self.mhmm_sound.play()
+                                dialog_step = npc.interaction(now_ms)
+                                self.dialog_vm.show(dialog_step, npc=npc)
+                        else:
+                            self.away = True
+                        npc.update_sprite(now_ms, dt)
 
-                now_ms = pygame.time.get_ticks()
-                self.inputs.keyboard_roles()
-                self.dialog_vm.handle_event(
-                    self.inputs.is_pick_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt
-                )
+                    if self.inputs.is_right_pressed:
+                        self.move_player.move_right(self.level.current_map.platforms, dt)
+                    elif self.inputs.is_left_pressed:
+                        self.move_player.move_left(self.level.current_map.platforms, dt)
 
-                for npc in self.level.current_map.npcs:
-                    if self.sara.player_rect.colliderect(npc.npc_rect):
-                        self.away = False
-                        self.colliding_npc = npc
-                        if self.inputs.is_pick_pressed:
-                            self.mhmm_sound.play()
-                            dialog_step = npc.interaction(now_ms)
-                            self.dialog_vm.show(dialog_step, npc=npc)
-                    else:
-                        self.away = True
-                    npc.update_sprite(now_ms, dt)
+                    if self.inputs.space_down_this_frame:
+                        self.move_player.jump()
 
-                if self.inputs.is_right_pressed:
-                    self.move_player.move_right(self.level.current_map.platforms, dt)
-                elif self.inputs.is_left_pressed:
-                    self.move_player.move_left(self.level.current_map.platforms, dt)
+                    self.dialog_vm.update(dt)
+                    self.move_player.move_vertically(self.level.current_map.platforms, dt)
 
-                if self.inputs.space_down_this_frame:
-                    self.move_player.jump()
+                    if self.move_player.visual_rect.centerx > ss.GAME_WIDTH:
+                        if self.level.try_load_map(Direction.RIGHT):
+                            self.move_player.set_x_position(0)
+                        else:
+                            reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
+                            self.move_player.set_x_position(reset_player)
+                    elif self.move_player.visual_rect.centerx <= 0:
+                        if self.level.try_load_map(Direction.LEFT):
+                            reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
+                            self.move_player.set_x_position(reset_player)
+                        else:
+                            self.move_player.set_x_position(0)
 
-                self.dialog_vm.update(dt)
-                self.move_player.move_vertically(self.level.current_map.platforms, dt)
+                    self.sara.update_sprite(
+                        self.move_player.is_on_ground,
+                        self.inputs.is_right_pressed,
+                        self.inputs.is_left_pressed,
+                        self.move_player.coordinates,
+                        dt,
+                    )
 
-                if self.move_player.visual_rect.centerx > ss.GAME_WIDTH:
-                    if self.level.try_load_map(Direction.RIGHT):
-                        self.move_player.set_x_position(0)
-                    else:
-                        reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                        self.move_player.set_x_position(reset_player)
-                elif self.move_player.visual_rect.centerx <= 0:
-                    if self.level.try_load_map(Direction.LEFT):
-                        reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                        self.move_player.set_x_position(reset_player)
-                    else:
-                        self.move_player.set_x_position(0)
+                    self.inputs.screen.fill((53, 71, 46))  # tło gry
+                    self.level.draw_level(self.inputs.game_surface, self.sara)
+                    if self.inputs.DEBUG_OVERLAYS:
+                        self.level.draw_debug(self.inputs.game_surface, self.move_player)
 
-                self.sara.update_sprite(
-                    self.move_player.is_on_ground,
-                    self.inputs.is_right_pressed,
-                    self.inputs.is_left_pressed,
-                    self.move_player.coordinates,
-                    dt,
-                )
+                    # WYŚRODKOWANA gra:
+                    self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
+                    self.inputs.layout.draw_panel(self.inputs.screen)
+                    self.inputs.layout.draw_panel_windows(self.inputs.screen)
+                    # DIALOG:
+                    self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
+                    # PRZEDMIOTY:
+                    if self.inputs.is_pick_pressed:
+                        for bush in itertools.chain(
+                            self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes
+                        ):
+                            picked_items = bush.try_pick_berries(self.sara.player_rect)
+                            if picked_items > 0:
+                                self.inventory.add(bush.berry_item_id, picked_items)
 
-                self.inputs.screen.fill((53, 71, 46))  # tło gry
-                self.level.draw_level(self.inputs.game_surface, self.sara)
-                if self.inputs.DEBUG_OVERLAYS:
-                    self.level.draw_debug(self.inputs.game_surface, self.move_player)
+                    self.inventory_ui.draw(self.inputs.screen, self.inventory)
 
-                # WYŚRODKOWANA gra:
-                self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
-                self.inputs.layout.draw_panel(self.inputs.screen)
-                self.inputs.layout.draw_panel_windows(self.inputs.screen)
-                # DIALOG:
-                self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
-                # PRZEDMIOTY:
-                if self.inputs.is_pick_pressed:
-                    for bush in itertools.chain(
-                        self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes
-                    ):
-                        picked_items = bush.try_pick_berries(self.sara.player_rect)
-                        if picked_items > 0:
-                            self.inventory.add(bush.berry_item_id, picked_items)
-
-                self.inventory_ui.draw(self.inputs.screen, self.inventory)
-
-                if self.inputs.DEBUG_OVERLAYS:
-                    self.fps_counter.draw(self.inputs.screen)
+                    if self.inputs.DEBUG_OVERLAYS:
+                        self.fps_counter.draw(self.inputs.screen)
                 pygame.display.flip()
 
             except Exception as e:
