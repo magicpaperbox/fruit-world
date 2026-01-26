@@ -18,11 +18,7 @@ LEVEL_1_SPEC = LevelSpec(
             ],
             puzzle_platforms=[
                 DynamicSpriteObjectSpec(
-                    x=660,
-                    y=889,
-                    height_units=89,
-                    segments_count=2,
-                    sprite_path="sprites/objects/dirt_center.png"
+                    x=660, y=889, height_units=89, segments_count=2, sprite_path="sprites/objects/dirt_center.png"
                 ),
                 DynamicSpriteObjectSpec(
                     x=0,
@@ -92,7 +88,9 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(x=1370, y=680, height_units=120, sprite_path="sprites/objects/bush_small.png")
             ],
             npcs={},
-            static_objects=[],
+            static_objects=[
+                SpriteObjectSpec(x=1390, y=150, height_units=118, sprite_path="sprites/objects/yellow_herb.png"),
+            ],
             neighbours={Direction.LEFT: "map1"},
         ),
     ],

@@ -1,12 +1,12 @@
 import pygame
-from ui import UIManager, Modal, Button, Action
+from ui import Action, Button, Modal, UIManager
 
 
 def make_settings_modal(screen_size: tuple[int, int], font: pygame.font.Font) -> Modal:
-    W, H = screen_size
-    modal_w, modal_h = int(W * 0.5), int(H * 0.6)
+    w, h = screen_size
+    modal_w, modal_h = int(w * 0.5), int(h * 0.6)
     rect = pygame.Rect(0, 0, modal_w, modal_h)
-    rect.center = (W // 2, H // 2)
+    rect.center = (w // 2, h // 2)
 
     pad = 24
     btn_w = (modal_w - pad * 3) // 2

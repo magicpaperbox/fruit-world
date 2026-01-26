@@ -12,7 +12,8 @@ from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import Inventory, InventoryUI
 from gameplay.player.player import Player
 from gameplay.player.player_mobility import PlayerMobility
-from menu.ui import UIManager
+from menu.main_menu import MainMenu
+from menu.ui import Action, UIManager
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 from screen.fps_counter import FPSCounter
@@ -31,6 +32,9 @@ class Game:
         self._init_game_inputs()
         self._init_inventory()
         self._init_gameplay()
+
+        self.main_menu = MainMenu(self.screen.get_size(), self.font)
+        self.in_menu = True
 
     def _init_pygame(self):
         pygame.init()
@@ -89,6 +93,23 @@ class Game:
             try:
                 dt = self.clock.tick_busy_loop(self.FPS)
                 self.fps_counter.update(dt)
+
+                if self.in_menu:
+                    for e in pygame.event.get():
+                        if e.type == pygame.QUIT:
+                            self.inputs.running = False
+                        action = self.main_menu.handle_event(e)
+                        if action == Action.START_GAME:
+                            self.in_menu = False
+                        elif action == Action.QUIT_GAME:
+                            self.inputs.running = False
+                    self.inputs.screen.fill((0, 0, 0))
+                    self.main_menu.draw(self.inputs.screen)
+                    pygame.display.flip()
+
+                    # KONIEC obiegu pętli - jeśli jesteśmy w menu, nie robimy logiki gry poniżej
+                    continue
+
                 now_ms = pygame.time.get_ticks()
                 self.inputs.keyboard_roles()
                 self.dialog_vm.handle_event(

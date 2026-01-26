@@ -1,5 +1,5 @@
 from gameplay.levels.map.direction import Direction
-from gameplay.levels.map.object_spec import ObjectSpec, SpriteObjectSpec, DynamicSpriteObjectSpec
+from gameplay.levels.map.object_spec import DynamicSpriteObjectSpec, ObjectSpec, SpriteObjectSpec
 
 
 class MapSpec:

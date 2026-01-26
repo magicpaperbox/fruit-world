@@ -1,8 +1,10 @@
-import pygame
 import random
-from screen import scale_screen as ss
+
+import pygame
+
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
+from screen import scale_screen as ss
 
 
 class BerryBush(SpriteObject):
@@ -33,7 +35,7 @@ class BerryBush(SpriteObject):
             berry.draw(screen)
 
     def _spawn_berries(self, berries_count: int):
-        berry_height_px = ss.game_units_to_px(42)
+        berry_height_px = ss.game_units_to_px(40)
         sprite = SPRITE_FACTORY.load(self._berry_sprite_path, berry_height_px)
         jitter_px = ss.game_units_to_px(36)
         rnd = random.Random()

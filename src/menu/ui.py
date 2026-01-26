@@ -1,5 +1,6 @@
-import pygame
 from enum import Enum, auto
+
+import pygame
 
 
 class Action(Enum):
@@ -9,6 +10,7 @@ class Action(Enum):
     RESET_LEVEL = auto()
     RES_800x600 = auto()
     RES_1280x720 = auto()
+    START_GAME = auto()
 
 
 class Button:
@@ -34,15 +36,18 @@ class Button:
         return Action.NONE
 
     def draw(self, surf: pygame.Surface):
-        bg = (70, 70, 80)
+        bg = (70, 70, 80, 0)
         if self._hover:
-            bg = (90, 90, 110)
+            bg = (90, 90, 110, 100)
         if self._pressed:
-            bg = (60, 60, 75)
-        pygame.draw.rect(surf, bg, self.rect, border_radius=8)
-        pygame.draw.rect(surf, (200, 200, 220), self.rect, 2, border_radius=8)
-        txt = self.font.render(self.text, True, (240, 240, 255))
-        surf.blit(txt, txt.get_rect(center=self.rect.center))
+            bg = (60, 60, 75, 180)
+        temp_rect = pygame.Rect(0, 0, self.rect.width, self.rect.height)
+        temp_surface = pygame.Surface(temp_rect.size, pygame.SRCALPHA)
+        pygame.draw.rect(temp_surface, bg, temp_rect, border_radius=8)
+
+        # txt = self.font.render(self.text, True, (240, 240, 255))
+        surf.blit(temp_surface, self.rect.topleft)
+        # surf.blit(txt, txt.get_rect(center=self.rect.center))
 
 
 class Modal:
@@ -69,7 +74,7 @@ class Modal:
 
     def draw(self, surf: pygame.Surface):
         overlay = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
-        overlay.fill((0, 0, 0, 140))
+        overlay.fill((0, 0, 0, 0))
         surf.blit(overlay, (0, 0))
 
         pygame.draw.rect(surf, (30, 30, 40), self.rect, border_radius=16)
