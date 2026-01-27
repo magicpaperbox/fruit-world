@@ -60,7 +60,7 @@ class Game:
 
     def _init_audio(self):
         pygame.mixer.init()
-        self.music = Music(None)
+        self.music = Music()
         self.jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
@@ -98,7 +98,6 @@ class Game:
                 self.inputs.process_inputs()
                 if self.inputs.in_menu:
                     self.music.play("sounds/music/Fruit World.mp3")
-                    # self.inputs.screen.fill((0, 0, 0))
                     self.inputs.main_menu.draw(self.inputs.screen)
                 else:
                     self.music.play(self.level.music)
