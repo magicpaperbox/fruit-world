@@ -50,6 +50,7 @@ class GameInputs:
 
             if self.in_menu:
                 action = self.main_menu.handle_event(e)
+
                 if action == Action.START_GAME:
                     self.in_menu = False
                 elif action == Action.QUIT_GAME:

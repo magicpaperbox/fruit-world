@@ -19,10 +19,10 @@ class MainMenu:
 
         buttons = [
             Button(
-                rect=pygame.Rect(cx - 100, cy + 125, 200, 46), text="Graj", action=Action.START_GAME, font=self.font
+                rect=pygame.Rect(cx - 109, cy + 125, 218, 46), text="Graj", action=Action.START_GAME, font=self.font
             ),
             Button(
-                rect=pygame.Rect(cx - 100, cy + 286, 200, 35), text="Wyjdź", action=Action.QUIT_GAME, font=self.font
+                rect=pygame.Rect(cx - 105, cy + 286, 210, 35), text="Wyjdź", action=Action.QUIT_GAME, font=self.font
             ),
         ]
 

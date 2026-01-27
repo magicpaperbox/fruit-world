@@ -38,12 +38,12 @@ class Button:
     def draw(self, surf: pygame.Surface):
         bg = (70, 70, 80, 0)
         if self._hover:
-            bg = (90, 90, 110, 100)
+            bg = (230, 200, 100, 20)
         if self._pressed:
-            bg = (60, 60, 75, 180)
+            bg = (0, 0, 0, 50)
         temp_rect = pygame.Rect(0, 0, self.rect.width, self.rect.height)
         temp_surface = pygame.Surface(temp_rect.size, pygame.SRCALPHA)
-        pygame.draw.rect(temp_surface, bg, temp_rect, border_radius=8)
+        pygame.draw.rect(temp_surface, bg, temp_rect, border_radius=15)
 
         # txt = self.font.render(self.text, True, (240, 240, 255))
         surf.blit(temp_surface, self.rect.topleft)

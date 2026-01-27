@@ -8,6 +8,7 @@ from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rec
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
 from gameplay.levels.map.direction import Direction
+from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import Inventory, InventoryUI
 from gameplay.player.player import Player
@@ -59,6 +60,7 @@ class Game:
 
     def _init_audio(self):
         pygame.mixer.init()
+        self.music = Music(None)
         self.jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
@@ -95,11 +97,12 @@ class Game:
                 self.fps_counter.update(dt)
                 self.inputs.process_inputs()
                 if self.inputs.in_menu:
+                    self.music.play("sounds/music/Fruit World.mp3")
                     # self.inputs.screen.fill((0, 0, 0))
                     self.inputs.main_menu.draw(self.inputs.screen)
                 else:
+                    self.music.play(self.level.music)
                     now_ms = pygame.time.get_ticks()
-
                     self.dialog_vm.handle_event(
                         self.inputs.is_pick_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt
                     )
