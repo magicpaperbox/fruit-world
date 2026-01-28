@@ -1,7 +1,11 @@
 from gameplay.levels.level_spec import LevelSpec
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import DynamicSpriteObjectSpec, ObjectSpec, SpriteObjectSpec
+from gameplay.levels.map.object_spec import (
+    DynamicSpriteObjectSpec,
+    ObjectSpec,
+    SpriteObjectSpec,
+)
 
 LEVEL_1_SPEC = LevelSpec(
     maps=[
@@ -47,6 +51,7 @@ LEVEL_1_SPEC = LevelSpec(
             ],
             npcs={"mouse": ObjectSpec(x=1100, y=905, width=389, height=251)},
             static_objects=[SpriteObjectSpec(x=970, y=676, height_units=251, sprite_path="sprites/objects/domek.png")],
+            moving_dynamic_objects=[],
             neighbours={Direction.RIGHT: "map2"},
         ),
         MapSpec(
@@ -90,6 +95,14 @@ LEVEL_1_SPEC = LevelSpec(
             npcs={},
             static_objects=[
                 SpriteObjectSpec(x=1390, y=150, height_units=118, sprite_path="sprites/objects/yellow_herb.png"),
+            ],
+            moving_dynamic_objects=[
+                SpriteObjectSpec(
+                    x=1350,
+                    y=190,
+                    height_units=50,
+                    sprite_path="sprites/items/heart.png"
+                )
             ],
             neighbours={Direction.LEFT: "map1"},
         ),

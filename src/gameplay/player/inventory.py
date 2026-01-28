@@ -1,5 +1,8 @@
 import pygame
 
+from gameplay.player.player_health import Health
+from render. sprite_factory import SPRITE_FACTORY
+
 from screen import scale_screen as ss
 
 
@@ -60,7 +63,8 @@ class InventoryUI:
                 slot = pygame.Rect(x, y, self._box_width, self._box_height)
                 self._slots.append(slot)
 
-    def draw(self, screen: pygame.Surface, inventory: Inventory):
+    def draw(self, screen: pygame.Surface, inventory: Inventory, health: Health):
+        self._draw_health(screen, health.health_points)
         items_list = list(inventory.all_items())
         for slot_index, slot in enumerate(self._slots):
             self._draw_slot(screen, slot)
@@ -81,3 +85,11 @@ class InventoryUI:
             text = self.font.render(str(count), True, (255, 255, 255))
             text_rect = text.get_rect(bottomright=(slot.right - 4 * self._padding, slot.bottom - 2 * self._line_space))
             screen.blit(text, text_rect)
+
+    def _draw_health(self, screen: pygame.Surface, count):
+        icon_height = ss.relative_y_to_game_units_px(0.05)
+        heart_icon = SPRITE_FACTORY.load("sprites/items/heart.png", icon_height)
+        heart_rect = heart_icon.get_rect(bottomright=self._panel.bottomright)
+        screen.blit(heart_icon, (heart_rect[0] - 6.5 * icon_height, heart_rect[1] - icon_height * 0.5))
+        text = self.font.render(str(count), True, (255, 255, 255))
+        screen.blit(text, (heart_rect[0] - 6 * icon_height, heart_rect[1] - icon_height * 0.25))

@@ -8,7 +8,7 @@ from render.debug import draw_area, draw_rect
 
 class Level:
     def __init__(self, inventory: Inventory, level_spec: LevelSpec):
-        self.music = level_spec.music_path
+        self.music_path = level_spec.music_path
         self._maps = {}
         for map_spec in level_spec.maps:
             map = Map(map_spec)
@@ -40,6 +40,9 @@ class Level:
             obj.draw(game_surface)
         for npc in self.current_map.npcs:
             npc.draw(game_surface)
+        for dynamic_object in self.current_map.dynamic_objects:
+            dynamic_object.draw(game_surface)
+
         player.draw(game_surface)
 
     def draw_debug(self, game_surface, move_player):

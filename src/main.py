@@ -12,6 +12,7 @@ from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import Inventory, InventoryUI
 from gameplay.player.player import Player
+from gameplay.player.player_health import Health
 from gameplay.player.player_mobility import PlayerMobility
 from menu.main_menu import MainMenu
 from menu.ui import UIManager
@@ -85,6 +86,7 @@ class Game:
         self.gravity = ss.game_units_to_decimal(0.001)
         self.sara = Player.load()
         self.move_player = PlayerMobility(self.gravity)
+        self.health = Health()
         self.level = Level(self.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
@@ -100,7 +102,7 @@ class Game:
                     self.music.play("sounds/music/Fruit World.mp3")
                     self.inputs.main_menu.draw(self.inputs.screen)
                 else:
-                    self.music.play(self.level.music)
+                    self.music.play(self.level.music_path)
                     now_ms = pygame.time.get_ticks()
                     self.dialog_vm.handle_event(
                         self.inputs.is_pick_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt
@@ -149,7 +151,8 @@ class Game:
                         self.move_player.coordinates,
                         dt,
                     )
-
+                    if self.level.current_map.dynamic_objects:
+                        self.health.collect_life(self.sara.player_rect, self.level.current_map.dynamic_objects[0])
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     if self.inputs.DEBUG_OVERLAYS:
@@ -170,7 +173,7 @@ class Game:
                             if picked_items > 0:
                                 self.inventory.add(bush.berry_item_id, picked_items)
 
-                    self.inventory_ui.draw(self.inputs.screen, self.inventory)
+                    self.inventory_ui.draw(self.inputs.screen, self.inventory, self.health)
 
                     if self.inputs.DEBUG_OVERLAYS:
                         self.fps_counter.draw(self.inputs.screen)
