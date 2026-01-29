@@ -23,3 +23,14 @@ class SpriteObject:
     @classmethod
     def create_invisible(cls, rect: pygame.Rect):
         return cls(sprite=None, rect=rect)
+
+
+class Collectible(SpriteObject):
+    def __init__(self, sprite, kind: str, rect):
+        super().__init__(sprite, rect)
+        self.kind = kind
+
+    @classmethod
+    def create_collectible(cls, sprite: pygame.Surface, kind: str, **kwargs) -> "Collectible":
+        rect = sprite.get_rect(**kwargs)
+        return cls(sprite, kind, rect)

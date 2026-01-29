@@ -40,8 +40,8 @@ class Level:
             obj.draw(game_surface)
         for npc in self.current_map.npcs:
             npc.draw(game_surface)
-        for dynamic_object in self.current_map.dynamic_objects:
-            dynamic_object.draw(game_surface)
+        for collectible_object in self.current_map.collectible_objects:
+            collectible_object.draw(game_surface)
 
         player.draw(game_surface)
 

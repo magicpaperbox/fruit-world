@@ -4,7 +4,7 @@ import pygame
 class Health:
     def __init__(self):
         self.health_max_points = 5
-        self.health_points = 4
+        self.health_points = 2
         self.restart_game = False
 
 
@@ -26,7 +26,3 @@ class Health:
     def fatal_fall(self, player_rect: pygame.Rect, screen_height: int):
         if player_rect.y > screen_height:
             self.die()
-
-    def collect_life(self, player_rect: pygame.Rect, heart_rect: pygame.Rect):
-        if player_rect.colliderect(heart_rect):
-            self.health_gain()

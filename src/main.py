@@ -7,6 +7,7 @@ import pygame
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
+from gameplay.levels.map.collect_resources import CollectResources
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
@@ -87,9 +88,11 @@ class Game:
         self.sara = Player.load()
         self.move_player = PlayerMobility(self.gravity)
         self.health = Health()
+        self.collect_resources = CollectResources()
         self.level = Level(self.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
+
 
     # noinspection PyAttributeOutsideInit
     def run(self):
@@ -151,8 +154,14 @@ class Game:
                         self.move_player.coordinates,
                         dt,
                     )
-                    if self.level.current_map.dynamic_objects:
-                        self.health.collect_life(self.sara.player_rect, self.level.current_map.dynamic_objects[0])
+
+                    self.collect_resources.collect(
+                        self.sara.player_rect,
+                        self.level.current_map.collectible_objects,
+                        self.health
+                    )
+
+
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     if self.inputs.DEBUG_OVERLAYS:

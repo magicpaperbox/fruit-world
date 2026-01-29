@@ -5,10 +5,10 @@ import pygame
 import screen.scale_screen as ss
 from gameplay.levels.berry_bush import BerryBush
 from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import SpriteObjectSpec
+from gameplay.levels.map.object_spec import CollectibleSpec, SpriteObjectSpec
 from gameplay.levels.npcs import Npc
 from render.sprite_factory import SPRITE_FACTORY
-from render.sprite_object import SpriteObject
+from render.sprite_object import Collectible, SpriteObject
 
 
 class Map:
@@ -18,7 +18,7 @@ class Map:
         self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes), 1, "blueberry")
         self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes), 3, "strawberry")
         self.static_objects = self._load_static_objects(spec.static_objects)
-        self.dynamic_objects = self._load_dynamic_objects(spec.moving_dynamic_objects)
+        self.collectible_objects = self._load_collectible_objects(spec.collectible)
         self.npcs = []
         for key, value in spec.npcs.items():
             if key == "mouse":
@@ -61,13 +61,13 @@ class Map:
             static_objects.append(sprite_obj)
         return static_objects
 
-    def _load_dynamic_objects(self, specs: list[SpriteObjectSpec]):
-        dynamic_objects = []
+    def _load_collectible_objects(self, specs: list[CollectibleSpec]):
+        collectible_obj = []
         for obj in specs:
             sprite = SPRITE_FACTORY.load(obj.sprite_path, obj.height)
-            sprite_obj = self._create_sprite_object(obj, sprite)
-            dynamic_objects.append(sprite_obj)
-        return dynamic_objects
+            sprite_obj = self._create_collectible_object(obj, sprite, kind=obj.kind)
+            collectible_obj.append(sprite_obj)
+        return collectible_obj
 
 
     def _load_bushes(self, specs: list[SpriteObjectSpec], count: int, item_id: str):
@@ -91,6 +91,12 @@ class Map:
         if not isinstance(position, tuple):
             position = (position.x, position.y)
         return SpriteObject.create(sprite, topleft=position)
+
+    def _create_collectible_object(self, position, sprite: pygame.Surface, kind: str):
+        if not isinstance(position, tuple):
+            position = (position.x, position.y)
+        return Collectible.create_collectible(sprite, kind, topleft=position)
+
 
 
 __all__ = ["Map"]
