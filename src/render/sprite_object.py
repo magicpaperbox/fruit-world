@@ -29,6 +29,11 @@ class Collectible(SpriteObject):
     def __init__(self, sprite, kind: str, rect):
         super().__init__(sprite, rect)
         self.kind = kind
+        self.effect = None
+
+    def update(self, now_ms):
+        if self.effect is not None:
+            self.effect.update(now_ms)
 
     @classmethod
     def create_collectible(cls, sprite: pygame.Surface, kind: str, **kwargs) -> "Collectible":

@@ -18,6 +18,7 @@ from gameplay.player.player_mana import Mana
 from gameplay.player.player_mobility import PlayerMobility
 from menu.main_menu import MainMenu
 from menu.ui import UIManager
+from render.effects import VisualEffects
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 from screen.fps_counter import FPSCounter
@@ -164,7 +165,7 @@ class Game:
                         self.mana
                     )
 
-
+                    self.level.update_level(self.level.current_map.collectible_objects, now_ms)
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     if self.inputs.DEBUG_OVERLAYS:

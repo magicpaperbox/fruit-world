@@ -7,6 +7,7 @@ from gameplay.levels.berry_bush import BerryBush
 from gameplay.levels.map.map_spec import MapSpec
 from gameplay.levels.map.object_spec import CollectibleSpec, SpriteObjectSpec
 from gameplay.levels.npcs import Npc
+from render.effects import VisualEffects
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import Collectible, SpriteObject
 
@@ -66,6 +67,8 @@ class Map:
         for obj in specs:
             sprite = SPRITE_FACTORY.load(obj.sprite_path, obj.height)
             sprite_obj = self._create_collectible_object(obj, sprite, kind=obj.kind)
+            if sprite_obj.kind == "heart":
+                sprite_obj.effect = VisualEffects(sprite_obj)
             collectible_obj.append(sprite_obj)
         return collectible_obj
 
