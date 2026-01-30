@@ -18,7 +18,6 @@ from gameplay.player.player_mana import Mana
 from gameplay.player.player_mobility import PlayerMobility
 from menu.main_menu import MainMenu
 from menu.ui import UIManager
-from render.effects import VisualEffects
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 from screen.fps_counter import FPSCounter

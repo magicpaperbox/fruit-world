@@ -1,8 +1,7 @@
-from gameplay.player.inventory import Inventory
-
+from gameplay.levels.dialog import DialogStep
 from gameplay.levels.npcs import Npc
 from gameplay.levels.quest import Quest, QuestState
-from gameplay.levels.dialog import DialogStep
+from gameplay.player.inventory import Inventory
 
 _WELCOME_DIALOG = [
     DialogStep("Hello my friend!", frame="hello", speaker="Mouse"),

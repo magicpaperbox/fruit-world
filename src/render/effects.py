@@ -1,7 +1,5 @@
 from math import sin
 
-import pygame
-
 from render.sprite_object import Collectible
 
 

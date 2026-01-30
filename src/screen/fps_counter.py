@@ -3,8 +3,9 @@ FPS counter and frame drop warning system.
 Displays current FPS on screen and logs warnings when frames are dropped.
 """
 
-import pygame
 from collections import deque
+
+import pygame
 
 
 class FPSCounter:

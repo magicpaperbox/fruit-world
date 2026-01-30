@@ -1,4 +1,3 @@
-import pygame
 
 class Mana:
     def __init__(self):

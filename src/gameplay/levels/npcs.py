@@ -3,10 +3,10 @@ import enum
 import pygame
 
 from gameplay.levels.dialog import DialogStep
-from render.animation import Animation
-from screen import scale_screen as ss
 from gameplay.levels.quest import Quest
+from render.animation import Animation
 from render.sprite_factory import SPRITE_FACTORY
+from screen import scale_screen as ss
 
 
 class Status(str, enum.Enum):

@@ -1,5 +1,6 @@
-import numpy as np
 import wave
+
+import numpy as np
 
 SAMPLE_RATE = 44100
 DURATION = 0.12

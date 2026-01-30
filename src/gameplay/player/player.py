@@ -1,7 +1,8 @@
 import pygame
+
 from render.animation import Animation
-from screen import scale_screen as ss
 from render.sprite_factory import SPRITE_FACTORY
+from screen import scale_screen as ss
 
 
 class Player:
