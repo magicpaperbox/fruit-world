@@ -11,6 +11,7 @@ class CollectResources:
             if player_rect.colliderect(collectible.rect):
                 if collectible.kind == "heart":
                     health.health_gain()
+                    pygame.mixer.Sound("sounds/heart_collect.wav").play()
                     to_remove.append(collectible)
 
         for item in to_remove:

@@ -227,3 +227,73 @@ with wave.open("../sounds/npc_mmhm.wav", "w") as f:
     f.writeframes(audio.tobytes())
 
 print("npc_mmhm.wav wygenerowany")
+
+
+# heart collect - miękka wersja
+DURATION_HEART = 0.18
+t = np.linspace(0, DURATION_HEART, int(SAMPLE_RATE * DURATION_HEART), False)
+# niższy, łagodniejszy ton
+freq = np.linspace(500, 650, t.size)  # mniejszy sweep, niższe tony
+signal = np.sin(2 * np.pi * freq * t)
+# dodajemy delikatny szum dla miękkości
+noise = np.random.normal(0, 1, t.size)
+noise = np.convolve(noise, np.ones(400) / 400, mode="same") * 0.15
+signal = signal * 0.5 + noise
+# dłuższa, łagodniejsza obwiednia
+attack = int(0.02 * SAMPLE_RATE)
+release = int(0.16 * SAMPLE_RATE)
+envelope = np.concatenate([
+    np.linspace(0, 1, attack),
+    np.linspace(1, 0, release),
+])
+signal = signal[:envelope.size] * envelope
+audio = (signal * 1.5 * 32767).astype(np.int16)  # ciszej niż VOLUME=2
+with wave.open("../sounds/heart_collect.wav", "w") as f:
+    f.setnchannels(1)
+    f.setsampwidth(2)
+    f.setframerate(SAMPLE_RATE)
+    f.writeframes(audio.tobytes())
+print("heart_collect.wav wygenerowany")
+
+
+# potion drink - bulgotanie "gul gul"
+def soft_bubble(freq, duration):
+    t = np.linspace(0, duration, int(SAMPLE_RATE * duration), False)
+
+    tone = np.sin(2 * np.pi * freq * t) * 0.5
+
+    attack = int(0.03 * SAMPLE_RATE)
+    sustain = int(0.01 * SAMPLE_RATE)
+    release = int((duration - 0.04) * SAMPLE_RATE)
+
+    envelope = np.concatenate(
+        [
+            np.linspace(0, 0.8, attack),
+            np.ones(sustain) * 0.8,
+            np.linspace(0.8, 0, release),
+        ]
+    )
+
+    return tone[: envelope.size] * envelope[: tone.size]
+
+
+# 5 bąbelków, umiarkowane tempo
+b1 = soft_bubble(230, 0.09)
+pause = np.zeros(int(0.025 * SAMPLE_RATE))  # dłuższa pauza
+b2 = soft_bubble(250, 0.08)
+b3 = soft_bubble(220, 0.09)
+b4 = soft_bubble(240, 0.08)
+b5 = soft_bubble(215, 0.10)
+sound = np.concatenate([b1, pause, b2, pause, b3, pause, b4, pause])
+# minimalny szum
+noise = np.random.normal(0, 1, sound.size)
+noise = np.convolve(noise, np.ones(800) / 800, mode="same") * 0.05
+sound = sound + noise[: sound.size]
+# umiarkowana głośność (między 0.8 a 2.5)
+audio = (sound * 1.8 * 32767).astype(np.int16)
+with wave.open("../sounds/potion_drink.wav", "w") as f:
+    f.setnchannels(1)
+    f.setsampwidth(2)
+    f.setframerate(SAMPLE_RATE)
+    f.writeframes(audio.tobytes())
+print("potion_drink.wav wygenerowany")
