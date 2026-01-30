@@ -1,8 +1,8 @@
 import pygame
-from render. sprite_factory import SPRITE_FACTORY
 
 from gameplay.player.player_health import Health
 from gameplay.player.player_mana import Mana
+from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 
 

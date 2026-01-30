@@ -4,7 +4,6 @@ from gameplay.levels.map.direction import Direction
 from gameplay.levels.strawberry_quest import StrawberryQuest
 from gameplay.player.inventory import Inventory
 from render.debug import draw_area, draw_rect
-from render.sprite_object import Collectible
 
 
 class Level:
@@ -59,6 +58,6 @@ class Level:
                 f"{platform.rect.left}x{platform.rect.top}",
             )
 
-    def update_level(self, collectibles: list[Collectible], now_ms: int):
-        for collectible in collectibles:
+    def update_level(self, now_ms: int):
+        for collectible in self.current_map.collectible_objects:
             collectible.update(now_ms)

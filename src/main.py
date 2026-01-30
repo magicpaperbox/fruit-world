@@ -7,7 +7,7 @@ import pygame
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
-from gameplay.levels.map.collect_resources import CollectResources
+from gameplay.levels.map.consumables import collect_consumables
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
@@ -69,9 +69,7 @@ class Game:
 
     def _init_game_inputs(self):
         main_menu = MainMenu(self.screen.get_size(), self.font)
-        self.inputs = GameInputs(
-            self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu
-        )
+        self.inputs = GameInputs(self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu)
 
     def _init_inventory(self):
         icon_height = ss.relative_y_to_game_units_px(0.05)
@@ -90,11 +88,9 @@ class Game:
         self.move_player = PlayerMobility(self.gravity)
         self.health = Health()
         self.mana = Mana()
-        self.collect_resources = CollectResources()
         self.level = Level(self.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
-
 
     # noinspection PyAttributeOutsideInit
     def run(self):
@@ -109,9 +105,7 @@ class Game:
                 else:
                     self.music.play(self.level.music_path)
                     now_ms = pygame.time.get_ticks()
-                    self.dialog_vm.handle_event(
-                        self.inputs.is_pick_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt
-                    )
+                    self.dialog_vm.handle_event(self.inputs.is_pick_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt)
 
                     for npc in self.level.current_map.npcs:
                         if self.sara.player_rect.colliderect(npc.npc_rect):
@@ -157,14 +151,9 @@ class Game:
                         dt,
                     )
 
-                    self.collect_resources.collect(
-                        self.sara.player_rect,
-                        self.level.current_map.collectible_objects,
-                        self.health,
-                        self.mana
-                    )
+                    collect_consumables(self.sara.player_rect, self.level.current_map.collectible_objects, self.health, self.mana)
 
-                    self.level.update_level(self.level.current_map.collectible_objects, now_ms)
+                    self.level.update_level(now_ms)
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     if self.inputs.DEBUG_OVERLAYS:
@@ -178,9 +167,7 @@ class Game:
                     self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
                     # PRZEDMIOTY:
                     if self.inputs.is_pick_pressed:
-                        for bush in itertools.chain(
-                            self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes
-                        ):
+                        for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
                             picked_items = bush.try_pick_berries(self.sara.player_rect)
                             if picked_items > 0:
                                 self.inventory.add(bush.berry_item_id, picked_items)
