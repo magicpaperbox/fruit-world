@@ -52,7 +52,14 @@ LEVEL_1_SPEC = LevelSpec(
             ],
             npcs={"mouse": ObjectSpec(x=1100, y=905, width=389, height=251)},
             static_objects=[SpriteObjectSpec(x=970, y=676, height_units=251, sprite_path="sprites/objects/domek.png")],
-            collectible=[],
+            collectible=[CollectibleSpec(
+                    x=500,
+                    y=730,
+                    height_units=70,
+                    sprite_path="sprites/items/mana_potion.png",
+                    kind="mana"
+                )
+            ],
             neighbours={Direction.RIGHT: "map2"},
         ),
         MapSpec(

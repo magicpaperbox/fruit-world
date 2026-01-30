@@ -278,12 +278,12 @@ def soft_bubble(freq, duration):
 
 
 # 5 bąbelków, umiarkowane tempo
-b1 = soft_bubble(230, 0.09)
+b1 = soft_bubble(330, 0.09)
 pause = np.zeros(int(0.025 * SAMPLE_RATE))  # dłuższa pauza
-b2 = soft_bubble(250, 0.08)
-b3 = soft_bubble(220, 0.09)
-b4 = soft_bubble(240, 0.08)
-b5 = soft_bubble(215, 0.10)
+b2 = soft_bubble(350, 0.08)
+b3 = soft_bubble(320, 0.09)
+b4 = soft_bubble(340, 0.08)
+b5 = soft_bubble(315, 0.10)
 sound = np.concatenate([b1, pause, b2, pause, b3, pause, b4, pause])
 # minimalny szum
 noise = np.random.normal(0, 1, sound.size)

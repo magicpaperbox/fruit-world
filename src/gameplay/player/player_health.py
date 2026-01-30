@@ -12,11 +12,11 @@ class Health:
         self.health_points = 0
         self.restart_game = True
 
-    def health_gain(self):
+    def gain(self):
         if self.health_points < self.health_max_points:
             self.health_points += 1
 
-    def health_leech(self):
+    def leech(self):
         if self.health_points > 0:
             self.health_points -= 1
 
