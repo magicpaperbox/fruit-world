@@ -11,7 +11,7 @@ from gameplay.levels.map.consumables import collect_consumables
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
-from gameplay.player.inventory import Inventory, InventoryUI
+from gameplay.player.inventory import InventoryUI
 from gameplay.player.player import Player
 from gameplay.player.player_mobility import PlayerMobility
 from menu.main_menu import MainMenu
@@ -77,14 +77,13 @@ class Game:
             "strawberry": strawberry_icon,
             "blueberry": blueberry_icon,
         }
-        self.inventory = Inventory()
         self.inventory_ui = InventoryUI(self.font, item_icons, self.inputs.layout.right_window)
 
     def _init_gameplay(self):
         self.gravity = ss.game_units_to_decimal(0.001)
         self.sara = Player.load()
         self.move_player = PlayerMobility(self.gravity)
-        self.level = Level(self.inventory, LEVEL_1_SPEC)
+        self.level = Level(self.sara.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
 
@@ -166,9 +165,9 @@ class Game:
                         for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
                             picked_items = bush.try_pick_berries(self.sara.player_rect)
                             if picked_items > 0:
-                                self.inventory.add(bush.berry_item_id, picked_items)
+                                self.sara.inventory.add(bush.berry_item_id, picked_items)
 
-                    self.inventory_ui.draw(self.inputs.screen, self.inventory, self.sara.health, self.sara.mana)
+                    self.inventory_ui.draw(self.inputs.screen, self.sara.inventory, self.sara.health, self.sara.mana)
 
                     if self.inputs.DEBUG_OVERLAYS:
                         self.fps_counter.draw(self.inputs.screen)

@@ -2,6 +2,7 @@ from typing import Self
 
 import pygame
 
+from gameplay.player.inventory import Inventory
 from gameplay.player.player_health import Health
 from gameplay.player.player_mana import Mana
 from gameplay.player.player_view import PlayerView
@@ -9,10 +10,11 @@ from render.drawable import Drawable
 
 
 class Player(Drawable):
-    def __init__(self, view: PlayerView):
+    def __init__(self, view: PlayerView, inventory: Inventory):
         self._view = view
         self.health = Health()
         self.mana = Mana()
+        self.inventory = inventory
 
     @property
     def player_rect(self):
@@ -20,7 +22,7 @@ class Player(Drawable):
 
     @classmethod
     def load(cls) -> Self:
-        return cls(PlayerView.load())
+        return Player(PlayerView.load(), Inventory())
 
     def update_sprite(
         self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int], dt_ms: int

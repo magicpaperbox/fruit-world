@@ -11,7 +11,6 @@ class Inventory:
         self._items = {}
 
     def add(self, item_id: str, amount: int = 1):
-        # self.items.get("strawberry", 0) → nie istnieje → 0; 0 + 1 = 1
         self._items[item_id] = self._items.get(item_id, 0) + amount
 
     def remove(self, item_id: str, amount: int = 1):
