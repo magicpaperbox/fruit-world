@@ -6,7 +6,8 @@ from gameplay.player.inventory import Inventory
 _WELCOME_DIALOG = [
     DialogStep("Hello my friend!", frame="hello", speaker="Mouse"),
     DialogStep(
-        "I need your help. I need some food for my poor sick baby. There should be some strawberries growing somewhere nearby, but I can't leave my house. ",
+        "I need your help. I need some food for my poor sick baby. "
+        + "There should be some strawberries growing somewhere nearby, but I can't leave my house. ",
         frame="thinking",
         speaker="Mouse",
     ),

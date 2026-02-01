@@ -13,8 +13,6 @@ from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import Inventory, InventoryUI
 from gameplay.player.player import Player
-from gameplay.player.player_health import Health
-from gameplay.player.player_mana import Mana
 from gameplay.player.player_mobility import PlayerMobility
 from menu.main_menu import MainMenu
 from menu.ui import UIManager
@@ -86,8 +84,6 @@ class Game:
         self.gravity = ss.game_units_to_decimal(0.001)
         self.sara = Player.load()
         self.move_player = PlayerMobility(self.gravity)
-        self.health = Health()
-        self.mana = Mana()
         self.level = Level(self.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
@@ -151,7 +147,7 @@ class Game:
                         dt,
                     )
 
-                    collect_consumables(self.sara.player_rect, self.level.current_map.consumable_objects, self.health, self.mana)
+                    collect_consumables(self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.health, self.sara.mana)
 
                     self.level.update_level(now_ms)
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
@@ -172,7 +168,7 @@ class Game:
                             if picked_items > 0:
                                 self.inventory.add(bush.berry_item_id, picked_items)
 
-                    self.inventory_ui.draw(self.inputs.screen, self.inventory, self.health, self.mana)
+                    self.inventory_ui.draw(self.inputs.screen, self.inventory, self.sara.health, self.sara.mana)
 
                     if self.inputs.DEBUG_OVERLAYS:
                         self.fps_counter.draw(self.inputs.screen)
