@@ -13,7 +13,6 @@ from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import InventoryUI
 from gameplay.player.player import Player
-from gameplay.player.player_mobility import PlayerMobility
 from menu.main_menu import MainMenu
 from menu.ui import UIManager
 from render.sprite_factory import SPRITE_FACTORY
@@ -81,8 +80,7 @@ class Game:
 
     def _init_gameplay(self):
         self.gravity = ss.game_units_to_decimal(0.001)
-        self.sara = Player.load()
-        self.move_player = PlayerMobility(self.gravity)
+        self.sara = Player.load(self.gravity)
         self.level = Level(self.sara.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
@@ -114,37 +112,24 @@ class Game:
                             self.away = True
                         npc.update_sprite(now_ms, dt)
 
-                    if self.inputs.is_right_pressed:
-                        self.move_player.move_right(self.level.current_map.platforms, dt)
-                    elif self.inputs.is_left_pressed:
-                        self.move_player.move_left(self.level.current_map.platforms, dt)
-
-                    if self.inputs.space_down_this_frame:
-                        self.move_player.jump()
-
                     self.dialog_vm.update(dt)
-                    self.move_player.move_vertically(self.level.current_map.platforms, dt)
 
-                    if self.move_player.visual_rect.centerx > ss.GAME_WIDTH:
+                    self.sara.process_inputs(dt, self.inputs, self.level.current_map.platforms)
+
+                    if self.sara.player_rect.centerx > ss.GAME_WIDTH:
                         if self.level.try_load_map(Direction.RIGHT):
-                            self.move_player.set_x_position(0)
+                            self.sara._mobility.set_x_position(0)
                         else:
                             reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                            self.move_player.set_x_position(reset_player)
-                    elif self.move_player.visual_rect.centerx <= 0:
+                            self.sara._mobility.set_x_position(reset_player)
+                    elif self.sara.player_rect.centerx <= 0:
                         if self.level.try_load_map(Direction.LEFT):
                             reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                            self.move_player.set_x_position(reset_player)
+                            self.sara._mobility.set_x_position(reset_player)
                         else:
-                            self.move_player.set_x_position(0)
+                            self.sara._mobility.set_x_position(0)
 
-                    self.sara.update_sprite(
-                        self.move_player.is_on_ground,
-                        self.inputs.is_right_pressed,
-                        self.inputs.is_left_pressed,
-                        self.move_player.coordinates,
-                        dt,
-                    )
+                    self.sara.update_sprite(self.inputs, dt)
 
                     collect_consumables(self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.health, self.sara.mana)
 
@@ -152,7 +137,7 @@ class Game:
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     if self.inputs.DEBUG_OVERLAYS:
-                        self.level.draw_debug(self.inputs.game_surface, self.move_player)
+                        self.level.draw_debug(self.inputs.game_surface, self.sara._mobility)
 
                     # WYŚRODKOWANA gra:
                     self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)

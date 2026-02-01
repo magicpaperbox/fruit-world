@@ -5,29 +5,44 @@ import pygame
 from gameplay.player.inventory import Inventory
 from gameplay.player.player_health import Health
 from gameplay.player.player_mana import Mana
+from gameplay.player.player_mobility import PlayerMobility
 from gameplay.player.player_view import PlayerView
 from render.drawable import Drawable
+from render.sprite_object import SpriteObject
+from screen.game_inputs import GameInputs
 
 
 class Player(Drawable):
-    def __init__(self, view: PlayerView, inventory: Inventory):
+    def __init__(self, view: PlayerView, inventory: Inventory, mobility: PlayerMobility):
         self._view = view
+        self._mobility = mobility
         self.health = Health()
         self.mana = Mana()
         self.inventory = inventory
 
+    def process_inputs(self, dt: int, inputs: GameInputs, obstacles: list[SpriteObject]):
+        if inputs.is_right_pressed:
+            self._mobility.move_right(obstacles, dt)
+        elif inputs.is_left_pressed:
+            self._mobility.move_left(obstacles, dt)
+
+        if inputs.space_down_this_frame:
+            self._mobility.jump()
+
+        self._mobility.move_vertically(obstacles, dt)
+
     @property
     def player_rect(self):
-        return self._view.player_rect
+        return self._mobility.visual_rect
 
     @classmethod
-    def load(cls) -> Self:
-        return Player(PlayerView.load(), Inventory())
+    def load(cls, gravity: float) -> Self:
+        return Player(PlayerView.load(), Inventory(), PlayerMobility(gravity))
 
-    def update_sprite(
-        self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int], dt_ms: int
-    ) -> None:
-        self._view.update_sprite(on_ground, is_right_pressed, is_left_pressed, coordinates, dt_ms)
+    def update_sprite(self, inputs: GameInputs, dt_ms: int) -> None:
+        self._view.update_sprite(
+            self._mobility.is_on_ground, inputs.is_right_pressed, inputs.is_left_pressed, self._mobility.coordinates, dt_ms
+        )
 
     def draw(self, screen: pygame.surface.Surface):
         self._view.draw(screen)

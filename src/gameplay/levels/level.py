@@ -5,6 +5,7 @@ from gameplay.levels.map import Map
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.strawberry_quest import StrawberryQuest
 from gameplay.player.inventory import Inventory
+from gameplay.player.player_mobility import PlayerMobility
 from render.debug import draw_area, draw_rect
 from render.drawable import Drawable
 
@@ -48,7 +49,7 @@ class Level:
 
         player.draw(game_surface)
 
-    def draw_debug(self, game_surface, move_player):
+    def draw_debug(self, game_surface, move_player: PlayerMobility):
         draw_area(game_surface, self.current_map.strawberry_bushes, (190, 20, 40), "TRUS")
         draw_area(game_surface, self.current_map.blueberry_bushes, (60, 120, 255), "BOR")
         draw_rect(game_surface, move_player.collision_rect_x, (250, 250, 0), "HIT")
