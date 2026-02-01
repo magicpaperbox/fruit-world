@@ -1,6 +1,6 @@
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.object_spec import (
-    CollectibleSpec,
+    ConsumableSpec,
     DynamicSpriteObjectSpec,
     ObjectSpec,
     SpriteObjectSpec,
@@ -19,7 +19,7 @@ class MapSpec:
         blueberry_bushes: list[SpriteObjectSpec],
         npcs: dict[str, ObjectSpec],
         static_objects: list[SpriteObjectSpec],
-        collectible: list[CollectibleSpec],
+        consumable: list[ConsumableSpec],
         neighbours: dict[Direction, str],
     ):
         self.map_id = map_id
@@ -31,5 +31,5 @@ class MapSpec:
         self.blueberry_bushes = blueberry_bushes
         self.npcs = npcs
         self.static_objects = static_objects
-        self.collectible = collectible
+        self.consumable = consumable
         self.neighbours = neighbours

@@ -243,11 +243,13 @@ signal = signal * 0.5 + noise
 # dłuższa, łagodniejsza obwiednia
 attack = int(0.02 * SAMPLE_RATE)
 release = int(0.16 * SAMPLE_RATE)
-envelope = np.concatenate([
-    np.linspace(0, 1, attack),
-    np.linspace(1, 0, release),
-])
-signal = signal[:envelope.size] * envelope
+envelope = np.concatenate(
+    [
+        np.linspace(0, 1, attack),
+        np.linspace(1, 0, release),
+    ]
+)
+signal = signal[: envelope.size] * envelope
 audio = (signal * 1.5 * 32767).astype(np.int16)  # ciszej niż VOLUME=2
 with wave.open("../sounds/heart_collect.wav", "w") as f:
     f.setnchannels(1)

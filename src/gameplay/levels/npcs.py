@@ -36,8 +36,8 @@ class Npc:
         self._bye_bye_animation = bye_bye_animation
         self._dialog_index = 0
         self._dialog: list[DialogStep] = []
-        self._sprite = self._static.surface()
         self._default_dialog = default_dialog
+        self._sprite = self._static.surface()
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
 
         # tymczasowa podmiana animacji
@@ -150,7 +150,7 @@ class Npc:
 
         return npc
 
-    def center(self, new_frame):
+    def _center(self, new_frame):
         if new_frame.get_size() != self._sprite.get_size():
             cx, by = self.npc_rect.centerx, self.npc_rect.bottom
             self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
@@ -161,7 +161,7 @@ class Npc:
         if self._override_anim and now_ms < self._override_anim_until_ms:
             self._override_anim.advance(dt_ms)
             new_frame = self._override_anim.surface()
-            self.center(new_frame)
+            self._center(new_frame)
             return
         else:
             self._override_anim = None
@@ -169,14 +169,14 @@ class Npc:
         # tymczasowa statyczna klatka
         if self._override_surface and now_ms < self._override_until_ms:
             new_frame = self._override_surface
-            self.center(new_frame)
+            self._center(new_frame)
             return
         else:
             self._override_surface = None
 
         self._static.advance(dt_ms)
         new_frame = self._static.surface()
-        self.center(new_frame)
+        self._center(new_frame)
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self._sprite, self.npc_rect)

@@ -7,7 +7,6 @@ class Health:
         self.health_points = 2
         self.restart_game = False
 
-
     def die(self):
         self.health_points = 0
         self.restart_game = True

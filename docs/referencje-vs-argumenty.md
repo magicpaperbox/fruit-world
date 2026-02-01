@@ -74,7 +74,7 @@ class CollectResources:
 # W main.py - wersja B (bezpieczniejsza):
 self.collect_resources.check_collisions(
     self.sara.player_rect,
-    self.level.current_map.collectible_objects,  # <- zawsze aktualna lista!
+    self.level.current_map.consumable_objects,  # <- zawsze aktualna lista!
     self.health
 )
 ```

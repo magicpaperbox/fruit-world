@@ -2,7 +2,7 @@ from gameplay.levels.level_spec import LevelSpec
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.map_spec import MapSpec
 from gameplay.levels.map.object_spec import (
-    CollectibleSpec,
+    ConsumableSpec,
     DynamicSpriteObjectSpec,
     ObjectSpec,
     SpriteObjectSpec,
@@ -22,9 +22,7 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(x=630, y=128, height_units=90, sprite_path="sprites/objects/platform_small.png"),
             ],
             puzzle_platforms=[
-                DynamicSpriteObjectSpec(
-                    x=660, y=889, height_units=89, segments_count=2, sprite_path="sprites/objects/dirt_center.png"
-                ),
+                DynamicSpriteObjectSpec(x=660, y=889, height_units=89, segments_count=2, sprite_path="sprites/objects/dirt_center.png"),
                 DynamicSpriteObjectSpec(
                     x=0,
                     y=799,
@@ -47,19 +45,10 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(x=970, y=487, height_units=120, sprite_path="sprites/objects/bush_small.png"),
                 SpriteObjectSpec(x=165, y=680, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
             ],
-            blueberry_bushes=[
-                SpriteObjectSpec(x=1270, y=680, height_units=120, sprite_path="sprites/objects/bush_big.png")
-            ],
+            blueberry_bushes=[SpriteObjectSpec(x=1270, y=680, height_units=120, sprite_path="sprites/objects/bush_big.png")],
             npcs={"mouse": ObjectSpec(x=1100, y=905, width=389, height=251)},
             static_objects=[SpriteObjectSpec(x=970, y=676, height_units=251, sprite_path="sprites/objects/domek.png")],
-            collectible=[CollectibleSpec(
-                    x=500,
-                    y=730,
-                    height_units=70,
-                    sprite_path="sprites/items/mana_potion.png",
-                    kind="mana"
-                )
-            ],
+            consumable=[ConsumableSpec(x=500, y=730, height_units=70, sprite_path="sprites/items/mana_potion.png", kind="mana")],
             neighbours={Direction.RIGHT: "map2"},
         ),
         MapSpec(
@@ -97,22 +86,12 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(x=770, y=260, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
                 SpriteObjectSpec(x=245, y=680, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
             ],
-            blueberry_bushes=[
-                SpriteObjectSpec(x=1370, y=680, height_units=120, sprite_path="sprites/objects/bush_small.png")
-            ],
+            blueberry_bushes=[SpriteObjectSpec(x=1370, y=680, height_units=120, sprite_path="sprites/objects/bush_small.png")],
             npcs={},
             static_objects=[
                 SpriteObjectSpec(x=1390, y=150, height_units=118, sprite_path="sprites/objects/yellow_herb.png"),
             ],
-            collectible=[
-                CollectibleSpec(
-                    x=1350,
-                    y=190,
-                    height_units=50,
-                    sprite_path="sprites/items/heart.png",
-                    kind="heart"
-                )
-            ],
+            consumable=[ConsumableSpec(x=1350, y=190, height_units=50, sprite_path="sprites/items/heart.png", kind="heart")],
             neighbours={Direction.LEFT: "map1"},
         ),
     ],

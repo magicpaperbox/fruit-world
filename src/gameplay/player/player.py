@@ -54,9 +54,7 @@ class Player:
 
         return Player(right_jump, left_jump, static, right_animation, left_animation)
 
-    def update_sprite(
-        self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int], dt_ms: int
-    ) -> None:
+    def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int], dt_ms: int) -> None:
         self.player_rect.x = coordinates[0]
         self.player_rect.y = coordinates[1]
         if is_right_pressed:

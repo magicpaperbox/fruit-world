@@ -1,4 +1,4 @@
-import scale_screen as ss
+import screen.scale_screen as ss
 
 
 class GameUnit:

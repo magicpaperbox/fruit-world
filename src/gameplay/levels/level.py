@@ -40,8 +40,8 @@ class Level:
             obj.draw(game_surface)
         for npc in self.current_map.npcs:
             npc.draw(game_surface)
-        for collectible_object in self.current_map.collectible_objects:
-            collectible_object.draw(game_surface)
+        for consumable_object in self.current_map.consumable_objects:
+            consumable_object.draw(game_surface)
 
         player.draw(game_surface)
 
@@ -59,5 +59,5 @@ class Level:
             )
 
     def update_level(self, now_ms: int):
-        for collectible in self.current_map.collectible_objects:
-            collectible.update(now_ms)
+        for consumable in self.current_map.consumable_objects:
+            consumable.update(now_ms)

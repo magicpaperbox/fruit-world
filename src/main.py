@@ -151,7 +151,7 @@ class Game:
                         dt,
                     )
 
-                    collect_consumables(self.sara.player_rect, self.level.current_map.collectible_objects, self.health, self.mana)
+                    collect_consumables(self.sara.player_rect, self.level.current_map.consumable_objects, self.health, self.mana)
 
                     self.level.update_level(now_ms)
                     self.inputs.screen.fill((53, 71, 46))  # tło gry

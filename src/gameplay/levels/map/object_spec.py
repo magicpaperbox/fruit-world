@@ -16,7 +16,8 @@ class SpriteObjectSpec:
         self.height = ss.game_units_to_px(height_units)
         self.sprite_path = sprite_path
 
-class CollectibleSpec(SpriteObjectSpec):
+
+class ConsumableSpec(SpriteObjectSpec):
     def __init__(self, *args, kind: str, **kwargs):
         super().__init__(*args, **kwargs)
         self.kind = kind

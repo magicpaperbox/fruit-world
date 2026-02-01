@@ -1,4 +1,3 @@
-
 class Mana:
     def __init__(self):
         self.mana_max_points = 5
