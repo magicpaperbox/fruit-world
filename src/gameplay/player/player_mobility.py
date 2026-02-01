@@ -1,11 +1,13 @@
 import pygame
 
 from gameplay.player.collisions import collision_x, collision_y
+from render.debug import draw_rect
+from render.debuggable import Debuggable
 from render.sprite_object import SpriteObject
 from screen import scale_screen as ss
 
 
-class PlayerMobility:
+class PlayerMobility(Debuggable):
     def __init__(self, gravity: float):
         self._gravity = gravity
         # _anchor is now a list of floats for sub-pixel precision at high FPS
@@ -96,3 +98,7 @@ class PlayerMobility:
     def set_x_position(self, x: int) -> None:
         self._anchor[0] = float(x) + self.collision_rect_x.width / 2
         self._sync_all()
+
+    def draw_debug(self, screen: pygame.Surface):
+        draw_rect(screen, self.collision_rect_x, (250, 250, 0), "X")
+        draw_rect(screen, self.collision_rect_y, (250, 165, 20), "Y")

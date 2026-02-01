@@ -7,12 +7,13 @@ from gameplay.player.player_health import Health
 from gameplay.player.player_mana import Mana
 from gameplay.player.player_mobility import PlayerMobility
 from gameplay.player.player_view import PlayerView
+from render.debuggable import Debuggable
 from render.drawable import Drawable
 from render.sprite_object import SpriteObject
 from screen.game_inputs import GameInputs
 
 
-class Player(Drawable):
+class Player(Drawable, Debuggable):
     def __init__(self, view: PlayerView, inventory: Inventory, mobility: PlayerMobility):
         self._view = view
         self._mobility = mobility
@@ -31,6 +32,9 @@ class Player(Drawable):
 
         self._mobility.move_vertically(obstacles, dt)
 
+    def set_x_position(self, x: int) -> None:
+        self._mobility.set_x_position(x)
+
     @property
     def player_rect(self):
         return self._mobility.visual_rect
@@ -46,3 +50,6 @@ class Player(Drawable):
 
     def draw(self, screen: pygame.surface.Surface):
         self._view.draw(screen)
+
+    def draw_debug(self, screen: pygame.surface.Surface):
+        self._mobility.draw_debug(screen)

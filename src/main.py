@@ -116,18 +116,19 @@ class Game:
 
                     self.sara.process_inputs(dt, self.inputs, self.level.current_map.platforms)
 
+                    # TODO move to level
                     if self.sara.player_rect.centerx > ss.GAME_WIDTH:
                         if self.level.try_load_map(Direction.RIGHT):
-                            self.sara._mobility.set_x_position(0)
+                            self.sara.set_x_position(0)
                         else:
                             reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                            self.sara._mobility.set_x_position(reset_player)
+                            self.sara.set_x_position(reset_player)
                     elif self.sara.player_rect.centerx <= 0:
                         if self.level.try_load_map(Direction.LEFT):
                             reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                            self.sara._mobility.set_x_position(reset_player)
+                            self.sara.set_x_position(reset_player)
                         else:
-                            self.sara._mobility.set_x_position(0)
+                            self.sara.set_x_position(0)
 
                     self.sara.update_sprite(self.inputs, dt)
 
@@ -137,7 +138,7 @@ class Game:
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     if self.inputs.DEBUG_OVERLAYS:
-                        self.level.draw_debug(self.inputs.game_surface, self.sara._mobility)
+                        self.level.draw_debug(self.inputs.game_surface, [self.sara])
 
                     # WYŚRODKOWANA gra:
                     self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
