@@ -1,9 +1,12 @@
+import pygame
+
 from gameplay.levels.level_spec import LevelSpec
 from gameplay.levels.map import Map
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.strawberry_quest import StrawberryQuest
 from gameplay.player.inventory import Inventory
 from render.debug import draw_area, draw_rect
+from render.drawable import Drawable
 
 
 class Level:
@@ -28,7 +31,7 @@ class Level:
         self.current_map = self._maps[next_map_id]
         return True
 
-    def draw_level(self, game_surface, player):
+    def draw_level(self, game_surface: pygame.Surface, player: Drawable):
         self.current_map.background_img.draw(game_surface)
         for platform in self.current_map.platforms:
             platform.draw(game_surface)

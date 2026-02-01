@@ -1,84 +1,25 @@
+from typing import Self
+
 import pygame
 
-from render.animation import Animation
-from render.sprite_factory import SPRITE_FACTORY
-from screen import scale_screen as ss
+from gameplay.player.player_view import PlayerView
+from render.drawable import Drawable
 
 
-class Player:
-    def __init__(
-        self,
-        right_jump: pygame.Surface,
-        left_jump: pygame.Surface,
-        static: pygame.Surface,
-        right_animation: Animation,
-        left_animation: Animation,
-    ):
-        self._right_jump = right_jump
-        self._left_jump = left_jump
-        self._static = static
-        self._right_animation = right_animation
-        self._left_animation = left_animation
+class Player(Drawable):
+    def __init__(self, view: PlayerView):
+        self._view = view
 
-        self._sprite = self._static
-        self.player_rect = self._sprite.get_rect(center=(ss.relative_coords_to_game_units_px(0.5, 0.5)))
+    @property
+    def player_rect(self):
+        return self._view.player_rect
 
     @classmethod
-    def load(cls) -> "Player":
-        height = ss.relative_y_to_game_units_px(0.1)
-
-        def load_player_sprite(sprite_name: str) -> pygame.Surface:
-            return SPRITE_FACTORY.load(f"sprites/player/{sprite_name}.png", height)
-
-        right_jump = load_player_sprite("right_1")
-        left_jump = load_player_sprite("left_1")
-        static = load_player_sprite("static")
-
-        right_animation = Animation(
-            duration=200,
-            frames=[
-                load_player_sprite("right_2"),
-                load_player_sprite("right_3"),
-                load_player_sprite("right_4"),
-            ],
-        )
-
-        left_animation = Animation(
-            duration=200,
-            frames=[
-                load_player_sprite("left_2"),
-                load_player_sprite("left_3"),
-                load_player_sprite("left_4"),
-            ],
-        )
-
-        return Player(right_jump, left_jump, static, right_animation, left_animation)
+    def load(cls) -> Self:
+        return cls(PlayerView.load())
 
     def update_sprite(self, on_ground: bool, is_right_pressed: bool, is_left_pressed: bool, coordinates: tuple[int, int], dt_ms: int) -> None:
-        self.player_rect.x = coordinates[0]
-        self.player_rect.y = coordinates[1]
-        if is_right_pressed:
-            facing_dir = "right"
-        elif is_left_pressed:
-            facing_dir = "left"
-        else:
-            facing_dir = "front"
-        if not on_ground:
-            if facing_dir == "right":
-                self._sprite = self._right_jump
-            elif facing_dir == "left":
-                self._sprite = self._left_jump
-            else:
-                self._sprite = self._static
-        else:
-            if facing_dir == "right":
-                self._right_animation.advance(dt_ms)
-                self._sprite = self._right_animation.sprite
-            elif facing_dir == "left":
-                self._left_animation.advance(dt_ms)
-                self._sprite = self._left_animation.sprite
-            else:
-                self._sprite = self._static
+        self._view.update_sprite(on_ground, is_right_pressed, is_left_pressed, coordinates, dt_ms)
 
     def draw(self, screen: pygame.surface.Surface):
-        screen.blit(self._sprite, self.player_rect)
+        self._view.draw(screen)
