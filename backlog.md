@@ -1,16 +1,9 @@
 Wydzielić osobny komponent(y?) do rysowania stanu gracza (hp, mana)
 
-Znaleźć dobre miejsce na health i mana (Health) - obecnie w Game
 
-Collectible powinno być w osobnym pliku niż sprite_object
+Przenieść logikę przemieszczania się między mapami/kolizji ze ścianą do levelu (player jako parametr)
 
-Composition vs Inheritance
-
-
-rect
-sprite
-kind
-
+--------------
 
 if obj.kind == "heart":
   heart_logic()
