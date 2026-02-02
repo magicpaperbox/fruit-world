@@ -4,6 +4,7 @@ from gameplay.levels.dialog import DialogStep
 from gameplay.levels.npcs import Npc
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
+from screen.game_units import GameUnit
 
 
 # MVVM
@@ -218,14 +219,13 @@ class DialogBoxView:
         return lines
 
 
-def make_dialog_rect(game_w: int, screen_h: int, box_height: int, screen_bottom_border_margin: int) -> pygame.Rect:
-    width = game_w - 100 * screen_bottom_border_margin
-    return pygame.Rect(
-        (game_w - width) // 2,
-        screen_h - box_height - screen_bottom_border_margin,
-        width,
-        box_height,
-    )
+def make_dialog_rect(game_w: int, game_h: int) -> pygame.Rect:
+    bottom_margin = GameUnit(3).pixels
+    box_height = int(0.1 * game_h)
+    box_width = int(0.6 * game_w)
+    x = (game_w - box_width) // 2
+    y = game_h - box_height - bottom_margin
+    return pygame.Rect(x, y, box_width, box_height)
 
 
 class Button:

@@ -13,10 +13,10 @@ from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import InventoryUI
 from gameplay.player.player import Player
+from gameplay.resources_ui import ResourcesUI
 from menu.main_menu import MainMenu
 from menu.ui import UIManager
 from render.lighting import Lighting, SunLight
-from render.resources import DrawResources
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 from screen.fps_counter import FPSCounter
@@ -53,13 +53,13 @@ class Game:
         self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
         self.font, self.font_size = get_font_size()
         self.layout = Layout(0.4 * self.font_size, 0.4 * self.font_size)
-        self.resources = DrawResources(self.font)
+        self.resources_ui = ResourcesUI(self.font)
         self.fps_counter = FPSCounter(self.font)
         self.lighting = Lighting(ss.GAME_WIDTH, ss.GAME_HEIGHT, ambient_color=(210, 215, 230))
         self.sunlight = SunLight()
 
     def _init_dialogs(self):
-        rect = make_dialog_rect(int(ss.GAME_WIDTH), ss.SCREEN_HEIGHT, ss.DIALOG_HEIGHT, screen_bottom_border_margin=3)
+        rect = make_dialog_rect(ss.GAME_WIDTH, ss.GAME_HEIGHT)
         self.dialog_vm = DialogBox(rect=rect, cps=45, padding=self.font_size)
         self.dialog_view = DialogBoxView(font=self.font)
 
@@ -144,7 +144,7 @@ class Game:
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     self.sunlight.draw(self.inputs.game_surface)
                     self.lighting.reset()
-                    # self.lighting.draw_light(self.sara.player_rect.center)  <-- USUNIĘTE (nie chcemy kółka wokół gracza)
+                    # self.lighting.draw_light(self.sara.player_rect.center) # <-- USUNIĘTE (nie chcemy kółka wokół gracza)
                     self.lighting.apply(self.inputs.game_surface)
                     if self.inputs.DEBUG_OVERLAYS:
                         self.level.draw_debug(self.inputs.game_surface, [self.sara])
@@ -163,7 +163,7 @@ class Game:
                                 self.sara.inventory.add(bush.berry_item_id, picked_items)
 
                     self.inventory_ui.draw(self.inputs.screen, self.sara.inventory)
-                    self.resources.draw(self.inputs.screen, self.sara.health, self.sara.mana)
+                    self.resources_ui.draw(self.inputs.screen, self.sara.health, self.sara.mana)
 
                     if self.inputs.DEBUG_OVERLAYS:
                         self.fps_counter.draw(self.inputs.screen)
