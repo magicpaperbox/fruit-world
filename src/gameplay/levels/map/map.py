@@ -89,8 +89,8 @@ class Map:
         return bushes
 
     def _load_map_background(self, sprite_name: str) -> SpriteObject:
-        sprite = SPRITE_FACTORY.load(f"sprites/map/{sprite_name}.png", ss.GAME_HEIGHT)
-        rect = sprite.get_rect(center=ss.relative_coords_to_game_units_px(0.5, 0.5))
+        sprite = SPRITE_FACTORY.load_by_width(f"sprites/map/{sprite_name}.png", ss.SCREEN_WIDTH)
+        rect = sprite.get_rect(bottom=ss.SCREEN_HEIGHT, centerx=ss.SCREEN_WIDTH // 2)
         return SpriteObject(sprite, rect)
 
     def _create_sprite_object(self, position, sprite: pygame.Surface):

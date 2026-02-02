@@ -1,8 +1,5 @@
 import pygame
 
-from gameplay.player.player_health import Health
-from gameplay.player.player_mana import Mana
-from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 
 
@@ -22,7 +19,7 @@ class Inventory:
                 self._items[item_id] = new_amount
 
     def count(self, item_id: str) -> int:
-        return self._items.get(item_id, 0)  # 0 <- to co dostaniemy jeśli klucz nie istnieje
+        return self._items.get(item_id, 0)  # 0 <- to, co dostaniemy, jeśli klucz nie istnieje
 
     def all_items(self):
         return self._items.items()
@@ -62,9 +59,7 @@ class InventoryUI:
                 slot = pygame.Rect(x, y, self._box_width, self._box_height)
                 self._slots.append(slot)
 
-    def draw(self, screen: pygame.Surface, inventory: Inventory, health: Health, mana: Mana):
-        self._draw_health(screen, health.health_points)
-        self._draw_mana(screen, mana.mana_points)
+    def draw(self, screen: pygame.Surface, inventory: Inventory):
         items_list = list(inventory.all_items())
         for slot_index, slot in enumerate(self._slots):
             self._draw_slot(screen, slot)
@@ -85,19 +80,3 @@ class InventoryUI:
             text = self.font.render(str(count), True, (255, 255, 255))
             text_rect = text.get_rect(bottomright=(slot.right - 4 * self._padding, slot.bottom - 2 * self._line_space))
             screen.blit(text, text_rect)
-
-    def _draw_health(self, screen: pygame.Surface, count):
-        icon_height = ss.relative_y_to_game_units_px(0.05)
-        heart_icon = SPRITE_FACTORY.load("sprites/items/heart.png", icon_height)
-        heart_rect = heart_icon.get_rect(bottomright=self._panel.bottomright)
-        screen.blit(heart_icon, (heart_rect[0] - icon_height, heart_rect[1] - icon_height * 0.5))
-        text = self.font.render(str(count), True, (255, 255, 255))
-        screen.blit(text, (heart_rect[0] + 0.2 * icon_height, heart_rect[1] - icon_height * 0.25))
-
-    def _draw_mana(self, screen: pygame.Surface, count):
-        icon_height = ss.relative_y_to_game_units_px(0.05)
-        mana_icon = SPRITE_FACTORY.load("sprites/items/mana_potion.png", icon_height)
-        mana_rect = mana_icon.get_rect(bottomright=self._panel.bottomright)
-        screen.blit(mana_icon, (mana_rect[0] - 3 * icon_height, mana_rect[1] - icon_height * 0.5))
-        text = self.font.render(str(count), True, (255, 255, 255))
-        screen.blit(text, (mana_rect[0] - 2 * icon_height, mana_rect[1] - icon_height * 0.25))

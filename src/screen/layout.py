@@ -47,11 +47,11 @@ class Layout:
         r = self.right_window
 
         # tło
-        pygame.draw.rect(screen, fill, r, border_radius=10)
+        pygame.draw.rect(screen, fill, r, border_radius=35)
 
         # jasny obrys
-        pygame.draw.rect(screen, light, r, width=2, border_radius=10)
+        pygame.draw.rect(screen, light, r, width=2, border_radius=15)
 
         # cień
         shadow_rect = r.inflate(2, 2).move(1, 1)
-        pygame.draw.rect(screen, dark, shadow_rect, width=2, border_radius=10)
+        pygame.draw.rect(screen, dark, shadow_rect, width=2, border_radius=15)

@@ -49,7 +49,7 @@ def recalc_sizes(width: int, height: int):
     DIALOG_HEIGHT = int(_GUI_HEIGHT_RATIO * SCREEN_HEIGHT)
     SIDE_PANEL_W = int(SCREEN_WIDTH * _SIDE_PANEL_RATIO)
     GAME_WIDTH = SCREEN_WIDTH - SIDE_PANEL_W
-    GAME_HEIGHT = SCREEN_HEIGHT - DIALOG_HEIGHT
+    GAME_HEIGHT = SCREEN_HEIGHT
 
 
 def init_display(width: int, height: int, fullscreen: bool):

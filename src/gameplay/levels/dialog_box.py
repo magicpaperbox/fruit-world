@@ -137,7 +137,7 @@ class DialogBoxView:
         bg_color=(80, 100, 75),
         border_light=(140, 165, 135),
         border_dark=(65, 85, 60),
-        radius: int = 12,
+        radius: int = 16,
         border_w: int = 2,
     ):
         self.font = font
@@ -218,11 +218,10 @@ class DialogBoxView:
         return lines
 
 
-def make_dialog_rect(screen_w: int, screen_h: int, box_height: int, screen_bottom_border_margin: int) -> pygame.Rect:
-    offset_x = (ss.SCREEN_WIDTH - screen_w) // 2
-    width = screen_w - 2 * screen_bottom_border_margin
+def make_dialog_rect(game_w: int, screen_h: int, box_height: int, screen_bottom_border_margin: int) -> pygame.Rect:
+    width = game_w - 100 * screen_bottom_border_margin
     return pygame.Rect(
-        offset_x + screen_bottom_border_margin,
+        (game_w - width) // 2,
         screen_h - box_height - screen_bottom_border_margin,
         width,
         box_height,
