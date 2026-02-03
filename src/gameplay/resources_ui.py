@@ -2,6 +2,7 @@ import pygame
 
 from gameplay.player.player_health import Health
 from gameplay.player.player_mana import Mana
+from gameplay.player.player_money import Money
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
 from screen.game_units import GameUnit
@@ -16,8 +17,10 @@ class ResourcesUI:
         icon_height = ss.relative_y_to_game_units_px(0.05)
         self._heart_icon = SPRITE_FACTORY.load("sprites/items/heart.png", icon_height)
         self._mana_icon = SPRITE_FACTORY.load("sprites/items/mana_potion.png", icon_height)
+        self._money_icon = SPRITE_FACTORY.load("sprites/items/nut_money.png", icon_height)
 
-    def draw(self, screen: pygame.Surface, health: Health, mana: Mana):
+    def draw(self, screen: pygame.Surface, money: Money, health: Health, mana: Mana):
+        self._draw_resource(screen, money.money_points, self._money_icon, 0.7)
         self._draw_resource(screen, health.health_points, self._heart_icon, 0.8)
         self._draw_resource(screen, mana.mana_points, self._mana_icon, 0.9)
 

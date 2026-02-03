@@ -16,6 +16,7 @@ from gameplay.player.player import Player
 from gameplay.resources_ui import ResourcesUI
 from menu.main_menu import MainMenu
 from menu.ui import UIManager
+from render.interaction_effects import Particle
 from render.lighting import Lighting, SunLight
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
@@ -89,6 +90,7 @@ class Game:
         self.level = Level(self.sara.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
+        self.particles = []
 
     # noinspection PyAttributeOutsideInit
     def run(self):
@@ -137,11 +139,16 @@ class Game:
 
                     self.sara.update_sprite(self.inputs, dt)
 
-                    collect_consumables(self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.health, self.sara.mana)
+                    collected_pos = collect_consumables(
+                        self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.money, self.sara.health, self.sara.mana
+                    )
+                    for pos in collected_pos:
+                        self.particles.extend(Particle.spawn_particles(pos))
                     self.sunlight.update(dt)
                     self.level.update_level(now_ms)
                     self.inputs.screen.fill((53, 71, 46))  # tło gry
                     self.level.draw_level(self.inputs.game_surface, self.sara)
+                    self.particles = Particle.create_blink_effect(self.inputs.game_surface, self.particles, dt)
                     self.sunlight.draw(self.inputs.game_surface)
                     self.lighting.reset()
                     # self.lighting.draw_light(self.sara.player_rect.center) # <-- USUNIĘTE (nie chcemy kółka wokół gracza)
@@ -156,6 +163,7 @@ class Game:
                     # DIALOG:
                     self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
                     # PRZEDMIOTY:
+
                     if self.inputs.is_pick_pressed:
                         for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
                             picked_items = bush.try_pick_berries(self.sara.player_rect)
@@ -163,7 +171,7 @@ class Game:
                                 self.sara.inventory.add(bush.berry_item_id, picked_items)
 
                     self.inventory_ui.draw(self.inputs.screen, self.sara.inventory)
-                    self.resources_ui.draw(self.inputs.screen, self.sara.health, self.sara.mana)
+                    self.resources_ui.draw(self.inputs.screen, self.sara.money, self.sara.health, self.sara.mana)
 
                     if self.inputs.DEBUG_OVERLAYS:
                         self.fps_counter.draw(self.inputs.screen)

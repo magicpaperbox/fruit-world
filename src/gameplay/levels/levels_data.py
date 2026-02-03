@@ -91,7 +91,10 @@ LEVEL_1_SPEC = LevelSpec(
             static_objects=[
                 SpriteObjectSpec(x=1390, y=250, height_units=118, sprite_path="sprites/objects/yellow_herb.png"),
             ],
-            consumable=[ConsumableSpec(x=1350, y=290, height_units=50, sprite_path="sprites/items/heart.png", kind="heart")],
+            consumable=[
+                ConsumableSpec(x=1350, y=290, height_units=50, sprite_path="sprites/items/heart.png", kind="heart"),
+                ConsumableSpec(x=1050, y=810, height_units=50, sprite_path="sprites/items/nut_money.png", kind="money"),
+            ],
             neighbours={Direction.LEFT: "map1"},
         ),
     ],

@@ -72,6 +72,10 @@ class Map:
                 sprite_obj = AnimatedObject.create(
                     sprite, effects=[BobbingEffect(effect_amplitude=GameUnit(8), speed_factor=0.003)], topleft=(obj_spec.x, obj_spec.y)
                 )
+            elif obj_spec.kind == "money":
+                sprite_obj = AnimatedObject.create(
+                    sprite, effects=[BobbingEffect(effect_amplitude=GameUnit(5), speed_factor=0.004)], topleft=(obj_spec.x, obj_spec.y)
+                )
             else:
                 sprite_obj = self._create_sprite_object(obj_spec, sprite)
             consumable = Consumable(sprite_obj, obj_spec.kind)

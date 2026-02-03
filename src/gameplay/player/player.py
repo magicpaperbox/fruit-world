@@ -6,6 +6,7 @@ from gameplay.player.inventory import Inventory
 from gameplay.player.player_health import Health
 from gameplay.player.player_mana import Mana
 from gameplay.player.player_mobility import PlayerMobility
+from gameplay.player.player_money import Money
 from gameplay.player.player_view import PlayerView
 from render.debuggable import Debuggable
 from render.drawable import Drawable
@@ -17,6 +18,7 @@ class Player(Drawable, Debuggable):
     def __init__(self, view: PlayerView, inventory: Inventory, mobility: PlayerMobility):
         self._view = view
         self._mobility = mobility
+        self.money = Money()
         self.health = Health()
         self.mana = Mana()
         self.inventory = inventory
