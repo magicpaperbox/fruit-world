@@ -16,8 +16,8 @@ class Particle:
         self._lifetime_ms = lifetime_ms
         self._initial_lifetime = lifetime_ms
 
-        _icon_height = ss.relative_y_to_game_units_px(0.03)
-        self._image = SPRITE_FACTORY.load("sprites/items/spark.png", _icon_height)
+        icon_height = ss.relative_y_to_game_units_px(0.03)
+        self._image = SPRITE_FACTORY.load("sprites/items/spark.png", icon_height)
         self._original_image = self._image
 
     def update(self, dt: int):
@@ -48,13 +48,13 @@ class Particle:
 
     @staticmethod
     def spawn_particles(pos: tuple[int, int]):
-        _particle_amount = 80
+        particle_amount = 80
         particles = []
-        for i in range(_particle_amount):
-            _angle = random.uniform(0, 2 * 3.14159)  # rad
-            _direction = Vector2(math.cos(_angle), math.sin(_angle))
-            _speed = random.uniform(0.05, 0.15)
-            particle = Particle(pos, _direction, _speed)
+        for i in range(particle_amount):
+            angle = random.uniform(0, 2 * 3.14159)  # rad
+            direction = Vector2(math.cos(angle), math.sin(angle))
+            speed = random.uniform(0.05, 0.15)
+            particle = Particle(pos, direction, speed)
             particles.append(particle)
         return particles
 
