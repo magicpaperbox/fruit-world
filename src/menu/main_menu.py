@@ -20,7 +20,7 @@ class MainMenu:
         buttons = [
             Button(
                 rect=pygame.Rect(
-                    cx - ss.game_units_to_px(164),
+                    cx - ss.game_units_to_px(173),
                     cy + ss.game_units_to_px(190),
                     ss.game_units_to_px(330),
                     ss.game_units_to_px(70),
@@ -31,7 +31,7 @@ class MainMenu:
             ),
             Button(
                 rect=pygame.Rect(
-                    cx - ss.game_units_to_px(158),
+                    cx - ss.game_units_to_px(167),
                     cy + ss.game_units_to_px(430),
                     ss.game_units_to_px(315),
                     ss.game_units_to_px(55),
