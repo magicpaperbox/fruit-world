@@ -4,9 +4,7 @@ Wydzielić osobny komponent(y?) do rysowania stanu gracza (hp, mana)
 Przenieść logikę przemieszczania się między mapami/kolizji ze ścianą do levelu (player jako parametr)
 
 
-dopasować proporcje teł
-
-system czcionek żeby łatwo wybierać rozmar
+zmienne lokalne nie powinny się zaczynać od _
 
 --------------
 
