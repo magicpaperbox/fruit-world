@@ -30,14 +30,14 @@ _CANONICAL_SCREEN_HEIGHT = 1080
 
 def get_font_size():
     if _chosen_res == _AVAILABLE_RESOLUTIONS[0]:
-        size = 8
-    elif _chosen_res == _AVAILABLE_RESOLUTIONS[1]:
         size = 10
-    elif _chosen_res == _AVAILABLE_RESOLUTIONS[2]:
+    elif _chosen_res == _AVAILABLE_RESOLUTIONS[1]:
         size = 12
+    elif _chosen_res == _AVAILABLE_RESOLUTIONS[2]:
+        size = 14
     else:
-        size = 16
-    return pygame.font.SysFont("comicsansms", size), size
+        size = 18
+    return size
 
 
 def recalc_sizes(width: int, height: int):

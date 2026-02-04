@@ -44,10 +44,7 @@ class Button:
         temp_rect = pygame.Rect(0, 0, self.rect.width, self.rect.height)
         temp_surface = pygame.Surface(temp_rect.size, pygame.SRCALPHA)
         pygame.draw.rect(temp_surface, bg, temp_rect, border_radius=15)
-
-        # txt = self.font.render(self.text, True, (240, 240, 255))
         surf.blit(temp_surface, self.rect.topleft)
-        # surf.blit(txt, txt.get_rect(center=self.rect.center))
 
 
 class Modal:
