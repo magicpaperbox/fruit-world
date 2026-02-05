@@ -4,8 +4,8 @@ zmienne lokalne nie powinny się zaczynać od _
 
 fonts:
 😄move fonts from sprites/ to toplevel fonts/
-😄FontType -> FontSize and rename sizes SMALL, MEDIUM, LARGE, XLARGE
-😄FontFamily - nazwy powinny mówić co to za czcionka
+😄FontType -> FontSize and rename sizes SMALL, MEDIUM, LARGE, XLARGE✅
+😄FontFamily - nazwy powinny mówić co to za czcionka ✅
 😄FontsFactory - prywatne pole
 😭można się zastanowić nad cache jak w sprite factory
 😄resolution size vs enlarge vs get font size
@@ -40,3 +40,4 @@ class HealthCollectible(Collectible):
     player.health.gain()
     return True
 
+inventory draw picked item - poprawic sposob rysowania zebyranych rzeczy i ich licczb

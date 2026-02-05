@@ -12,14 +12,16 @@ from screen.game_units import GameUnit
 # VM - ViewModel
 # V - View
 class DialogBox:
-    def __init__(self, *, rect, cps: int, padding: int):
+    def __init__(self, *, rect):
         self.rect = rect
-        self.cps = cps
-        self.padding = padding
+        self.cps = ss.game_units_to_px(85)
+        self.s_padding = ss.game_units_to_px(20)
+        self.m_padding = ss.game_units_to_px(30)
+        self.offset = ss.game_units_to_px(150)
 
-        self.queue: list[DialogStep] = []
+        self._queue: list[DialogStep] = []
         self.current: DialogStep | None = None
-        self.visible = False
+        self._visible = False
 
         self._typed_len = 0
         self._time_acc = 0.0
@@ -35,22 +37,22 @@ class DialogBox:
         self._active_npc: Npc | None = None
 
     def show(self, step: DialogStep, npc: Npc | None = None):
-        self.queue.clear()
+        self._queue.clear()
         self.current = None
-        self.visible = True
+        self._visible = True
         if npc is not None:
             self._active_npc = npc
         self._enqueue(step)
 
     def _enqueue(self, step: DialogStep):
-        self.queue.append(step)
+        self._queue.append(step)
         if not self.current:
             self._take_next()
 
     def _hide(self):
-        self.visible = False
+        self._visible = False
         self.current = None
-        self.queue.clear()
+        self._queue.clear()
         self._active_npc = None
         self._away_time = 0.0
         self.farewell_shown = False
@@ -61,7 +63,7 @@ class DialogBox:
         if is_pick_pressed:
             self._away_time = 0.0
             self._farewell_shown = False
-            if self.queue:
+            if self._queue:
                 self._take_next()
             else:
                 self._hide()
@@ -84,7 +86,7 @@ class DialogBox:
             self._farewell_shown = False
 
     def update(self, dt_ms: int):
-        if not self.visible or not self.current:
+        if not self._visible or not self.current:
             return
 
         dt = dt_ms / 1000.0
@@ -104,7 +106,7 @@ class DialogBox:
 
     # getters
     def should_draw(self) -> bool:
-        return self.visible and bool(self.current)
+        return self._visible and bool(self.current)
 
     def get_text(self) -> str:
         return self.current.text if self.current else None
@@ -123,35 +125,25 @@ class DialogBox:
 
     # private
     def _take_next(self):
-        self.current = self.queue.pop(0)
+        self.current = self._queue.pop(0)
         self._typed_len = 0
         self._time_acc = 0.0
         self._finished = False
 
 
 class DialogBoxView:
-    def __init__(
-        self,
-        *,
-        font: pygame.font.Font,
-        text_color=(245, 245, 235),
-        bg_color=(80, 100, 75),
-        border_light=(140, 165, 135),
-        border_dark=(65, 85, 60),
-        radius: int = 16,
-        border_w: int = 2,
-    ):
+    def __init__(self, font: pygame.font.Font):
         self.font = font
-        self.text_color = text_color
-        self.bg_color = bg_color
-        self.border_light = border_light
-        self.border_dark = border_dark
-        self.radius = radius
-        self.border_w = border_w
-        self.portrait_height = ss.game_units_to_px(175)
-        self.portraits = {
-            "Sara": SPRITE_FACTORY.load("sprites/player/portrait.png", self.portrait_height),
-            "Mouse": SPRITE_FACTORY.load("sprites/npc/mouse/portrait.png", self.portrait_height),
+        self._text_color = (245, 245, 235)
+        self._bg_color = (80, 100, 75)
+        self._border_light = (140, 165, 135)
+        self._border_dark = (65, 85, 60)
+        self._radius: int = ss.game_units_to_px(25)
+        self._border_w: int = ss.game_units_to_px_min(3)
+        self._portrait_height = ss.game_units_to_px(175)
+        self._portraits = {
+            "Sara": SPRITE_FACTORY.load("sprites/player/portrait.png", self._portrait_height),
+            "Mouse": SPRITE_FACTORY.load("sprites/npc/mouse/portrait.png", self._portrait_height),
         }
 
     def draw(self, screen: pygame.Surface, vm: DialogBox):
@@ -159,22 +151,24 @@ class DialogBoxView:
             return
 
         rect = vm.rect
-        padding = vm.padding
+        s_padding = vm.s_padding
+        m_padding = vm.m_padding
+        offset = vm.offset
 
-        #         # tło  + ramka
-        if vm.current.speaker in self.portraits:
-            avatar = self.portraits[vm.current.speaker]
-            screen.blit(avatar, (rect.x, rect.y - self.portrait_height * 0.85))
-        pygame.draw.rect(screen, self.bg_color, rect, border_radius=self.radius)
-        pygame.draw.rect(screen, self.border_light, rect, width=self.border_w, border_radius=self.radius)
+        # tło + ramka
+        if vm.current.speaker in self._portraits:
+            avatar = self._portraits[vm.current.speaker]
+            screen.blit(avatar, (rect.x, rect.y - offset))
+        pygame.draw.rect(screen, self._bg_color, rect, border_radius=self._radius)
+        pygame.draw.rect(screen, self._border_light, rect, width=self._border_w, border_radius=self._radius)
         shadow_rect = rect.inflate(2, 2).move(1, 1)
-        pygame.draw.rect(screen, self.border_dark, shadow_rect, width=self.border_w, border_radius=self.radius)
+        pygame.draw.rect(screen, self._border_dark, shadow_rect, width=self._border_w, border_radius=self._radius)
 
-        #         # tekst
-        inner_w = rect.width - 2 * padding
-        inner_h = rect.height - 2 * padding
-        x = rect.x + padding
-        y = rect.y + padding
+        # tekst
+        inner_w = rect.width - m_padding
+        inner_h = rect.height - m_padding
+        x = rect.x + s_padding
+        y = rect.y + s_padding
 
         typed = vm.get_text()[: vm.get_typed_len()]
         lines = self._wrap(typed, inner_w)
@@ -183,16 +177,16 @@ class DialogBoxView:
         lines = lines[:max_lines]  # obetnij jakby było za dużo
 
         for i, ln in enumerate(lines):
-            surf = self.font.render(ln, True, self.text_color)
+            surf = self.font.render(ln, True, self._text_color)
             screen.blit(surf, (x, y + i * line_h))
 
         # wskaźnik “dalej”
         if vm.is_finished() and vm.is_blink_on():
-            tri_x = rect.right - padding - 12
-            tri_y = rect.bottom - padding - 8
+            tri_x = rect.right - s_padding - 12
+            tri_y = rect.bottom - s_padding - 8
             pygame.draw.polygon(
                 screen,
-                self.border_light,
+                self._border_light,
                 [(tri_x, tri_y), (tri_x + 12, tri_y), (tri_x + 6, tri_y + 8)],
             )
 

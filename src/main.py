@@ -8,7 +8,6 @@ from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rec
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
 from gameplay.levels.map.consumables import collect_consumables
-from gameplay.levels.map.direction import Direction
 from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import InventoryUI
@@ -20,10 +19,11 @@ from render.interaction_effects import Particle
 from render.lighting import Lighting, SunLight
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
-from screen.fonts import FontFamily, FontsFactory, FontType
+from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
 from screen.game_inputs import GameInputs
 from screen.layout import Layout
+from screen.scale_screen import game_units_to_px
 
 
 class Game:
@@ -53,17 +53,17 @@ class Game:
         self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
         self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
         self.font = FontsFactory()
-        self.font_size = ss.get_font_size()
-        self.layout = Layout(0.4 * self.font_size, 0.4 * self.font_size)
-        self.resources_ui = ResourcesUI(self.font.get_font(FontType.RESOURCES, FontFamily.TITLES))
-        self.fps_counter = FPSCounter(self.font.get_font(FontType.OTHER, FontFamily.HANDWRITTING))
-        self.lighting = Lighting(ss.GAME_WIDTH, ss.GAME_HEIGHT, ambient_color=(210, 215, 230))
+        self.font_size = game_units_to_px(6)
+        self.layout = Layout()
+        self.resources_ui = ResourcesUI(self.font.get_font(FontSize.XLARGE, FontStyle.RUSTIC))
+        self.fps_counter = FPSCounter(self.font.get_font(FontSize.LARGE, FontStyle.SIMPLE))
+        self.lighting = Lighting(ss.GAME_WIDTH, ss.GAME_HEIGHT)
         self.sunlight = SunLight()
 
     def _init_dialogs(self):
         rect = make_dialog_rect(ss.GAME_WIDTH, ss.GAME_HEIGHT)
-        self.dialog_vm = DialogBox(rect=rect, cps=45, padding=self.font_size)
-        self.dialog_view = DialogBoxView(font=self.font.get_font(FontType.DIALOG, FontFamily.DIALOG))
+        self.dialog_vm = DialogBox(rect=rect)
+        self.dialog_view = DialogBoxView(font=self.font.get_font(FontSize.SMALL, FontStyle.SIMPLE))
 
     def _init_audio(self):
         pygame.mixer.init()
@@ -72,11 +72,11 @@ class Game:
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
     def _init_game_inputs(self):
-        main_menu = MainMenu(self.screen.get_size(), self.font.get_font(FontType.OTHER, FontFamily.BASIC))  # wtf w menu nic nie wypisuję
+        main_menu = MainMenu(self.screen.get_size(), self.font.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
         self.inputs = GameInputs(self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu)
 
     def _init_inventory(self):
-        icon_height = ss.relative_y_to_game_units_px(0.05)
+        icon_height = ss.relative_y_to_game_units_px(0.03)
         strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", icon_height)
         blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", icon_height)
         item_icons = {
@@ -84,7 +84,7 @@ class Game:
             "blueberry": blueberry_icon,
         }
         self.inventory_ui = InventoryUI(
-            self.font.get_font(FontType.INVENTORY, FontFamily.PRETTY), item_icons, self.inputs.layout.right_window
+            self.font.get_font(FontSize.MEDIUM, FontStyle.HANDWRITTING), item_icons, self.inputs.layout.right_window
         )
 
     def _init_gameplay(self):
@@ -125,21 +125,7 @@ class Game:
                     self.dialog_vm.update(dt)
 
                     self.sara.process_inputs(dt, self.inputs, self.level.current_map.platforms)
-
-                    # TODO move to level
-                    if self.sara.player_rect.centerx > ss.GAME_WIDTH:
-                        if self.level.try_load_map(Direction.RIGHT):
-                            self.sara.set_x_position(0)
-                        else:
-                            reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                            self.sara.set_x_position(reset_player)
-                    elif self.sara.player_rect.centerx <= 0:
-                        if self.level.try_load_map(Direction.LEFT):
-                            reset_player = ss.GAME_WIDTH - self.sara.player_rect.width
-                            self.sara.set_x_position(reset_player)
-                        else:
-                            self.sara.set_x_position(0)
-
+                    self.level.change_map(self.sara)
                     self.sara.update_sprite(self.inputs, dt)
 
                     collected_pos = collect_consumables(
@@ -149,17 +135,16 @@ class Game:
                         self.particles.extend(Particle.spawn_particles(pos))
                     self.sunlight.update(dt)
                     self.level.update_level(now_ms)
-                    self.inputs.screen.fill((53, 71, 46))  # tło gry
+                    self.inputs.screen.fill((53, 71, 46))
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     self.particles = Particle.create_blink_effect(self.inputs.game_surface, self.particles, dt)
                     self.sunlight.draw(self.inputs.game_surface)
                     self.lighting.reset()
-                    # self.lighting.draw_light(self.sara.player_rect.center) # <-- USUNIĘTE (nie chcemy kółka wokół gracza)
+                    # self.lighting.draw_light(self.sara.player_rect.center)
                     self.lighting.apply(self.inputs.game_surface)
                     if self.inputs.DEBUG_OVERLAYS:
                         self.level.draw_debug(self.inputs.game_surface, [self.sara])
 
-                    # WYŚRODKOWANA gra:
                     self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
                     self.inputs.layout.draw_panel(self.inputs.screen)
                     self.inputs.layout.draw_panel_windows(self.inputs.screen)

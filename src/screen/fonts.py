@@ -5,27 +5,27 @@ import pygame
 from screen import scale_screen
 
 
-class FontType(Enum):
-    DIALOG = 8
-    INVENTORY = 9
-    RESOURCES = 14
-    OTHER = 10
+class FontSize(Enum):
+    SMALL = 8
+    MEDIUM = 9
+    LARGE = 10
+    XLARGE = 14
 
 
-class FontFamily(Enum):
-    BASIC = "sprites/fonts/AmaticSC.ttf"
-    BASIC_BOLD = "sprites/fonts/AmaticSC-Bold.ttf"
-    PRETTY = "sprites/fonts/Delius.ttf"
-    DIALOG = "sprites/fonts/Fredoka.ttf"
+class FontStyle(Enum):
+    CAPS_CONDENSED = "sprites/fonts/AmaticSC.ttf"
+    CAPS_CONDENSED_BOLD = "sprites/fonts/AmaticSC-Bold.ttf"
+    ORNATE = "sprites/fonts/Delius.ttf"
+    SIMPLE = "sprites/fonts/Fredoka.ttf"
     HANDWRITTING = "sprites/fonts/LaBelleAurore.ttf"
-    TITLES = "sprites/fonts/PrincessSofia.ttf"
+    RUSTIC = "sprites/fonts/PrincessSofia.ttf"
 
 
 class FontsFactory:
     def __init__(self):
-        self.resolution_size = scale_screen.get_font_size()
+        self._resolution_size = scale_screen.get_resolution()
 
-    def get_font(self, font_type: FontType, font_family: FontFamily):
-        enlarge = self.resolution_size - 8
-        size = font_type.value + enlarge
-        return pygame.font.Font(font_family.value, size)
+    def get_font(self, font_size: FontSize, font_style: FontStyle):
+        scale = self._resolution_size + 3
+        size = font_size.value + scale
+        return pygame.font.Font(font_style.value, size)

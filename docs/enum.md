@@ -27,17 +27,17 @@ Zamiast pisać `8` czy `"dialog"` w kodzie, piszesz `FontType.DIALOG` — czytel
 
 ```python
 # Przypisanie
-my_font_type = FontType.DIALOG
+my_font_type = FontType.SMALL
 
 # Porównanie
-if my_font_type == FontType.DIALOG:
+if my_font_type == FontType.SMALL:
     print("To jest font do dialogów!")
 
 # Dostęp do wartości liczbowej
-print(FontType.DIALOG.value)  # wypisze: 8
+print(FontType.SMALL.value)  # wypisze: 8
 
 # Dostęp do nazwy
-print(FontType.DIALOG.name)   # wypisze: DIALOG
+print(FontType.SMALL.name)  # wypisze: DIALOG
 ```
 
 ---
@@ -45,14 +45,16 @@ print(FontType.DIALOG.name)   # wypisze: DIALOG
 ## ⚠️ WAŻNE: Enum jest IMMUTABLE (niezmienny)!
 
 **NIE DZIAŁA:**
+
 ```python
-font_type = FontType.DIALOG
+font_type = FontType.SMALL
 font_type.value += 2  # ❌ AttributeError! Nie można zmienić .value
 ```
 
 **ROZWIĄZANIE:** Wyciągnij wartość do zmiennej i ją modyfikuj:
+
 ```python
-font_type = FontType.DIALOG
+font_type = FontType.SMALL
 size = font_type.value + enlarge  # ✅ Działa! Tworzysz nową zmienną
 ```
 
@@ -84,14 +86,14 @@ class SetFont:
 
 ```python
 # ❌ ŹLE - wywołujesz na KLASIE (brak self!)
-font = SetFont.get_font(FontType.OTHER)
+font = SetFont.get_font(FontType.LARGE)
 
 # ✅ DOBRZE - tworzysz INSTANCJĘ i wywołujesz metodę
 font_manager = SetFont()
-font = font_manager.get_font(FontType.OTHER)
+font = font_manager.get_font(FontType.LARGE)
 
 # ✅ Lub w jednej linii:
-font = SetFont().get_font(FontType.OTHER)
+font = SetFont().get_font(FontType.LARGE)
 ```
 
 **Dlaczego?** Metoda `get_font(self, font_type)` potrzebuje `self` — czyli instancji obiektu. 

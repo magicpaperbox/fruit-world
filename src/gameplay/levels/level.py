@@ -1,10 +1,12 @@
 import pygame
 
+import screen.scale_screen as ss
 from gameplay.levels.level_spec import LevelSpec
 from gameplay.levels.map import Map
 from gameplay.levels.map.direction import Direction
 from gameplay.levels.strawberry_quest import StrawberryQuest
 from gameplay.player.inventory import Inventory
+from gameplay.player.player import Player
 from render.debug import draw_area, draw_rect
 from render.debuggable import Debuggable
 from render.drawable import Drawable
@@ -62,6 +64,20 @@ class Level:
                 (0, 230, 0),
                 f"{platform.rect.left}x{platform.rect.top}",
             )
+
+    def change_map(self, player: Player):
+        if player.player_rect.centerx > ss.GAME_WIDTH:
+            if self.try_load_map(Direction.RIGHT):
+                player.set_x_position(0)
+            else:
+                reset_player = ss.GAME_WIDTH - player.player_rect.width
+                player.set_x_position(reset_player)
+        elif player.player_rect.centerx <= 0:
+            if self.try_load_map(Direction.LEFT):
+                reset_player = ss.GAME_WIDTH - player.player_rect.width
+                player.set_x_position(reset_player)
+            else:
+                player.set_x_position(0)
 
     def update_level(self, now_ms: int):
         for consumable in self.current_map.consumable_objects:

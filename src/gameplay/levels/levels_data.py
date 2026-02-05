@@ -58,7 +58,7 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(x=1268, y=360, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
                 SpriteObjectSpec(x=298, y=330, height_units=90, sprite_path="sprites/objects/platform_small.png"),
                 SpriteObjectSpec(x=1080, y=600, height_units=90, sprite_path="sprites/objects/platform_small.png"),
-                SpriteObjectSpec(x=450, y=635, height_units=90, sprite_path="sprites/objects/platform_small.png"),
+                SpriteObjectSpec(x=450, y=665, height_units=90, sprite_path="sprites/objects/platform_small.png"),
                 SpriteObjectSpec(x=725, y=474, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
                 SpriteObjectSpec(x=755, y=1005, height_units=89, sprite_path="sprites/objects/platform_small.png"),
                 SpriteObjectSpec(x=1140, y=1005, height_units=89, sprite_path="sprites/objects/platform_small.png"),

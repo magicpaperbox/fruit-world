@@ -4,54 +4,39 @@ from screen import scale_screen as ss
 
 
 class Layout:
-    def __init__(self, pad: int, gap: int):
-        self.screen = pygame.Rect(0, 0, ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT)
-
+    def __init__(self):
         game_top = 0
         self.game_view = pygame.Rect(0, game_top, ss.GAME_WIDTH, ss.GAME_HEIGHT)
 
-        self.right_panel = pygame.Rect(
+        self._right_panel = pygame.Rect(
             self.game_view.right,
             game_top,
             ss.SCREEN_WIDTH - self.game_view.right,
             ss.GAME_HEIGHT,
         )
 
-        self.pad = pad
-        self.gap = gap
-        self.right_window = self._inner_rect(self.right_panel)
+        self._pad = ss.game_units_to_px(-18)
+        self._gap = ss.game_units_to_px(6)
+        self.right_window = self._inner_rect(self._right_panel)
+        self._border = ss.game_units_to_px_min(3)
+        self._fill_rgb = (80, 100, 75)
+        self._light_rgb = (140, 165, 135)
+        self._dark_rgb = (65, 85, 60)
 
     def _inner_rect(self, panel: pygame.Rect) -> pygame.Rect:
-        return panel.inflate(-3 * self.pad, -3 * self.pad)
+        return panel.inflate(self._pad, self._pad)
 
     def draw_panel(self, screen: pygame.Surface):
-        # tło panelu
-        fill = (80, 100, 75)
-        screen.fill(fill, self.right_panel)
+        screen.fill(self._fill_rgb, self._right_panel)
 
-        # bevel (jak w dialogu): góra/lewo jaśniej, dół/prawo ciemniej
-        light = (140, 165, 135)
-        dark = (65, 85, 60)
-
-        r = self.right_panel
-        pygame.draw.line(screen, light, r.topleft, (r.right - 1, r.top), 2)
-        pygame.draw.line(screen, light, r.topleft, (r.left, r.bottom - 1), 2)
-        pygame.draw.line(screen, dark, (r.left, r.bottom - 1), (r.right - 1, r.bottom - 1), 2)
-        pygame.draw.line(screen, dark, (r.right - 1, r.top), (r.right - 1, r.bottom - 1), 2)
+        r = self._right_panel
+        pygame.draw.line(screen, self._light_rgb, r.topleft, (r.right - 1, r.top), self._border)
+        pygame.draw.line(screen, self._light_rgb, r.topleft, (r.left, r.bottom - 1), self._border)
+        pygame.draw.line(screen, self._dark_rgb, (r.left, r.bottom - 1), (r.right - 1, r.bottom - 1), self._border)
+        pygame.draw.line(screen, self._dark_rgb, (r.right - 1, r.top), (r.right - 1, r.bottom - 1), self._border)
 
     def draw_panel_windows(self, screen: pygame.Surface):
-        fill = (80, 100, 75)
-        light = (140, 165, 135)
-        dark = (65, 85, 60)
-
-        r = self.right_window
-
-        # tło
-        pygame.draw.rect(screen, fill, r, border_radius=35)
-
-        # jasny obrys
-        pygame.draw.rect(screen, light, r, width=2, border_radius=15)
-
-        # cień
-        shadow_rect = r.inflate(2, 2).move(1, 1)
-        pygame.draw.rect(screen, dark, shadow_rect, width=2, border_radius=15)
+        pygame.draw.rect(screen, self._fill_rgb, self.right_window, border_radius=ss.game_units_to_px(35))
+        pygame.draw.rect(screen, self._light_rgb, self.right_window, width=self._border, border_radius=ss.game_units_to_px(15))
+        shadow_rect = self.right_window.inflate(self._border, self._border).move(1, 1)
+        pygame.draw.rect(screen, self._dark_rgb, shadow_rect, width=self._border, border_radius=ss.game_units_to_px(15))

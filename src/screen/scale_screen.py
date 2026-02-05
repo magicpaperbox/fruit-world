@@ -16,10 +16,10 @@ _AVAILABLE_RESOLUTIONS = [
 
 _GUI_HEIGHT_RATIO = 0.1
 # _chosen_size = RES_HD
-_chosen_res = _AVAILABLE_RESOLUTIONS[1]
+chosen_res = _AVAILABLE_RESOLUTIONS[2]
 
-_SIDE_PANEL_RATIO = 0.140625
-SCREEN_WIDTH, SCREEN_HEIGHT = _chosen_res
+_SIDE_PANEL_RATIO = 0.1
+SCREEN_WIDTH, SCREEN_HEIGHT = chosen_res
 SIDE_PANEL_W = None
 DIALOG_HEIGHT = None
 GAME_WIDTH: int | None = None
@@ -28,16 +28,8 @@ GAME_HEIGHT: int | None = None
 _CANONICAL_SCREEN_HEIGHT = 1080
 
 
-def get_font_size():
-    if _chosen_res == _AVAILABLE_RESOLUTIONS[0]:
-        size = 10
-    elif _chosen_res == _AVAILABLE_RESOLUTIONS[1]:
-        size = 12
-    elif _chosen_res == _AVAILABLE_RESOLUTIONS[2]:
-        size = 14
-    else:
-        size = 18
-    return size
+def get_resolution():
+    return _AVAILABLE_RESOLUTIONS.index(chosen_res)
 
 
 def recalc_sizes(width: int, height: int):
@@ -61,6 +53,11 @@ def init_display(width: int, height: int, fullscreen: bool):
 
 def game_units_to_px(units: int) -> int:  # Skalowanie stałych jednostek gry na piksele
     return int(units * SCREEN_HEIGHT / _CANONICAL_SCREEN_HEIGHT)
+
+
+def game_units_to_px_min(units: int, min_value: int = 1) -> int:
+    scaled = int(units * SCREEN_HEIGHT / _CANONICAL_SCREEN_HEIGHT)
+    return max(scaled, min_value)
 
 
 def game_units_to_decimal(units: float) -> float:  # Skalowanie stałych jednostek gry na piksele

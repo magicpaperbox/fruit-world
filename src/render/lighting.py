@@ -2,14 +2,14 @@ import pygame
 
 
 class Lighting:
-    def __init__(self, width: int, height: int, ambient_color: tuple[int, int, int] = (200, 200, 200)):
-        self.size = (width, height)
-        self.ambient_color = ambient_color
-        self._light_surface = pygame.Surface(self.size)
+    def __init__(self, width: int, height: int):
+        self._size = (width, height)
+        self._ambient_color = (210, 215, 230)
+        self._light_surface = pygame.Surface(self._size)
+        self._light_texture = self._generate_light_texture(radius=150)
 
-        self.light_texture = self._generate_light_texture(radius=150)
-
-    def _generate_light_texture(self, radius: int) -> pygame.Surface:
+    @staticmethod
+    def _generate_light_texture(radius: int) -> pygame.Surface:
         surf = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
         for r in range(radius, 0, -5):
             # Im bliżej środka, tym jaśniej (alpha jest mała, ale nakładamy wiele warstw)
@@ -19,18 +19,18 @@ class Lighting:
 
     def reset(self):
         # W każdej klatce czyścimy warstwę mroku kolorem otoczenia
-        self._light_surface.fill(self.ambient_color)
+        self._light_surface.fill(self._ambient_color)
 
     def draw_light(self, center_pos: tuple[int, int]):
         # Rysujemy światło na warstwie mroku
         # Używamy BLEND_ADD, żeby "dodać jasność" do mroku
         x, y = center_pos
         # radius = self.light_texture.get_width() // 2
-        dest_rect = self.light_texture.get_rect(center=(x, y))
-        self._light_surface.blit(self.light_texture, dest_rect, special_flags=pygame.BLEND_ADD)
+        dest_rect = self._light_texture.get_rect(center=(x, y))
+        self._light_surface.blit(self._light_texture, dest_rect, special_flags=pygame.BLEND_ADD)
 
     def apply(self, target_surface: pygame.Surface):
-        # BLEND_MULT sprawia, że to co ciemne na mapie, przyciemnia grę.
+        # BLEND_MULT sprawia, że to, co ciemne na mapie, przyciemnia grę.
         target_surface.blit(self._light_surface, (0, 0), special_flags=pygame.BLEND_MULT)
 
 
@@ -47,9 +47,9 @@ class SunLight:
         # Środek promienia jest jasny, boki wygasają do czerni
         center_x = width / 2.0
         for x in range(width):
-            # Odległość od środka (0.0 w środku, 1.0 na krawędzi)
+            # Odległość od środka (0,0 w środku, 1,0 na krawędzi)
             dist = abs(x - center_x) / center_x
-            intensity = max(0, 1 - dist * dist)
+            intensity = max(0.0, 1 - dist * dist)
 
             # Obliczamy kolor paska
             r = int(self.base_color[0] * intensity)
@@ -70,7 +70,7 @@ class SunLight:
         for i in range(num_rays):
             # Każdy promień rusza się trochę inaczej
             speed_mult = 1.0 + ((i % 3) * 0.2)
-            # modulo (sw + 800) żeby promienie wyjeżdżały i wjeżdżały płynnie
+            # modulo (sw + 800), żeby promienie wyjeżdżały i wjeżdżały płynnie
             # 800 to margines na szerokość obróconego promienia
             total_w = sw + 800
             base_x = (self.time * 50 * speed_mult + i * gap) % total_w

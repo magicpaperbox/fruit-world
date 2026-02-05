@@ -1,6 +1,6 @@
 import pygame
 
-from screen.fonts import FontsFactory, FontType
+from screen.fonts import FontsFactory, FontSize, FontStyle
 
 _debug_font: pygame.font.Font | None = None
 
@@ -8,7 +8,7 @@ _debug_font: pygame.font.Font | None = None
 def _get_debug_font() -> pygame.font.Font:
     global _debug_font
     if _debug_font is None:
-        _debug_font = FontsFactory().get_font(FontType.OTHER)
+        _debug_font = FontsFactory().get_font(FontSize.LARGE, FontStyle.SIMPLE)
     return _debug_font
 
 
