@@ -1,12 +1,5 @@
-Przenieść logikę przemieszczania się między mapami/kolizji ze ścianą do levelu (player jako parametr)
-
-zmienne lokalne nie powinny się zaczynać od _
-
 fonts:
 😄move fonts from sprites/ to toplevel fonts/
-😄FontType -> FontSize and rename sizes SMALL, MEDIUM, LARGE, XLARGE✅
-😄FontFamily - nazwy powinny mówić co to za czcionka ✅
-😄FontsFactory - prywatne pole✅
 😭można się zastanowić nad cache jak w sprite factory
 😄resolution size vs enlarge vs get font size🤔
 😄podawać wielkość czcionki w game units

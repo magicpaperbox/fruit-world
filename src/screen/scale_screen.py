@@ -14,31 +14,27 @@ _AVAILABLE_RESOLUTIONS = [
     _RES_2K,
 ]
 
-_GUI_HEIGHT_RATIO = 0.1
-# _chosen_size = RES_HD
-chosen_res = _AVAILABLE_RESOLUTIONS[2]
+_chosen_res = _AVAILABLE_RESOLUTIONS[2]
 
 _SIDE_PANEL_RATIO = 0.1
-SCREEN_WIDTH, SCREEN_HEIGHT = chosen_res
+SCREEN_WIDTH, SCREEN_HEIGHT = _chosen_res
 SIDE_PANEL_W = None
-DIALOG_HEIGHT = None
 GAME_WIDTH: int | None = None
 GAME_HEIGHT: int | None = None
 
 _CANONICAL_SCREEN_HEIGHT = 1080
 
 
-def get_resolution():
-    return _AVAILABLE_RESOLUTIONS.index(chosen_res)
+def get_resolution_index():
+    return _AVAILABLE_RESOLUTIONS.index(_chosen_res)
 
 
 def recalc_sizes(width: int, height: int):
-    global SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT, DIALOG_HEIGHT, SIDE_PANEL_W
+    global SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT, SIDE_PANEL_W
 
     SCREEN_WIDTH = width
     SCREEN_HEIGHT = height
 
-    DIALOG_HEIGHT = int(_GUI_HEIGHT_RATIO * SCREEN_HEIGHT)
     SIDE_PANEL_W = int(SCREEN_WIDTH * _SIDE_PANEL_RATIO)
     GAME_WIDTH = SCREEN_WIDTH - SIDE_PANEL_W
     GAME_HEIGHT = SCREEN_HEIGHT

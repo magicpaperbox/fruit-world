@@ -133,17 +133,17 @@ class DialogBox:
 
 class DialogBoxView:
     def __init__(self, font: pygame.font.Font):
-        self.font = font
+        self._font = font
         self._text_color = (245, 245, 235)
         self._bg_color = (80, 100, 75)
         self._border_light = (140, 165, 135)
         self._border_dark = (65, 85, 60)
         self._radius: int = ss.game_units_to_px(25)
         self._border_w: int = ss.game_units_to_px_min(3)
-        self._portrait_height = ss.game_units_to_px(175)
+        portrait_height = ss.game_units_to_px(175)
         self._portraits = {
-            "Sara": SPRITE_FACTORY.load("sprites/player/portrait.png", self._portrait_height),
-            "Mouse": SPRITE_FACTORY.load("sprites/npc/mouse/portrait.png", self._portrait_height),
+            "Sara": SPRITE_FACTORY.load("sprites/player/portrait.png", portrait_height),
+            "Mouse": SPRITE_FACTORY.load("sprites/npc/mouse/portrait.png", portrait_height),
         }
 
     def draw(self, screen: pygame.Surface, vm: DialogBox):
@@ -172,12 +172,12 @@ class DialogBoxView:
 
         typed = vm.get_text()[: vm.get_typed_len()]
         lines = self._wrap(typed, inner_w)
-        line_h = self.font.get_linesize()
+        line_h = self._font.get_linesize()
         max_lines = inner_h // line_h
         lines = lines[:max_lines]  # obetnij jakby było za dużo
 
         for i, ln in enumerate(lines):
-            surf = self.font.render(ln, True, self._text_color)
+            surf = self._font.render(ln, True, self._text_color)
             screen.blit(surf, (x, y + i * line_h))
 
         # wskaźnik “dalej”
@@ -196,14 +196,14 @@ class DialogBoxView:
         cur = ""
         for w in words:
             test = w if not cur else cur + " " + w
-            if self.font.size(test)[0] <= max_w:
+            if self._font.size(test)[0] <= max_w:
                 cur = test
             else:
                 if cur:
                     lines.append(cur)
-                while self.font.size(w)[0] > max_w:
+                while self._font.size(w)[0] > max_w:
                     cut = len(w)
-                    while cut > 1 and self.font.size(w[:cut])[0] > max_w:
+                    while cut > 1 and self._font.size(w[:cut])[0] > max_w:
                         cut -= 1
                     lines.append(w[:cut])
                     w = w[cut:]

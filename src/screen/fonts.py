@@ -23,7 +23,7 @@ class FontStyle(Enum):
 
 class FontsFactory:
     def __init__(self):
-        self._resolution_size = ss.get_resolution()
+        self._resolution_size = ss.get_resolution_index()
 
     def get_font(self, font_size: FontSize, font_style: FontStyle):
         scale = self._resolution_size + ss.game_units_to_px(4)

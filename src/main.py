@@ -23,7 +23,6 @@ from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
 from screen.game_inputs import GameInputs
 from screen.layout import Layout
-from screen.scale_screen import game_units_to_px
 
 
 class Game:
@@ -53,7 +52,7 @@ class Game:
         self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
         self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
         self.font = FontsFactory()
-        self.font_size = game_units_to_px(6)
+        self.font_size = ss.game_units_to_px(6)
         self.layout = Layout()
         self.resources_ui = ResourcesUI(self.font.get_font(FontSize.XLARGE, FontStyle.RUSTIC))
         self.fps_counter = FPSCounter(self.font.get_font(FontSize.LARGE, FontStyle.SIMPLE))
