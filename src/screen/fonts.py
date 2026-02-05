@@ -2,7 +2,7 @@ from enum import Enum
 
 import pygame
 
-from screen import scale_screen
+from screen import scale_screen as ss
 
 
 class FontSize(Enum):
@@ -23,9 +23,9 @@ class FontStyle(Enum):
 
 class FontsFactory:
     def __init__(self):
-        self._resolution_size = scale_screen.get_resolution()
+        self._resolution_size = ss.get_resolution()
 
     def get_font(self, font_size: FontSize, font_style: FontStyle):
-        scale = self._resolution_size + 3
+        scale = self._resolution_size + ss.game_units_to_px(4)
         size = font_size.value + scale
         return pygame.font.Font(font_style.value, size)
