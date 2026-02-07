@@ -13,6 +13,7 @@ LEVEL_1_SPEC = LevelSpec(
         MapSpec(
             map_id="map1",
             background="background",
+            hazard=[],
             old_platforms={
                 "start": ObjectSpec(x=-5, y=0, width=5, height=1000),
             },
@@ -54,6 +55,9 @@ LEVEL_1_SPEC = LevelSpec(
         MapSpec(
             map_id="map2",
             background="background",
+            hazard=[
+                SpriteObjectSpec(x=950, y=1035, height_units=120, sprite_path="sprites/objects/thorns_narrow.png"),
+            ],
             floating_platforms=[
                 SpriteObjectSpec(x=1268, y=360, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
                 SpriteObjectSpec(x=298, y=330, height_units=90, sprite_path="sprites/objects/platform_small.png"),

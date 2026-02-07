@@ -11,6 +11,7 @@ class Action(Enum):
     RES_800x600 = auto()
     RES_1280x720 = auto()
     START_GAME = auto()
+    GO_TO_MENU = auto()
 
 
 class Button:

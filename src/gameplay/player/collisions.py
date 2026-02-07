@@ -3,7 +3,7 @@ import pygame
 from render.sprite_object import SpriteObject
 
 
-def collision_x(solids: list[SpriteObject], player_rect):
+def collision_x(solids: list[SpriteObject], player_rect: pygame.Rect):
     for s in solids:
         if player_rect.colliderect(s.rect):
             distance_from_right_platform = abs(player_rect.left - s.rect.right)

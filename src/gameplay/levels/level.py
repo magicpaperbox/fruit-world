@@ -36,6 +36,8 @@ class Level:
 
     def draw_level(self, game_surface: pygame.Surface, player: Drawable):
         self.current_map.background_img.draw(game_surface)
+        for hazardous_obj in self.current_map.hazard:
+            hazardous_obj.draw(game_surface)
         for platform in self.current_map.platforms:
             platform.draw(game_surface)
         for bush in self.current_map.blueberry_bushes:
@@ -56,6 +58,13 @@ class Level:
         draw_area(game_surface, self.current_map.blueberry_bushes, (60, 120, 255), "BOR")
         for d in debuggables:
             d.draw_debug(game_surface)
+        for hazardous_obj in self.current_map.hazard:
+            draw_rect(
+                game_surface,
+                hazardous_obj.rect,
+                (0, 150, 120),
+                f"{hazardous_obj.rect.left}x{hazardous_obj.rect.top}",
+            )
 
         for platform in self.current_map.platforms:
             draw_rect(

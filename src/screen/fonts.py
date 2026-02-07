@@ -13,12 +13,12 @@ class FontSize(Enum):
 
 
 class FontStyle(Enum):
-    CAPS_CONDENSED = "sprites/fonts/AmaticSC.ttf"
-    CAPS_CONDENSED_BOLD = "sprites/fonts/AmaticSC-Bold.ttf"
-    ORNATE = "sprites/fonts/Delius.ttf"
-    SIMPLE = "sprites/fonts/Fredoka.ttf"
-    HANDWRITTING = "sprites/fonts/LaBelleAurore.ttf"
-    RUSTIC = "sprites/fonts/PrincessSofia.ttf"
+    CAPS_CONDENSED = "fonts/AmaticSC.ttf"
+    CAPS_CONDENSED_BOLD = "fonts/AmaticSC-Bold.ttf"
+    ORNATE = "fonts/Delius.ttf"
+    SIMPLE = "fonts/Fredoka.ttf"
+    HANDWRITTING = "fonts/LaBelleAurore.ttf"
+    RUSTIC = "fonts/PrincessSofia.ttf"
 
 
 class FontsFactory:

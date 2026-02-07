@@ -6,7 +6,7 @@ from screen.layout import Layout
 
 
 class GameInputs:
-    def __init__(self, game_surface, screen, layout, fullscreen, jump_sound, main_menu):
+    def __init__(self, game_surface, screen, layout, fullscreen, jump_sound, main_menu, game_over):
         self.game_surface = game_surface
         self.screen = screen
         self.layout = layout
@@ -22,6 +22,8 @@ class GameInputs:
         self.jump_sound = jump_sound
         self.in_menu = True
         self.main_menu = main_menu
+        self.is_game_over = False
+        self.game_over_screen = game_over
 
     def process_inputs(self):
         self.space_down_this_frame = False
@@ -34,7 +36,7 @@ class GameInputs:
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
                 self.fullscreen = not self.fullscreen
                 self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
-                self.layout = Layout(16, 16)
+                self.layout = Layout()
                 self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 self.space_down_this_frame = True
@@ -55,6 +57,17 @@ class GameInputs:
                     self.in_menu = False
                 elif action == Action.QUIT_GAME:
                     self.running = False
+            elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+                self.in_menu = True
+
+            if self.is_game_over:
+                action = self.game_over_screen.handle_event(e)
+
+                if action == Action.RESET_LEVEL:
+                    self.is_game_over = False
+                    print("Zresetuj grę ręcznie")
+                elif action == Action.GO_TO_MENU:
+                    self.in_menu = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 self.in_menu = True
 

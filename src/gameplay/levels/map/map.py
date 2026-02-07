@@ -18,6 +18,7 @@ class Map:
     def __init__(self, spec: MapSpec):
         self.background_img = self._load_map_background(spec.background)
         self.platforms = list(self._load_platforms(spec))
+        self.hazard = self._load_hazardous_objects(spec.hazard)
         self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes), 1, "blueberry")
         self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes), 3, "strawberry")
         self.static_objects = self._load_static_objects(spec.static_objects)
@@ -55,6 +56,14 @@ class Map:
             if platform.right_sprite_path is not None:
                 right_sprite = SPRITE_FACTORY.load(platform.right_sprite_path, platform.height)
                 yield self._create_sprite_object((current_x, current_y), right_sprite)
+
+    def _load_hazardous_objects(self, specs: list[SpriteObjectSpec]):
+        hazardous_objects = []
+        for obj in specs:
+            sprite = SPRITE_FACTORY.load(obj.sprite_path, obj.height)
+            sprite_obj = self._create_sprite_object(obj, sprite)
+            hazardous_objects.append(sprite_obj)
+        return hazardous_objects
 
     def _load_static_objects(self, specs: list[SpriteObjectSpec]):
         static_objects = []

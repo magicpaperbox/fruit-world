@@ -4,10 +4,12 @@ import traceback
 
 import pygame
 
+from gameplay.game_over_screen import GameOverScreen
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
 from gameplay.levels.map.consumables import collect_consumables
+from gameplay.levels.map.hazards import Hazard
 from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import InventoryUI
@@ -71,8 +73,11 @@ class Game:
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
     def _init_game_inputs(self):
+        self.game_over_screen = GameOverScreen(self.screen, self.font.get_font(FontSize.LARGE, FontStyle.ORNATE))
         main_menu = MainMenu(self.screen.get_size(), self.font.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
-        self.inputs = GameInputs(self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu)
+        self.inputs = GameInputs(
+            self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen
+        )
 
     def _init_inventory(self):
         icon_height = ss.relative_y_to_game_units_px(0.03)
@@ -89,6 +94,7 @@ class Game:
     def _init_gameplay(self):
         self.gravity = ss.game_units_to_decimal(0.001)
         self.sara = Player.load(self.gravity)
+        self.hazard = Hazard()
         self.level = Level(self.sara.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
@@ -104,6 +110,10 @@ class Game:
                 if self.inputs.in_menu:
                     self.music.play("sounds/music/Fruit World.mp3")
                     self.inputs.main_menu.draw(self.inputs.screen)
+                elif self.inputs.is_game_over:
+                    self.level.draw_level(self.inputs.game_surface, self.sara)
+                    self.game_over_screen.draw()
+
                 else:
                     self.music.play(self.level.music_path)
                     now_ms = pygame.time.get_ticks()
@@ -123,7 +133,12 @@ class Game:
 
                     self.dialog_vm.update(dt)
 
-                    self.sara.process_inputs(dt, self.inputs, self.level.current_map.platforms)
+                    self.hazard.update(dt)
+                    self.hazard.collide_hazard(self.level.current_map.hazard, self.sara.player_rect, self.sara.health)
+                    if self.sara.health.restart_game:
+                        self.inputs.is_game_over = True
+                    all_solids = self.level.current_map.platforms + self.level.current_map.hazard
+                    self.sara.process_inputs(dt, self.inputs, all_solids)
                     self.level.change_map(self.sara)
                     self.sara.update_sprite(self.inputs, dt)
 

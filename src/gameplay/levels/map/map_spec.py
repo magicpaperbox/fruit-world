@@ -12,6 +12,7 @@ class MapSpec:
         self,
         map_id: str,
         background: str,
+        hazard: list[SpriteObjectSpec],
         floating_platforms: list[SpriteObjectSpec],
         puzzle_platforms: list[DynamicSpriteObjectSpec],
         old_platforms: dict[str, ObjectSpec],
@@ -24,6 +25,7 @@ class MapSpec:
     ):
         self.map_id = map_id
         self.background = background
+        self.hazard = hazard
         self.floating_platforms = floating_platforms
         self.puzzle_platforms = puzzle_platforms
         self.old_platforms = old_platforms
