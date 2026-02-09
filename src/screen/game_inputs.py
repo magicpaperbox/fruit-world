@@ -24,6 +24,7 @@ class GameInputs:
         self.main_menu = main_menu
         self.is_game_over = False
         self.game_over_screen = game_over
+        self.reset_level = False
 
     def process_inputs(self):
         self.space_down_this_frame = False
@@ -65,9 +66,11 @@ class GameInputs:
 
                 if action == Action.RESET_LEVEL:
                     self.is_game_over = False
-                    print("Zresetuj grę ręcznie")
+                    self.reset_level = True
                 elif action == Action.GO_TO_MENU:
+                    self.is_game_over = False
                     self.in_menu = True
+                    self.reset_level = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 self.in_menu = True
 

@@ -107,12 +107,15 @@ class Game:
                 dt = self.clock.tick_busy_loop(self.FPS)
                 self.fps_counter.update(dt)
                 self.inputs.process_inputs()
+                if self.inputs.reset_level:
+                    self._init_gameplay()
+                    self.inputs.reset_level = False
                 if self.inputs.in_menu:
                     self.music.play("sounds/music/Fruit World.mp3")
                     self.inputs.main_menu.draw(self.inputs.screen)
                 elif self.inputs.is_game_over:
                     self.level.draw_level(self.inputs.game_surface, self.sara)
-                    self.game_over_screen.draw()
+                    self.game_over_screen.draw(self.screen)
 
                 else:
                     self.music.play(self.level.music_path)
@@ -135,7 +138,7 @@ class Game:
 
                     self.hazard.update(dt)
                     self.hazard.collide_hazard(self.level.current_map.hazard, self.sara.player_rect, self.sara.health)
-                    if self.sara.health.restart_game:
+                    if self.sara.health.is_dead:
                         self.inputs.is_game_over = True
                     all_solids = self.level.current_map.platforms + self.level.current_map.hazard
                     self.sara.process_inputs(dt, self.inputs, all_solids)

@@ -5,11 +5,15 @@ class Health:
     def __init__(self):
         self.health_max_points = 5
         self.health_points = 2
-        self.restart_game = False
+        self._is_dead = False
+
+    @property
+    def is_dead(self):
+        return self._is_dead
 
     def die(self):
         self.health_points = 0
-        self.restart_game = True
+        self._is_dead = True
 
     def gain(self):
         if self.health_points < self.health_max_points:

@@ -1,37 +1,37 @@
 import pygame
 
 from menu.ui import Action, Button, Modal, UIManager
+from render.drawable import Drawable
 from screen import scale_screen as ss
+from screen.game_units import GameUnit
 
 
-class GameOverScreen:
+class GameOverScreen(Drawable):
     def __init__(self, screen: pygame.Surface, font: pygame.font.Font):
-        self.screen = screen
-        self.font = font
+        self._font = font
 
         game_width = ss.GAME_WIDTH
         game_height = ss.GAME_HEIGHT
         self._rect = pygame.Rect(0, 0, 500, 300)
         self._rect.center = (game_width // 2, game_height // 2)
         self._color = 30, 90, 40
-        self.ui = UIManager()
+        self._ui = UIManager()
         self._setup()
 
-    def draw(self):
-        pygame.draw.rect(self.screen, self._color, self._rect, border_radius=30)
-        text_surface = self.font.render("Game Over", True, (255, 255, 255))
+    def draw(self, screen: pygame.surface.Surface):
+        pygame.draw.rect(screen, self._color, self._rect, border_radius=30)
+        text_surface = self._font.render("Game Over", True, (255, 255, 255))
         text_rect = text_surface.get_rect()
         text_rect.centerx = self._rect.centerx
         text_rect.top = self._rect.top + 20
-        self.screen.blit(text_surface, text_rect)
-        self.ui.draw(self.screen)
+        screen.blit(text_surface, text_rect)
+        self._ui.draw(screen)
 
     def _setup(self):
-        w, h = self.screen.get_width(), self.screen.get_height()
-        cx, cy = w // 2, h // 2
+        cx, cy = self._rect.center
 
         button_y = cy + 80
-        button_width = 150
+        button_width = GameUnit(150).pixels
         button_height = 50
         gap = 20
         buttons = [
@@ -44,7 +44,7 @@ class GameOverScreen:
                 ),
                 text="Restart",
                 action=Action.RESET_LEVEL,
-                font=self.font,
+                font=self._font,
             ),
             Button(
                 rect=pygame.Rect(
@@ -55,12 +55,12 @@ class GameOverScreen:
                 ),
                 text="Menu",
                 action=Action.GO_TO_MENU,
-                font=self.font,
+                font=self._font,
             ),
         ]
 
-        modal = Modal(pygame.Rect(0, 0, 0, 0), "", buttons, self.font)
-        self.ui.push(modal)
+        modal = Modal(pygame.Rect(0, 0, 0, 0), "", buttons, self._font)
+        self._ui.push(modal)
 
     def handle_event(self, event: pygame.event.Event) -> Action:
-        return self.ui.handle_event(event)
+        return self._ui.handle_event(event)
