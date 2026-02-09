@@ -73,7 +73,7 @@ class Game:
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
     def _init_game_inputs(self):
-        self.game_over_screen = GameOverScreen(self.screen, self.font.get_font(FontSize.LARGE, FontStyle.ORNATE))
+        self.game_over_screen = GameOverScreen(self.font.get_font(FontSize.LARGE, FontStyle.ORNATE))
         main_menu = MainMenu(self.screen.get_size(), self.font.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
         self.inputs = GameInputs(
             self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen

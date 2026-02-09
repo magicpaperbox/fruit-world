@@ -15,13 +15,14 @@ class Action(Enum):
 
 
 class Button:
-    def __init__(self, rect: pygame.Rect, text: str, action: Action, font: pygame.font.Font):
+    def __init__(self, rect: pygame.Rect, text: str, action: Action, font: pygame.font.Font, transparency=0):
         self.rect = rect
         self.text = text
         self.action = action
         self.font = font
         self._pressed = False
         self._hover = False
+        self.transparency = transparency
 
     def handle_event(self, e: pygame.event.Event) -> Action:
         if e.type == pygame.MOUSEMOTION:
@@ -37,7 +38,7 @@ class Button:
         return Action.NONE
 
     def draw(self, surf: pygame.Surface):
-        bg = (70, 70, 80, 0)
+        bg = (70, 70, 80, self.transparency)
         if self._hover:
             bg = (230, 200, 100, 20)
         if self._pressed:
@@ -46,6 +47,9 @@ class Button:
         temp_surface = pygame.Surface(temp_rect.size, pygame.SRCALPHA)
         pygame.draw.rect(temp_surface, bg, temp_rect, border_radius=15)
         surf.blit(temp_surface, self.rect.topleft)
+        text_surface = self.font.render(self.text, True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        surf.blit(text_surface, text_rect)
 
 
 class Modal:

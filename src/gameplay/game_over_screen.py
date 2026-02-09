@@ -7,14 +7,14 @@ from screen.game_units import GameUnit
 
 
 class GameOverScreen(Drawable):
-    def __init__(self, screen: pygame.Surface, font: pygame.font.Font):
+    def __init__(self, font: pygame.font.Font):
         self._font = font
 
         game_width = ss.GAME_WIDTH
         game_height = ss.GAME_HEIGHT
         self._rect = pygame.Rect(0, 0, 500, 300)
         self._rect.center = (game_width // 2, game_height // 2)
-        self._color = 30, 90, 40
+        self._color = 140, 180, 130
         self._ui = UIManager()
         self._setup()
 
@@ -45,6 +45,7 @@ class GameOverScreen(Drawable):
                 text="Restart",
                 action=Action.RESET_LEVEL,
                 font=self._font,
+                transparency=120,
             ),
             Button(
                 rect=pygame.Rect(
@@ -56,6 +57,7 @@ class GameOverScreen(Drawable):
                 text="Menu",
                 action=Action.GO_TO_MENU,
                 font=self._font,
+                transparency=120,
             ),
         ]
 
