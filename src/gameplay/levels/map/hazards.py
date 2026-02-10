@@ -7,7 +7,7 @@ from render.sprite_object import SpriteObject
 class Hazard:
     def __init__(self):
         self._cooldown_timer = 0
-        self._cooldown_duration = 2000
+        self._cooldown_duration = 1000
 
     def update(self, dt_ms: int):
         if self._cooldown_timer > 0:

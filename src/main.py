@@ -1,3 +1,4 @@
+import ctypes
 import itertools
 import sys
 import traceback
@@ -39,6 +40,7 @@ class Game:
         self._init_gameplay()
 
     def _init_pygame(self):
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
         pygame.init()
         self.FPS = 60
         self.clock = pygame.time.Clock()
@@ -73,7 +75,7 @@ class Game:
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
     def _init_game_inputs(self):
-        self.game_over_screen = GameOverScreen(self.font.get_font(FontSize.LARGE, FontStyle.ORNATE))
+        self.game_over_screen = GameOverScreen(self.font.get_font(FontSize.XLARGE, FontStyle.ORNATE))
         main_menu = MainMenu(self.screen.get_size(), self.font.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
         self.inputs = GameInputs(
             self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen

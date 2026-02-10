@@ -67,7 +67,7 @@ class InventoryUI:
                 item_id, count = items_list[slot_index]
                 self._draw_picked_item(screen, slot, item_id, count)
 
-    def _draw_slot(self, screen, slot):
+    def _draw_slot(self, screen: pygame.Surface, slot: pygame.Rect):
         shadow_rect = slot.inflate(self._border, self._border).move(1, 1)
         pygame.draw.rect(screen, self._dark, shadow_rect, width=ss.game_units_to_px_min(7), border_radius=self._border_radius)
         pygame.draw.rect(screen, self._light, slot, width=ss.game_units_to_px_min(3), border_radius=self._border_radius)
