@@ -14,10 +14,10 @@ from screen.game_units import GameUnit
 class DialogBox:
     def __init__(self, *, rect):
         self.rect = rect
-        self.cps = ss.game_units_to_px(85)
-        self.s_padding = ss.game_units_to_px(20)
-        self.m_padding = ss.game_units_to_px(30)
-        self.offset = ss.game_units_to_px(150)
+        self.cps = GameUnit(85).pixels
+        self.s_padding = GameUnit(20).pixels
+        self.m_padding = GameUnit(30).pixels
+        self.offset = GameUnit(150).pixels
 
         self._queue: list[DialogStep] = []
         self.current: DialogStep | None = None
@@ -138,9 +138,9 @@ class DialogBoxView:
         self._bg_color = (80, 100, 75)
         self._border_light = (140, 165, 135)
         self._border_dark = (65, 85, 60)
-        self._radius: int = ss.game_units_to_px(25)
+        self._radius: int = GameUnit(25).pixels
         self._border_w: int = ss.game_units_to_px_min(3)
-        portrait_height = ss.game_units_to_px(175)
+        portrait_height = GameUnit(175).pixels
         self._portraits = {
             "Sara": SPRITE_FACTORY.load("sprites/player/portrait.png", portrait_height),
             "Mouse": SPRITE_FACTORY.load("sprites/npc/mouse/portrait.png", portrait_height),
@@ -180,7 +180,7 @@ class DialogBoxView:
             surf = self._font.render(ln, True, self._text_color)
             screen.blit(surf, (x, y + i * line_h))
 
-        # wskaźnik “dalej”
+        # wskaźnik "dalej"
         if vm.is_finished() and vm.is_blink_on():
             tri_x = rect.right - s_padding - 12
             tri_y = rect.bottom - s_padding - 8

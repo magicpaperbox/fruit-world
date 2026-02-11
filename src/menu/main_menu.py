@@ -3,6 +3,7 @@ import pygame
 import screen.scale_screen as ss
 from menu.ui import Action, Button, Modal, UIManager
 from render.sprite_factory import SPRITE_FACTORY
+from screen.game_units import GameUnit
 
 
 class MainMenu:
@@ -20,10 +21,10 @@ class MainMenu:
         buttons = [
             Button(
                 rect=pygame.Rect(
-                    cx - ss.game_units_to_px(173),
-                    cy + ss.game_units_to_px(190),
-                    ss.game_units_to_px(330),
-                    ss.game_units_to_px(70),
+                    cx - GameUnit(173).pixels,
+                    cy + GameUnit(190).pixels,
+                    GameUnit(330).pixels,
+                    GameUnit(70).pixels,
                 ),
                 text="",
                 action=Action.START_GAME,
@@ -31,10 +32,10 @@ class MainMenu:
             ),
             Button(
                 rect=pygame.Rect(
-                    cx - ss.game_units_to_px(167),
-                    cy + ss.game_units_to_px(430),
-                    ss.game_units_to_px(315),
-                    ss.game_units_to_px(55),
+                    cx - GameUnit(167).pixels,
+                    cy + GameUnit(430).pixels,
+                    GameUnit(315).pixels,
+                    GameUnit(55).pixels,
                 ),
                 text="",
                 action=Action.QUIT_GAME,

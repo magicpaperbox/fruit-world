@@ -1,6 +1,7 @@
 import pygame
 
 from screen import scale_screen as ss
+from screen.game_units import GameUnit
 
 
 class Layout:
@@ -15,8 +16,8 @@ class Layout:
             ss.GAME_HEIGHT,
         )
 
-        self._pad = ss.game_units_to_px(-18)
-        self._gap = ss.game_units_to_px(6)
+        self._pad = GameUnit(-18).pixels
+        self._gap = GameUnit(6).pixels
         self.right_window = self._inner_rect(self._right_panel)
         self._border = ss.game_units_to_px_min(3)
         self._fill_rgb = (80, 100, 75)
@@ -36,7 +37,7 @@ class Layout:
         pygame.draw.line(screen, self._dark_rgb, (r.right - 1, r.top), (r.right - 1, r.bottom - 1), self._border)
 
     def draw_panel_windows(self, screen: pygame.Surface):
-        pygame.draw.rect(screen, self._fill_rgb, self.right_window, border_radius=ss.game_units_to_px(35))
-        pygame.draw.rect(screen, self._light_rgb, self.right_window, width=self._border, border_radius=ss.game_units_to_px(15))
+        pygame.draw.rect(screen, self._fill_rgb, self.right_window, border_radius=GameUnit(35).pixels)
+        pygame.draw.rect(screen, self._light_rgb, self.right_window, width=self._border, border_radius=GameUnit(15).pixels)
         shadow_rect = self.right_window.inflate(self._border, self._border).move(1, 1)
-        pygame.draw.rect(screen, self._dark_rgb, shadow_rect, width=self._border, border_radius=ss.game_units_to_px(15))
+        pygame.draw.rect(screen, self._dark_rgb, shadow_rect, width=self._border, border_radius=GameUnit(15).pixels)

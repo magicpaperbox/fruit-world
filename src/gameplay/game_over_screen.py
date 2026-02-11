@@ -12,14 +12,14 @@ class GameOverScreen(Drawable):
 
         game_width = ss.GAME_WIDTH
         game_height = ss.GAME_HEIGHT
-        self._rect = pygame.Rect(0, 0, 500, 300)
+        self._rect = pygame.Rect(0, 0, GameUnit(500).pixels, GameUnit(300).pixels)
         self._rect.center = (game_width // 2, game_height // 2)
         self._color = 80, 100, 75
         self._ui = UIManager()
         self._setup()
 
     def draw(self, screen: pygame.surface.Surface):
-        pygame.draw.rect(screen, self._color, self._rect, border_radius=30)
+        pygame.draw.rect(screen, self._color, self._rect, border_radius=GameUnit(30).pixels)
         text_surface = self._font.render("GAME OVER", True, (255, 255, 255))
         text_rect = text_surface.get_rect()
         text_rect.centerx = self._rect.centerx
@@ -29,16 +29,16 @@ class GameOverScreen(Drawable):
         self._ui.draw(screen)
 
         shadow_rect = self._rect.inflate(3, 3).move(2, 2)
-        pygame.draw.rect(screen, (65, 85, 60), shadow_rect, width=ss.game_units_to_px_min(6), border_radius=30)
-        pygame.draw.rect(screen, (140, 165, 135), self._rect, width=ss.game_units_to_px_min(6), border_radius=30)
+        pygame.draw.rect(screen, (65, 85, 60), shadow_rect, width=ss.game_units_to_px_min(6), border_radius=GameUnit(30).pixels)
+        pygame.draw.rect(screen, (140, 165, 135), self._rect, width=ss.game_units_to_px_min(6), border_radius=GameUnit(30).pixels)
 
     def _setup(self):
         cx, cy = self._rect.center
 
-        button_y = cy + GameUnit(80).pixels
+        button_y = cy + GameUnit(60).pixels
         button_width = GameUnit(180).pixels
         button_height = GameUnit(50).pixels
-        gap = GameUnit(60).pixels
+        gap = GameUnit(40).pixels
         buttons = [
             Button(
                 rect=pygame.Rect(

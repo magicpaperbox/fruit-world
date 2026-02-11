@@ -4,7 +4,7 @@ import pygame
 
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
-from screen import scale_screen as ss
+from screen.game_units import GameUnit
 
 
 class BerryBush(SpriteObject):
@@ -35,9 +35,9 @@ class BerryBush(SpriteObject):
             berry.draw(screen)
 
     def _spawn_berries(self, berries_count: int):
-        berry_height_px = ss.game_units_to_px(40)
+        berry_height_px = GameUnit(40).pixels
         sprite = SPRITE_FACTORY.load(self._berry_sprite_path, berry_height_px)
-        jitter_px = ss.game_units_to_px(36)
+        jitter_px = GameUnit(36).pixels
         rnd = random.Random()
         berries: list[SpriteObject] = []
         if berries_count <= 0:

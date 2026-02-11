@@ -1,6 +1,7 @@
 import pygame
 
 from screen import scale_screen as ss
+from screen.game_units import GameUnit
 
 
 class Inventory:
@@ -35,17 +36,17 @@ class InventoryUI:
         self._font = font
         self._item_icons = item_icons
         self._panel = panel
-        self._padding = ss.game_units_to_px(8)
-        self._line_space = ss.game_units_to_px(5)
-        self._margin_x = ss.game_units_to_px(10)
-        self._margin_y = ss.game_units_to_px(20)
+        self._padding = GameUnit(8).pixels
+        self._line_space = GameUnit(5).pixels
+        self._margin_x = GameUnit(10).pixels
+        self._margin_y = GameUnit(20).pixels
         self._border = ss.game_units_to_px_min(3)
-        self._border_radius = ss.game_units_to_px(15)
+        self._border_radius = GameUnit(15).pixels
         self._start_x = self._panel.left + self._margin_x
         self._start_y = self._panel.top + self._margin_y
-        self._box_width = ss.game_units_to_px(75)
-        self._box_height = ss.game_units_to_px(75)
-        self._gap = ss.game_units_to_px(5)
+        self._box_width = GameUnit(75).pixels
+        self._box_height = GameUnit(75).pixels
+        self._gap = GameUnit(5).pixels
         self._dark = (65, 85, 60)
         self._light = (140, 165, 135)
         self._slot_columns = 2

@@ -3,13 +3,14 @@ from enum import Enum
 import pygame
 
 from screen import scale_screen as ss
+from screen.game_units import GameUnit
 
 
 class FontSize(Enum):
     SMALL = 8
     MEDIUM = 9
     LARGE = 10
-    XLARGE = 14
+    XLARGE = 15
 
 
 class FontStyle(Enum):
@@ -26,6 +27,6 @@ class FontsFactory:
         self._resolution_size = ss.get_resolution_index()
 
     def get_font(self, font_size: FontSize, font_style: FontStyle):
-        scale = self._resolution_size + ss.game_units_to_px(4)
+        scale = self._resolution_size + GameUnit(4).pixels
         size = font_size.value + scale
         return pygame.font.Font(font_style.value, size)
