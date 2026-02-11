@@ -26,12 +26,12 @@ def collision_y(
             distance_from_top_platform = abs(player_rect.top - s.rect.bottom)
             distance_from_bottom_platform = abs(player_rect.bottom - s.rect.top)
             if player_velocity_y > 0 and distance_from_bottom_platform < distance_from_top_platform:
-                # spadła na platformę
+                # floor
                 player_rect.bottom = s.rect.top
                 player_velocity_y = 0
                 on_ground = True
             elif player_velocity_y < 0 and distance_from_top_platform < distance_from_bottom_platform:
-                # uderzyła w sufit
+                # ceiling
                 player_rect.top = s.rect.bottom
                 player_velocity_y = 0
         elif player_rect.bottom == s.rect.top and player_rect.right > s.rect.left and player_rect.left < s.rect.right:

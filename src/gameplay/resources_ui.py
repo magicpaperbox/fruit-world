@@ -5,16 +5,16 @@ from gameplay.player.player_mana import Mana
 from gameplay.player.player_money import Money
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
-from screen.game_units import GameUnit
+from screen.game_units import GameUnit, RelativeUnit
 
 
 class ResourcesUI:
     def __init__(self, font: pygame.font.Font):
         self._font = font
 
-        self._y = ss.relative_y_to_game_units_px(0.03)
+        self._y = RelativeUnit(0.03).pixels_y
 
-        icon_height = ss.relative_y_to_game_units_px(0.05)
+        icon_height = RelativeUnit(0.05).pixels_y
         self._heart_icon = SPRITE_FACTORY.load("sprites/items/heart.png", icon_height)
         self._mana_icon = SPRITE_FACTORY.load("sprites/items/mana_potion.png", icon_height)
         self._money_icon = SPRITE_FACTORY.load("sprites/items/nut_money.png", icon_height)

@@ -1,5 +1,6 @@
 import pygame
 
+import screen.scale_screen as ss
 from screen.fonts import FontsFactory, FontSize, FontStyle
 
 _debug_font: pygame.font.Font | None = None
@@ -18,7 +19,7 @@ def draw_rect(
     color: tuple[int, int, int],
     label: str = "RECT",
     alpha: int = 50,
-    border_width: int = 2,
+    border_width: int = ss.game_units_to_px_min(2),
     show_anchors: bool = True,
 ):
     font = _get_debug_font()
@@ -27,15 +28,13 @@ def draw_rect(
     overlay = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
     overlay.fill((r, g, b, max(0, min(alpha, 255))))
     screen.blit(overlay, rect.topleft)
-    # obrys
     pygame.draw.rect(screen, color, rect, width=border_width)
-    # etykieta
     label = font.render(label, True, color)
-    screen.blit(label, (rect.x + 4, rect.y + 4))
+    screen.blit(label, (rect.x + ss.game_units_to_px_min(4), rect.y + ss.game_units_to_px_min(4)))
 
     if show_anchors:
-        pygame.draw.circle(screen, color, rect.center, 2)  # środek
-        pygame.draw.circle(screen, color, rect.midbottom, 3)  # „stopy”
+        pygame.draw.circle(screen, color, rect.center, ss.game_units_to_px_min(2))  # middle
+        pygame.draw.circle(screen, color, rect.midbottom, ss.game_units_to_px_min(3))  # „feet”
 
 
 def draw_area(
@@ -44,7 +43,7 @@ def draw_area(
     color: tuple[int, int, int],
     label: str = "RECT",
     alpha: int = 80,
-    border_width: int = 2,
+    border_width: int = ss.game_units_to_px_min(2),
     show_anchors: bool = False,
 ):
     for index, item in enumerate(items_to_draw, start=1):

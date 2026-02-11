@@ -7,4 +7,11 @@ class GameUnit:
         self.pixels = ss.game_units_to_px(self.value)
 
 
+class RelativeUnit:
+    def __init__(self, value: float):
+        self.value = value
+        self.pixels_y = ss.relative_y_to_game_units_px(self.value)
+        self.pixels_x = ss.relative_x_to_game_units_px(self.value)
+
+
 height = GameUnit(12)

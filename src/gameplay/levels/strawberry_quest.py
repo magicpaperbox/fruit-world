@@ -39,7 +39,7 @@ _COLLECTED_ALL_STRAWBERRIES_DIALOG = [
 ]
 
 
-def received_items_dialog(received_count: int, remaining_count: int):
+def received_items_dialog(received_count: int, remaining_count: int) -> list[DialogStep]:
     strawberry_word = "strawberies" if received_count > 1 else "strawberry"
     return [
         DialogStep(

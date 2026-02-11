@@ -5,7 +5,7 @@ import pygame
 from pygame import Vector2
 
 from render.sprite_factory import SPRITE_FACTORY
-from screen import scale_screen as ss
+from screen.game_units import RelativeUnit
 
 
 class Particle:
@@ -16,7 +16,7 @@ class Particle:
         self._lifetime_ms = lifetime_ms
         self._initial_lifetime = lifetime_ms
 
-        icon_height = ss.relative_y_to_game_units_px(0.03)
+        icon_height = RelativeUnit(0.03).pixels_y
         self._image = SPRITE_FACTORY.load("sprites/items/spark.png", icon_height)
         self._original_image = self._image
 
@@ -47,7 +47,7 @@ class Particle:
             screen.blit(self._image, self._position)
 
     @staticmethod
-    def spawn_particles(pos: tuple[int, int]):
+    def spawn_particles(pos: tuple[int, int]) -> list["Particle"]:
         particle_amount = 80
         particles = []
         for i in range(particle_amount):
@@ -59,7 +59,7 @@ class Particle:
         return particles
 
     @staticmethod
-    def create_blink_effect(screen: pygame.Surface, particles: list, dt: int):
+    def create_blink_effect(screen: pygame.Surface, particles: list, dt: int) -> list["Particle"]:
         for particle in particles:
             particle.update(dt)
             particle.draw_blink(screen)

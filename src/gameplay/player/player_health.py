@@ -8,7 +8,7 @@ class Health:
         self._is_dead = False
 
     @property
-    def is_dead(self):
+    def is_dead(self) -> bool:
         return self._is_dead
 
     def die(self):

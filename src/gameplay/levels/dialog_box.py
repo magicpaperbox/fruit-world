@@ -12,7 +12,7 @@ from screen.game_units import GameUnit
 # VM - ViewModel
 # V - View
 class DialogBox:
-    def __init__(self, *, rect):
+    def __init__(self, *, rect: pygame.Rect):
         self.rect = rect
         self.cps = GameUnit(85).pixels
         self.s_padding = GameUnit(20).pixels
@@ -53,11 +53,10 @@ class DialogBox:
         self._visible = False
         self.current = None
         self._queue.clear()
-        # self._active_npc = None
         self._away_time = 0.0
         self.farewell_shown = False
 
-    def handle_event(self, is_pick_pressed, is_exit_pressed, away, now_ms, dt_ms):
+    def handle_event(self, is_pick_pressed: bool, is_exit_pressed: bool, away: bool, now_ms: int, dt_ms: int):
         dt = dt_ms / 1000.0
 
         if is_pick_pressed:
@@ -155,7 +154,7 @@ class DialogBoxView:
         m_padding = vm.m_padding
         offset = vm.offset
 
-        # tło + ramka
+        # background + border
         if vm.current.speaker in self._portraits:
             avatar = self._portraits[vm.current.speaker]
             screen.blit(avatar, (rect.x, rect.y - offset))
@@ -164,7 +163,7 @@ class DialogBoxView:
         shadow_rect = rect.inflate(2, 2).move(1, 1)
         pygame.draw.rect(screen, self._border_dark, shadow_rect, width=self._border_w, border_radius=self._radius)
 
-        # tekst
+        # text
         inner_w = rect.width - m_padding
         inner_h = rect.height - m_padding
         x = rect.x + s_padding
@@ -174,13 +173,13 @@ class DialogBoxView:
         lines = self._wrap(typed, inner_w)
         line_h = self._font.get_linesize()
         max_lines = inner_h // line_h
-        lines = lines[:max_lines]  # obetnij jakby było za dużo
+        lines = lines[:max_lines]  # cut
 
         for i, ln in enumerate(lines):
             surf = self._font.render(ln, True, self._text_color)
             screen.blit(surf, (x, y + i * line_h))
 
-        # wskaźnik "dalej"
+        # "next"
         if vm.is_finished() and vm.is_blink_on():
             tri_x = rect.right - s_padding - 12
             tri_y = rect.bottom - s_padding - 8
@@ -223,7 +222,7 @@ def make_dialog_rect(game_w: int, game_h: int) -> pygame.Rect:
 
 
 class Button:
-    def __init__(self, font, text, width, height, pos):
+    def __init__(self, font: pygame.font.Font, text: str, width: int, height: int, pos: (int, int)):
         self.top_rect = pygame.Rect(pos, (width, height))
         self.top_color = (140, 165, 135)
         self.text_color = (245, 245, 235)

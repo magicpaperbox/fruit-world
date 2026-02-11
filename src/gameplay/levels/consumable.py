@@ -19,9 +19,3 @@ class Consumable(Drawable, GameObject):
 
     def update(self, now_ms: int) -> None:
         self._sprite_obj.update(now_ms)
-
-    #
-    # def try_collect(self, player: Player) -> bool:
-    #     if not player.position.collides(self.rect):
-    #         return False
-    #     return self._try_collect(player)

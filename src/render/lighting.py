@@ -1,12 +1,14 @@
 import pygame
 
+from screen.game_units import GameUnit
+
 
 class Lighting:
     def __init__(self, width: int, height: int):
         self._size = (width, height)
         self._ambient_color = (210, 215, 230)
         self._light_surface = pygame.Surface(self._size)
-        self._light_texture = self._generate_light_texture(radius=150)
+        self._light_texture = self._generate_light_texture(radius=GameUnit(120).pixels)
 
     @staticmethod
     def _generate_light_texture(radius: int) -> pygame.Surface:
@@ -18,7 +20,6 @@ class Lighting:
         return surf
 
     def reset(self):
-        # W każdej klatce czyścimy warstwę mroku kolorem otoczenia
         self._light_surface.fill(self._ambient_color)
 
     def draw_light(self, center_pos: tuple[int, int]):
@@ -39,7 +40,7 @@ class SunLight:
         self.time = 0.0
         # Kolor: Przy BLEND_ADD (dodawaniu) czerń (0,0,0) to brak zmian.
         self.base_color = (40, 20, 0)
-        self.ray_texture = self._generate_ray_texture(300, 2000)
+        self.ray_texture = self._generate_ray_texture(GameUnit(500).pixels, GameUnit(2000).pixels)
 
     def _generate_ray_texture(self, width: int, height: int) -> pygame.Surface:
         surf = pygame.Surface((width, height))
@@ -57,10 +58,10 @@ class SunLight:
             b = int(self.base_color[2] * intensity)
 
             pygame.draw.line(surf, (r, g, b), (x, 0), (x, height))
-        return pygame.transform.rotozoom(surf, -20, 1.0)
+        return pygame.transform.rotozoom(surf, GameUnit(-20).pixels, 1.0)
 
     def update(self, dt):
-        self.time += dt * 0.0002
+        self.time += dt * 0.0005
 
     def draw(self, screen: pygame.Surface):
         sw, sh = screen.get_size()
@@ -72,9 +73,9 @@ class SunLight:
             speed_mult = 1.0 + ((i % 3) * 0.2)
             # modulo (sw + 800), żeby promienie wyjeżdżały i wjeżdżały płynnie
             # 800 to margines na szerokość obróconego promienia
-            total_w = sw + 800
-            base_x = (self.time * 50 * speed_mult + i * gap) % total_w
-            x = base_x - 400  # Cofamy o margines
-            y = -500
+            total_w = sw + GameUnit(900).pixels
+            base_x = (self.time * GameUnit(50).pixels * speed_mult + i * gap) % total_w
+            x = base_x - GameUnit(400).pixels  # Cofamy o margines
+            y = GameUnit(-500).pixels
 
             screen.blit(self.ray_texture, (x, y), special_flags=pygame.BLEND_ADD)

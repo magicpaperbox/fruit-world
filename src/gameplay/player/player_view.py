@@ -3,6 +3,7 @@ import pygame
 from render.animation import Animation
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
+from screen.game_units import RelativeUnit
 
 
 class PlayerView:
@@ -25,7 +26,7 @@ class PlayerView:
 
     @classmethod
     def load(cls) -> "PlayerView":
-        height = ss.relative_y_to_game_units_px(0.1)
+        height = RelativeUnit(0.1).pixels_y
 
         def load_player_sprite(sprite_name: str) -> pygame.Surface:
             return SPRITE_FACTORY.load(f"sprites/player/{sprite_name}.png", height)

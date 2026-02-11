@@ -26,7 +26,7 @@ class FontsFactory:
     def __init__(self):
         self._resolution_size = ss.get_resolution_index()
 
-    def get_font(self, font_size: FontSize, font_style: FontStyle):
+    def get_font(self, font_size: FontSize, font_style: FontStyle) -> pygame.font.Font:
         scale = self._resolution_size + GameUnit(4).pixels
         size = font_size.value + scale
         return pygame.font.Font(font_style.value, size)

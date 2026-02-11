@@ -5,7 +5,7 @@ class Money:
     def gain(self):
         self.money_points += 1
 
-    def buy(self, amount):
+    def buy(self, amount: int) -> bool:
         if amount >= self.money_points:
             self.money_points -= amount
             return True

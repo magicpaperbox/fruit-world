@@ -20,7 +20,7 @@ class Inventory:
                 self._items[item_id] = new_amount
 
     def count(self, item_id: str) -> int:
-        return self._items.get(item_id, 0)  # 0 <- to, co dostaniemy, jeśli klucz nie istnieje
+        return self._items.get(item_id, 0)  # 0 <- if no key
 
     def all_items(self):
         return self._items.items()
@@ -73,7 +73,7 @@ class InventoryUI:
         pygame.draw.rect(screen, self._dark, shadow_rect, width=ss.game_units_to_px_min(7), border_radius=self._border_radius)
         pygame.draw.rect(screen, self._light, slot, width=ss.game_units_to_px_min(3), border_radius=self._border_radius)
 
-    def _draw_picked_item(self, screen, slot, item_id, count):
+    def _draw_picked_item(self, screen: pygame.Surface, slot: pygame.Rect, item_id: str, count: int):
         icon = self._item_icons.get(item_id)
         if icon:
             icon_rect = icon.get_rect(center=slot.center)

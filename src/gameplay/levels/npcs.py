@@ -40,10 +40,10 @@ class Npc:
         self._sprite = self._static.surface()
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
 
-        # tymczasowa podmiana animacji
+        # temporary animation
         self._override_surface: pygame.Surface | None = None
         self._override_until_ms: int = 0
-        # jednorazowa animacja
+        # single animation
         self._override_anim: Animation | None = None
         self._override_anim_until_ms: int = 0
         self._status = Status.STANDBY
@@ -111,13 +111,12 @@ class Npc:
         self._override_anim = None
 
     def play_once(self, anim: Animation, ms: int, now_ms: int):
-        # Pokaż jednorazową animację przez ms milisekund
         self._override_anim = anim.copy() if hasattr(anim, "copy") else anim
         self._override_anim_until_ms = now_ms + ms
         self._override_surface = None
 
     @property
-    def is_talking(self):
+    def is_talking(self) -> bool:
         return self._is_in_dialog
 
     @staticmethod
@@ -161,7 +160,7 @@ class Npc:
         self._sprite = new_frame
 
     def update_sprite(self, now_ms: int, dt_ms: int):
-        # jednorazowa animacja
+        # single animation
         if self._override_anim and now_ms < self._override_anim_until_ms:
             self._override_anim.advance(dt_ms)
             new_frame = self._override_anim.surface()
@@ -170,7 +169,7 @@ class Npc:
         else:
             self._override_anim = None
 
-        # tymczasowa statyczna klatka
+        # static
         if self._override_surface and now_ms < self._override_until_ms:
             new_frame = self._override_surface
             self._center(new_frame)
