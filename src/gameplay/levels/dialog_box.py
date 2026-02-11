@@ -3,7 +3,6 @@ import pygame
 from gameplay.levels.dialog import DialogStep
 from gameplay.levels.npcs import Npc
 from render.sprite_factory import SPRITE_FACTORY
-from screen import scale_screen as ss
 from screen.game_units import GameUnit
 
 
@@ -138,7 +137,7 @@ class DialogBoxView:
         self._border_light = (140, 165, 135)
         self._border_dark = (65, 85, 60)
         self._radius: int = GameUnit(25).pixels
-        self._border_w: int = ss.game_units_to_px_min(3)
+        self._border_w: int = GameUnit(3).non_zero_pixels
         portrait_height = GameUnit(175).pixels
         self._portraits = {
             "Sara": SPRITE_FACTORY.load("sprites/player/portrait.png", portrait_height),

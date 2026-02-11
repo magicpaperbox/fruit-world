@@ -19,7 +19,7 @@ class Layout:
         self._pad = GameUnit(-18).pixels
         self._gap = GameUnit(6).pixels
         self.right_window = self._inner_rect(self._right_panel)
-        self._border = ss.game_units_to_px_min(3)
+        self._border = GameUnit(3).non_zero_pixels
         self._fill_rgb = (80, 100, 75)
         self._light_rgb = (140, 165, 135)
         self._dark_rgb = (65, 85, 60)

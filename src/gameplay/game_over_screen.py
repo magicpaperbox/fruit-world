@@ -29,8 +29,8 @@ class GameOverScreen(Drawable):
         self._ui.draw(screen)
 
         shadow_rect = self._rect.inflate(3, 3).move(2, 2)
-        pygame.draw.rect(screen, (65, 85, 60), shadow_rect, width=ss.game_units_to_px_min(6), border_radius=GameUnit(30).pixels)
-        pygame.draw.rect(screen, (140, 165, 135), self._rect, width=ss.game_units_to_px_min(6), border_radius=GameUnit(30).pixels)
+        pygame.draw.rect(screen, (65, 85, 60), shadow_rect, width=GameUnit(6).non_zero_pixels, border_radius=GameUnit(30).pixels)
+        pygame.draw.rect(screen, (140, 165, 135), self._rect, width=GameUnit(6).non_zero_pixels, border_radius=GameUnit(30).pixels)
 
     def _setup(self):
         cx, cy = self._rect.center

@@ -1,6 +1,5 @@
 import pygame
 
-from screen import scale_screen as ss
 from screen.game_units import GameUnit
 
 
@@ -40,7 +39,7 @@ class InventoryUI:
         self._line_space = GameUnit(5).pixels
         self._margin_x = GameUnit(10).pixels
         self._margin_y = GameUnit(20).pixels
-        self._border = ss.game_units_to_px_min(3)
+        self._border = GameUnit(3).non_zero_pixels
         self._border_radius = GameUnit(15).pixels
         self._start_x = self._panel.left + self._margin_x
         self._start_y = self._panel.top + self._margin_y
@@ -70,8 +69,8 @@ class InventoryUI:
 
     def _draw_slot(self, screen: pygame.Surface, slot: pygame.Rect):
         shadow_rect = slot.inflate(self._border, self._border).move(1, 1)
-        pygame.draw.rect(screen, self._dark, shadow_rect, width=ss.game_units_to_px_min(7), border_radius=self._border_radius)
-        pygame.draw.rect(screen, self._light, slot, width=ss.game_units_to_px_min(3), border_radius=self._border_radius)
+        pygame.draw.rect(screen, self._dark, shadow_rect, width=GameUnit(7).non_zero_pixels, border_radius=self._border_radius)
+        pygame.draw.rect(screen, self._light, slot, width=GameUnit(3).non_zero_pixels, border_radius=self._border_radius)
 
     def _draw_picked_item(self, screen: pygame.Surface, slot: pygame.Rect, item_id: str, count: int):
         icon = self._item_icons.get(item_id)

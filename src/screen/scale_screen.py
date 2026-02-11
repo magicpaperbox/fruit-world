@@ -46,9 +46,9 @@ def game_units_to_px(units: int) -> int:  # Skalowanie stałych jednostek gry na
     return int(units * SCREEN_HEIGHT / _CANONICAL_SCREEN_HEIGHT)
 
 
-def game_units_to_px_min(units: int, min_value: int = 1) -> int:
+def game_units_to_px_min(units: int) -> int:
     scaled = int(units * SCREEN_HEIGHT / _CANONICAL_SCREEN_HEIGHT)
-    return max(scaled, min_value)
+    return max(scaled, 1)
 
 
 def game_units_to_decimal(units: float) -> float:  # Skalowanie stałych jednostek gry na piksele
