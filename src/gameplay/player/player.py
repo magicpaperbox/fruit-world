@@ -29,7 +29,7 @@ class Player(Drawable, Debuggable):
         elif inputs.is_left_pressed:
             self._mobility.move_left(obstacles, dt)
 
-        if inputs.space_down_this_frame:
+        if inputs.space_pressed_this_frame:
             self._mobility.jump()
 
         self._mobility.move_vertically(obstacles, dt)
@@ -45,11 +45,11 @@ class Player(Drawable, Debuggable):
     def load(cls, gravity: float) -> Self:
         return Player(PlayerView.load(), Inventory(), PlayerMobility(gravity))
 
-    def update_sprite(self, inputs: GameInputs, dt_ms: int, is_frozen: bool) -> None:
+    def update_sprite(self, inputs: GameInputs, dt_ms: int) -> None:
         self._view.update_sprite(
             self._mobility.is_on_ground,
-            inputs.is_right_pressed and not is_frozen,
-            inputs.is_left_pressed and not is_frozen,
+            inputs.is_right_pressed,
+            inputs.is_left_pressed,
             self._mobility.coordinates,
             dt_ms,
         )

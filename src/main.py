@@ -25,7 +25,7 @@ from screen import scale_screen as ss
 from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
 from screen.game_inputs import GameInputs
-from screen.game_units import GameUnit, RelativeUnit
+from screen.game_units import RelativeUnit
 from screen.layout import Layout
 
 
@@ -57,7 +57,6 @@ class Game:
         self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
         self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
         self.font = FontsFactory()
-        self.font_size = GameUnit(6).pixels
         self.layout = Layout()
         self.resources_ui = ResourcesUI(self.font.get_font(FontSize.XLARGE, FontStyle.RUSTIC))
         self.fps_counter = FPSCounter(self.font.get_font(FontSize.LARGE, FontStyle.SIMPLE))
@@ -105,7 +104,7 @@ class Game:
 
     # noinspection PyAttributeOutsideInit
     def run(self):
-        while self.inputs.running:
+        while self.inputs.game_loop_running:
             try:
                 dt = self.clock.tick_busy_loop(self.FPS)
                 self.fps_counter.update(dt)
@@ -123,13 +122,13 @@ class Game:
                 else:
                     self.music.play(self.level.music_path)
                     now_ms = pygame.time.get_ticks()
-                    self.dialog_vm.handle_event(self.inputs.is_pick_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt)
+                    self.dialog_vm.handle_event(self.inputs.is_interaction_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt)
 
                     for npc in self.level.current_map.npcs:
                         if self.sara.player_rect.colliderect(npc.npc_rect):
                             self.away = False
                             self.colliding_npc = npc
-                            if self.inputs.is_pick_pressed:
+                            if self.inputs.is_interaction_pressed:
                                 if self.dialog_vm.should_draw():
                                     self.in_dialog = True
                                 self.mhmm_sound.play()
@@ -147,9 +146,12 @@ class Game:
                         self.inputs.is_game_over = True
                     all_solids = self.level.current_map.platforms + self.level.current_map.hazard
                     is_npc_talking = self.colliding_npc is not None and self.colliding_npc.is_talking
-                    if not is_npc_talking:
-                        self.sara.process_inputs(dt, self.inputs, all_solids)
-                    self.sara.update_sprite(self.inputs, dt, is_frozen=is_npc_talking)
+                    if is_npc_talking:
+                        self.inputs.block_movement()
+                    else:
+                        self.inputs.unblock_movement()
+                    self.sara.process_inputs(dt, self.inputs, all_solids)
+                    self.sara.update_sprite(self.inputs, dt)
                     self.level.change_map(self.sara)
 
                     collected_pos = collect_consumables(
@@ -176,7 +178,7 @@ class Game:
                     self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
                     # PRZEDMIOTY:
 
-                    if self.inputs.is_pick_pressed:
+                    if self.inputs.is_interaction_pressed:
                         for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
                             picked_items = bush.try_pick_berries(self.sara.player_rect)
                             if picked_items > 0:
