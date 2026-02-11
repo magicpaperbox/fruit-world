@@ -45,9 +45,13 @@ class Player(Drawable, Debuggable):
     def load(cls, gravity: float) -> Self:
         return Player(PlayerView.load(), Inventory(), PlayerMobility(gravity))
 
-    def update_sprite(self, inputs: GameInputs, dt_ms: int) -> None:
+    def update_sprite(self, inputs: GameInputs, dt_ms: int, is_frozen: bool) -> None:
         self._view.update_sprite(
-            self._mobility.is_on_ground, inputs.is_right_pressed, inputs.is_left_pressed, self._mobility.coordinates, dt_ms
+            self._mobility.is_on_ground,
+            inputs.is_right_pressed and not is_frozen,
+            inputs.is_left_pressed and not is_frozen,
+            self._mobility.coordinates,
+            dt_ms,
         )
 
     def draw(self, screen: pygame.surface.Surface):

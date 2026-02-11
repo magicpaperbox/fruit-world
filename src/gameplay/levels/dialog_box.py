@@ -53,7 +53,7 @@ class DialogBox:
         self._visible = False
         self.current = None
         self._queue.clear()
-        self._active_npc = None
+        # self._active_npc = None
         self._away_time = 0.0
         self.farewell_shown = False
 

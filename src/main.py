@@ -130,13 +130,15 @@ class Game:
                             self.away = False
                             self.colliding_npc = npc
                             if self.inputs.is_pick_pressed:
+                                if self.dialog_vm.should_draw():
+                                    self.in_dialog = True
                                 self.mhmm_sound.play()
                                 dialog_step = npc.interaction(now_ms)
-                                self.dialog_vm.show(dialog_step, npc=npc)
+                                if dialog_step is not None:
+                                    self.dialog_vm.show(dialog_step, npc=npc)
                         else:
                             self.away = True
                         npc.update_sprite(now_ms, dt)
-
                     self.dialog_vm.update(dt)
 
                     self.hazard.update(dt)
@@ -144,9 +146,11 @@ class Game:
                     if self.sara.health.is_dead:
                         self.inputs.is_game_over = True
                     all_solids = self.level.current_map.platforms + self.level.current_map.hazard
-                    self.sara.process_inputs(dt, self.inputs, all_solids)
+                    is_npc_talking = self.colliding_npc is not None and self.colliding_npc.is_talking
+                    if not is_npc_talking:
+                        self.sara.process_inputs(dt, self.inputs, all_solids)
+                    self.sara.update_sprite(self.inputs, dt, is_frozen=is_npc_talking)
                     self.level.change_map(self.sara)
-                    self.sara.update_sprite(self.inputs, dt)
 
                     collected_pos = collect_consumables(
                         self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.money, self.sara.health, self.sara.mana

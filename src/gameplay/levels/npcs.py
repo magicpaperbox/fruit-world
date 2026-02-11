@@ -72,7 +72,10 @@ class Npc:
             else:
                 self.set_dialog(self._default_dialog)
             self._is_in_dialog = True
-
+        if self._dialog_index >= len(self._dialog):
+            self._is_in_dialog = False
+            self._dialog_index = 0
+            return None
         if not self._dialog:
             return None
         step = self._dialog[self._dialog_index]
@@ -81,11 +84,8 @@ class Npc:
         if frame:
             self.show_frame(frame, ms=1000, now_ms=now_ms)
         has_next = self._dialog_index < len(self._dialog) - 1
-        if has_next:
-            self._dialog_index += 1
-        else:
-            self._dialog_index = 0
-            self._is_in_dialog = False
+        self._dialog_index += 1
+        if not has_next:
             self._status = Status.HELLO
         return step
 
@@ -115,6 +115,10 @@ class Npc:
         self._override_anim = anim.copy() if hasattr(anim, "copy") else anim
         self._override_anim_until_ms = now_ms + ms
         self._override_surface = None
+
+    @property
+    def is_talking(self):
+        return self._is_in_dialog
 
     @staticmethod
     def load_npc_sprite(sprite_name: str) -> pygame.Surface:

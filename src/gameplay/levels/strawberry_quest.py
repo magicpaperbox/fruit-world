@@ -70,7 +70,7 @@ class StrawberryQuest(Quest):
 
         if not self._welcome_dialog_completed:
             self._welcome_dialog_completed = True
-            return _WELCOME_DIALOG
+            return _WELCOME_DIALOG + search_in_progress_dialog(self._remaining_strawberries)
         elif self._remaining_strawberries > 0:
             player_count = self._inventory.count(self._strawberry_id)
             if player_count >= self._remaining_strawberries:
