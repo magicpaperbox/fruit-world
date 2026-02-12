@@ -18,3 +18,6 @@ class Quest:
 
     def get_current_dialog(self, npc_id: str) -> list[DialogStep] | None:
         pass
+
+    def has_new_dialog(self, npc_id: str) -> bool:
+        return False

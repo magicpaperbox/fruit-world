@@ -7,6 +7,7 @@ from gameplay.levels.quest import Quest
 from render.animation import Animation
 from render.sprite_factory import SPRITE_FACTORY
 from screen import scale_screen as ss
+from screen.game_units import GameUnit
 
 
 class Status(str, enum.Enum):
@@ -41,6 +42,8 @@ class Npc:
         self.npc_rect = self._sprite.get_rect(midbottom=(x, y))
 
         # temporary animation
+        self.show_bubble = False
+        self.dialog_cloud = SPRITE_FACTORY.load("sprites/objects/dialog.png", GameUnit(40).pixels)
         self._override_surface: pygame.Surface | None = None
         self._override_until_ms: int = 0
         # single animation
@@ -55,6 +58,11 @@ class Npc:
 
     def clear_quest(self):
         self._current_quest = None
+
+    def has_something_to_say(self) -> bool:
+        if self._current_quest is not None:
+            return self._current_quest.has_new_dialog(self.npc_id)
+        return False
 
     def set_dialog(self, dialog_steps: list[DialogStep]):  # step = {"text": "Hello", "frame": "hello", "ms": 800}
         self._dialog = dialog_steps
@@ -183,3 +191,7 @@ class Npc:
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self._sprite, self.npc_rect)
+
+    def draw_bubble(self, screen: pygame.Surface, player_nearby=False):
+        if player_nearby and self.has_something_to_say():
+            screen.blit(self.dialog_cloud, (self.npc_rect.x + GameUnit(20).pixels, self.npc_rect.y - GameUnit(40).pixels))

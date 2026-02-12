@@ -117,6 +117,7 @@ class Game:
                         self.dialog_vm.show(dialog_step, npc=npc)
             else:
                 self.away = True
+                self.colliding_npc = None
             npc.update_sprite(now_ms, dt)
         self.dialog_vm.update(dt)
 
@@ -158,6 +159,8 @@ class Game:
             self.level.draw_debug(self.inputs.game_surface, [self.sara])
 
         self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
+        if self.colliding_npc is not None and self.colliding_npc.has_something_to_say():
+            self.colliding_npc.draw_bubble(self.inputs.screen, player_nearby=True)
         self.inputs.layout.draw_panel(self.inputs.screen)
         self.inputs.layout.draw_panel_windows(self.inputs.screen)
         self.dialog_view.draw(self.inputs.screen, self.dialog_vm)

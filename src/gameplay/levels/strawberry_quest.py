@@ -64,6 +64,11 @@ class StrawberryQuest(Quest):
         super().start()
         self._mouse.set_quest(self)
 
+    def has_new_dialog(self, npc_id: str) -> bool:
+        if npc_id != self._mouse.npc_id:
+            return False
+        return not self._welcome_dialog_completed
+
     def get_current_dialog(self, npc_id: str) -> list[DialogStep] | None:
         if npc_id != self._mouse.npc_id:
             return None
