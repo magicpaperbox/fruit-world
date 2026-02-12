@@ -102,13 +102,78 @@ class Game:
         self.colliding_npc: Npc | None = None
         self.particles = []
 
-    # noinspection PyAttributeOutsideInit
+    def _update_gameplay(self, dt, now_ms):
+        self.music.play(self.level.music_path)
+        self.dialog_vm.handle_event(self.inputs.is_interaction_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt)
+
+        for npc in self.level.current_map.npcs:
+            if self.sara.player_rect.colliderect(npc.npc_rect):
+                self.away = False
+                self.colliding_npc = npc
+                if self.inputs.is_interaction_pressed:
+                    self.mhmm_sound.play()
+                    dialog_step = npc.interaction(now_ms)
+                    if dialog_step is not None:
+                        self.dialog_vm.show(dialog_step, npc=npc)
+            else:
+                self.away = True
+            npc.update_sprite(now_ms, dt)
+        self.dialog_vm.update(dt)
+
+        self.hazard.update(dt)
+        self.hazard.collide_hazard(self.level.current_map.hazard, self.sara.player_rect, self.sara.health)
+        if self.sara.health.is_dead:
+            self.inputs.is_game_over = True
+        all_solids = self.level.current_map.platforms + self.level.current_map.hazard
+        is_npc_talking = self.colliding_npc is not None and self.colliding_npc.is_talking
+        if is_npc_talking:
+            self.inputs.block_movement()
+        else:
+            self.inputs.unblock_movement()
+        self.sara.process_inputs(dt, self.inputs, all_solids)
+        self.sara.update_sprite(self.inputs, dt)
+        self.level.change_map(self.sara)
+        collected_pos = collect_consumables(
+            self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.money, self.sara.health, self.sara.mana
+        )
+        for pos in collected_pos:
+            self.particles.extend(Particle.spawn_particles(pos))
+        if self.inputs.is_interaction_pressed:
+            for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
+                picked_items = bush.try_pick_berries(self.sara.player_rect)
+                if picked_items > 0:
+                    self.sara.inventory.add(bush.berry_item_id, picked_items)
+        self.sunlight.update(dt)
+        self.level.update_level(now_ms)
+
+    def _draw_gameplay(self, dt):
+        self.inputs.screen.fill((53, 71, 46))
+        self.level.draw_level(self.inputs.game_surface, self.sara)
+        self.particles = Particle.create_blink_effect(self.inputs.game_surface, self.particles, dt)
+        self.sunlight.draw(self.inputs.game_surface)
+        self.lighting.reset()
+        # self.lighting.draw_light(self.sara.player_rect.center)
+        self.lighting.apply(self.inputs.game_surface)
+        if self.inputs.DEBUG_OVERLAYS:
+            self.level.draw_debug(self.inputs.game_surface, [self.sara])
+
+        self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
+        self.inputs.layout.draw_panel(self.inputs.screen)
+        self.inputs.layout.draw_panel_windows(self.inputs.screen)
+        self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
+        self.inventory_ui.draw(self.inputs.screen, self.sara.inventory)
+        self.resources_ui.draw(self.inputs.screen, self.sara.money, self.sara.health, self.sara.mana)
+
+        if self.inputs.DEBUG_OVERLAYS:
+            self.fps_counter.draw(self.inputs.screen)
+
     def run(self):
         while self.inputs.game_loop_running:
             try:
                 dt = self.clock.tick_busy_loop(self.FPS)
                 self.fps_counter.update(dt)
                 self.inputs.process_inputs()
+
                 if self.inputs.reset_level:
                     self._init_gameplay()
                     self.inputs.reset_level = False
@@ -118,77 +183,11 @@ class Game:
                 elif self.inputs.is_game_over:
                     self.level.draw_level(self.inputs.game_surface, self.sara)
                     self.game_over_screen.draw(self.screen)
-
                 else:
-                    self.music.play(self.level.music_path)
                     now_ms = pygame.time.get_ticks()
-                    self.dialog_vm.handle_event(self.inputs.is_interaction_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt)
+                    self._update_gameplay(dt, now_ms)
+                    self._draw_gameplay(dt)
 
-                    for npc in self.level.current_map.npcs:
-                        if self.sara.player_rect.colliderect(npc.npc_rect):
-                            self.away = False
-                            self.colliding_npc = npc
-                            if self.inputs.is_interaction_pressed:
-                                if self.dialog_vm.should_draw():
-                                    self.in_dialog = True
-                                self.mhmm_sound.play()
-                                dialog_step = npc.interaction(now_ms)
-                                if dialog_step is not None:
-                                    self.dialog_vm.show(dialog_step, npc=npc)
-                        else:
-                            self.away = True
-                        npc.update_sprite(now_ms, dt)
-                    self.dialog_vm.update(dt)
-
-                    self.hazard.update(dt)
-                    self.hazard.collide_hazard(self.level.current_map.hazard, self.sara.player_rect, self.sara.health)
-                    if self.sara.health.is_dead:
-                        self.inputs.is_game_over = True
-                    all_solids = self.level.current_map.platforms + self.level.current_map.hazard
-                    is_npc_talking = self.colliding_npc is not None and self.colliding_npc.is_talking
-                    if is_npc_talking:
-                        self.inputs.block_movement()
-                    else:
-                        self.inputs.unblock_movement()
-                    self.sara.process_inputs(dt, self.inputs, all_solids)
-                    self.sara.update_sprite(self.inputs, dt)
-                    self.level.change_map(self.sara)
-
-                    collected_pos = collect_consumables(
-                        self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.money, self.sara.health, self.sara.mana
-                    )
-                    for pos in collected_pos:
-                        self.particles.extend(Particle.spawn_particles(pos))
-                    self.sunlight.update(dt)
-                    self.level.update_level(now_ms)
-                    self.inputs.screen.fill((53, 71, 46))
-                    self.level.draw_level(self.inputs.game_surface, self.sara)
-                    self.particles = Particle.create_blink_effect(self.inputs.game_surface, self.particles, dt)
-                    self.sunlight.draw(self.inputs.game_surface)
-                    self.lighting.reset()
-                    # self.lighting.draw_light(self.sara.player_rect.center)
-                    self.lighting.apply(self.inputs.game_surface)
-                    if self.inputs.DEBUG_OVERLAYS:
-                        self.level.draw_debug(self.inputs.game_surface, [self.sara])
-
-                    self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
-                    self.inputs.layout.draw_panel(self.inputs.screen)
-                    self.inputs.layout.draw_panel_windows(self.inputs.screen)
-                    # DIALOG:
-                    self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
-                    # PRZEDMIOTY:
-
-                    if self.inputs.is_interaction_pressed:
-                        for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
-                            picked_items = bush.try_pick_berries(self.sara.player_rect)
-                            if picked_items > 0:
-                                self.sara.inventory.add(bush.berry_item_id, picked_items)
-
-                    self.inventory_ui.draw(self.inputs.screen, self.sara.inventory)
-                    self.resources_ui.draw(self.inputs.screen, self.sara.money, self.sara.health, self.sara.mana)
-
-                    if self.inputs.DEBUG_OVERLAYS:
-                        self.fps_counter.draw(self.inputs.screen)
                 pygame.display.flip()
 
             except Exception as e:
