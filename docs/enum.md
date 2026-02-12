@@ -68,14 +68,14 @@ size = font_type.value + enlarge  # ✅ Działa! Tworzysz nową zmienną
 class SetFont:
     def get_font(self, font_type: FontType):
         enlarge = self.calculate_enlarge()
-        
+
         # ❌ ŹLE - nie można modyfikować enum!
         # font_type.value += enlarge
-        
+
         # ✅ DOBRZE - wyciągamy wartość i tworzymy nową zmienną
         size = font_type.value + enlarge
-        
-        return pygame.font.SysFont("comicsansms", size)
+
+        return pygame.fonts.SysFont("comicsansms", size)
 ```
 
 ---

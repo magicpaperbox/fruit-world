@@ -7,7 +7,7 @@ from gameplay.levels.map.direction import Direction
 from gameplay.levels.strawberry_quest import StrawberryQuest
 from gameplay.player.inventory import Inventory
 from gameplay.player.player import Player
-from render.debug import draw_area, draw_rect
+from render.debug import DEBUG_RENDERER
 from render.debuggable import Debuggable
 from render.drawable import Drawable
 
@@ -54,12 +54,12 @@ class Level:
         player.draw(game_surface)
 
     def draw_debug(self, game_surface, debuggables: list[Debuggable]):
-        draw_area(game_surface, self.current_map.strawberry_bushes, (190, 20, 40), "TRUS")
-        draw_area(game_surface, self.current_map.blueberry_bushes, (60, 120, 255), "BOR")
+        DEBUG_RENDERER.draw_area(game_surface, self.current_map.strawberry_bushes, (190, 20, 40), "TRUS")
+        DEBUG_RENDERER.draw_area(game_surface, self.current_map.blueberry_bushes, (60, 120, 255), "BOR")
         for d in debuggables:
             d.draw_debug(game_surface)
         for hazardous_obj in self.current_map.hazard:
-            draw_rect(
+            DEBUG_RENDERER.draw_rect(
                 game_surface,
                 hazardous_obj.rect,
                 (0, 150, 120),
@@ -67,7 +67,7 @@ class Level:
             )
 
         for platform in self.current_map.platforms:
-            draw_rect(
+            DEBUG_RENDERER.draw_rect(
                 game_surface,
                 platform.rect,
                 (0, 230, 0),

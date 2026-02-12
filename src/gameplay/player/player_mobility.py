@@ -1,7 +1,7 @@
 import pygame
 
 from gameplay.player.collisions import collision_x, collision_y
-from render.debug import draw_rect
+from render.debug import DEBUG_RENDERER
 from render.debuggable import Debuggable
 from render.sprite_object import SpriteObject
 from screen import scale_screen as ss
@@ -27,7 +27,6 @@ class PlayerMobility(Debuggable):
         self.jumps_left = 2
         self._on_ground = False
         self._horizontal_speed_px_per_s = RelativeUnit(0.15).pixels_x
-
         self._sync_all()
 
     def _place_rect(self, rect: pygame.Rect, y_offset: int):
@@ -97,5 +96,5 @@ class PlayerMobility(Debuggable):
         self._sync_all()
 
     def draw_debug(self, screen: pygame.Surface):
-        draw_rect(screen, self.collision_rect_x, (250, 250, 0), "X")
-        draw_rect(screen, self.collision_rect_y, (250, 165, 20), "Y")
+        DEBUG_RENDERER.draw_rect(screen, self.collision_rect_x, (250, 250, 0), "X")
+        DEBUG_RENDERER.draw_rect(screen, self.collision_rect_y, (250, 165, 20), "Y")

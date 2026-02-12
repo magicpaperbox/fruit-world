@@ -56,17 +56,17 @@ class Game:
         self.fullscreen = False
         self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
         self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
-        self.font = FontsFactory()
+        self.fonts = FontsFactory()
         self.layout = Layout()
-        self.resources_ui = ResourcesUI(self.font.get_font(FontSize.XLARGE, FontStyle.RUSTIC))
-        self.fps_counter = FPSCounter(self.font.get_font(FontSize.LARGE, FontStyle.SIMPLE))
+        self.resources_ui = ResourcesUI(self.fonts.get_font(FontSize.XLARGE, FontStyle.RUSTIC))
+        self.fps_counter = FPSCounter(self.fonts.get_font(FontSize.LARGE, FontStyle.SIMPLE))
         self.lighting = Lighting(ss.GAME_WIDTH, ss.GAME_HEIGHT)
         self.sunlight = SunLight()
 
     def _init_dialogs(self):
         rect = make_dialog_rect(ss.GAME_WIDTH, ss.GAME_HEIGHT)
         self.dialog_vm = DialogBox(rect=rect)
-        self.dialog_view = DialogBoxView(font=self.font.get_font(FontSize.SMALL, FontStyle.SIMPLE))
+        self.dialog_view = DialogBoxView(font=self.fonts.get_font(FontSize.SMALL, FontStyle.SIMPLE))
 
     def _init_audio(self):
         pygame.mixer.init()
@@ -75,8 +75,8 @@ class Game:
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
     def _init_game_inputs(self):
-        self.game_over_screen = GameOverScreen(self.font.get_font(FontSize.XLARGE, FontStyle.ORNATE))
-        main_menu = MainMenu(self.screen.get_size(), self.font.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
+        self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.ORNATE))
+        main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
         self.inputs = GameInputs(
             self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen
         )
@@ -90,7 +90,7 @@ class Game:
             "blueberry": blueberry_icon,
         }
         self.inventory_ui = InventoryUI(
-            self.font.get_font(FontSize.MEDIUM, FontStyle.HANDWRITTING), item_icons, self.inputs.layout.right_window
+            self.fonts.get_font(FontSize.MEDIUM, FontStyle.HANDWRITTING), item_icons, self.inputs.layout.right_window
         )
 
     def _init_gameplay(self):
