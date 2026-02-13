@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 import pygame
 
+from screen import scale_screen as ss
 from screen.game_units import GameUnit
 
 
@@ -72,6 +73,7 @@ class Modal:
         self.show_border = True
         self._overlay_alpha = 0
         self.border_radius = GameUnit(30).pixels
+        self.vignette = self._make_vignette()
 
     def handle_event(self, e: pygame.event.Event) -> Action:
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
@@ -83,11 +85,9 @@ class Modal:
         return Action.NONE
 
     def draw(self, surf: pygame.Surface):
-        self._overlay_alpha = min(self._overlay_alpha + 2, 80)
-        overlay = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
-        overlay.fill((0, 0, 0, self._overlay_alpha))
-
-        surf.blit(overlay, (0, 0))
+        self._overlay_alpha = min(self._overlay_alpha + 5, 220)
+        self.vignette.set_alpha(self._overlay_alpha)
+        surf.blit(self.vignette, (0, 0))
 
         pygame.draw.rect(surf, (80, 100, 75), self.rect, border_radius=self.border_radius)
         pygame.draw.rect(surf, (220, 220, 235), self.rect, 2, border_radius=self.border_radius)
@@ -104,6 +104,20 @@ class Modal:
             shadow_rect = self.rect.inflate(3, 3).move(2, 2)
             pygame.draw.rect(surf, (65, 85, 60), shadow_rect, width=GameUnit(6).non_zero_pixels, border_radius=self.border_radius)
             pygame.draw.rect(surf, (140, 165, 135), self.rect, width=GameUnit(6).non_zero_pixels, border_radius=self.border_radius)
+
+    @staticmethod
+    def _make_vignette():
+        width = ss.SCREEN_WIDTH
+        height = ss.SCREEN_HEIGHT
+        overlay = pygame.Surface((width, height), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        center = width // 2, height // 2
+        max_radius = int((width**2 + height**2) ** 0.5 / 2)
+        for r in range(max_radius, 0, -4):
+            distance_fraction = r / max_radius
+            alpha = int(150 * distance_fraction)
+            pygame.draw.circle(overlay, (0, 0, 0, alpha), center, r)
+        return overlay
 
 
 class UIManager:
