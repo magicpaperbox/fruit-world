@@ -23,10 +23,10 @@ class GameSettings:
         pad = GameUnit(25).pixels
         btn_h = GameUnit(60).pixels
         buttons = [
-            Button(self._slot(0, 0), "UNAVAILABLE", Action.RES_800x600, self._font),
-            Button(self._slot(1, 0), "UNAVAILABLE", Action.RES_1280x720, self._font),
-            Button(self._slot(0, 1), "RESTART LEVEL", Action.RESET_LEVEL, self._font),
-            Button(self._slot(1, 1), "MAIN MENU", Action.GO_TO_MENU, self._font),
+            Button(self._slot(0, 0), "UNAVAILABLE", Action.RES_800x600, self._font, transparency=120),
+            Button(self._slot(1, 0), "UNAVAILABLE", Action.RES_1280x720, self._font, transparency=120),
+            Button(self._slot(0, 1), "RESTART LEVEL", Action.RESET_LEVEL, self._font, transparency=120),
+            Button(self._slot(1, 1), "MAIN MENU", Action.GO_TO_MENU, self._font, transparency=120),
             Button(
                 pygame.Rect(self._rect.centerx - GameUnit(90).pixels, self._rect.bottom - btn_h - 2 * pad, GameUnit(200).pixels, btn_h),
                 "Return",
