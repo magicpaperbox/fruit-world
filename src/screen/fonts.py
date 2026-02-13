@@ -7,10 +7,10 @@ from screen.game_units import GameUnit
 
 
 class FontSize(Enum):
-    SMALL = 8
-    MEDIUM = 9
-    LARGE = 10
-    XLARGE = 15
+    SMALL = 10
+    MEDIUM = 15
+    LARGE = 20
+    XLARGE = 30
 
 
 class FontStyle(Enum):

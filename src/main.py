@@ -17,6 +17,7 @@ from gameplay.player.inventory import InventoryUI
 from gameplay.player.player import Player
 from gameplay.resources_ui import ResourcesUI
 from menu.main_menu import MainMenu
+from menu.settings_menu import GameSettings
 from menu.ui import UIManager
 from render.interaction_effects import Particle
 from render.lighting import Lighting, SunLight
@@ -58,7 +59,7 @@ class Game:
         self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
         self.fonts = FontsFactory()
         self.layout = Layout()
-        self.resources_ui = ResourcesUI(self.fonts.get_font(FontSize.XLARGE, FontStyle.RUSTIC))
+        self.resources_ui = ResourcesUI(self.fonts.get_font(FontSize.LARGE, FontStyle.HANDWRITTING))
         self.fps_counter = FPSCounter(self.fonts.get_font(FontSize.LARGE, FontStyle.SIMPLE))
         self.lighting = Lighting(ss.GAME_WIDTH, ss.GAME_HEIGHT)
         self.sunlight = SunLight()
@@ -66,7 +67,7 @@ class Game:
     def _init_dialogs(self):
         rect = make_dialog_rect(ss.GAME_WIDTH, ss.GAME_HEIGHT)
         self.dialog_vm = DialogBox(rect=rect)
-        self.dialog_view = DialogBoxView(font=self.fonts.get_font(FontSize.SMALL, FontStyle.SIMPLE))
+        self.dialog_view = DialogBoxView(font=self.fonts.get_font(FontSize.LARGE, FontStyle.SIMPLE))
 
     def _init_audio(self):
         pygame.mixer.init()
@@ -75,10 +76,11 @@ class Game:
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
     def _init_game_inputs(self):
-        self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.ORNATE))
+        self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
         main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
+        self.settings = GameSettings(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
         self.inputs = GameInputs(
-            self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen
+            self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen, self.settings
         )
 
     def _init_inventory(self):
@@ -149,7 +151,10 @@ class Game:
 
     def _draw_gameplay(self, dt):
         self.inputs.screen.fill((53, 71, 46))
-        self.level.draw_level(self.inputs.game_surface, self.sara)
+        self.level.draw_level(self.inputs.game_surface)
+        if self.colliding_npc is not None and self.colliding_npc.has_something_to_say():
+            self.colliding_npc.draw_bubble(self.inputs.game_surface, player_nearby=True)
+        self.sara.draw(self.inputs.game_surface)
         self.particles = Particle.create_blink_effect(self.inputs.game_surface, self.particles, dt)
         self.sunlight.draw(self.inputs.game_surface)
         self.lighting.reset()
@@ -159,8 +164,6 @@ class Game:
             self.level.draw_debug(self.inputs.game_surface, [self.sara])
 
         self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
-        if self.colliding_npc is not None and self.colliding_npc.has_something_to_say():
-            self.colliding_npc.draw_bubble(self.inputs.screen, player_nearby=True)
         self.inputs.layout.draw_panel(self.inputs.screen)
         self.inputs.layout.draw_panel_windows(self.inputs.screen)
         self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
@@ -184,8 +187,9 @@ class Game:
                     self.music.play("sounds/music/Fruit World.mp3")
                     self.inputs.main_menu.draw(self.inputs.screen)
                 elif self.inputs.is_game_over:
-                    self.level.draw_level(self.inputs.game_surface, self.sara)
                     self.game_over_screen.draw(self.screen)
+                elif self.inputs.in_settings:
+                    self.settings.draw(self.screen)
                 else:
                     now_ms = pygame.time.get_ticks()
                     self._update_gameplay(dt, now_ms)

@@ -6,7 +6,7 @@ from screen.layout import Layout
 
 
 class GameInputs:
-    def __init__(self, game_surface, screen, layout, fullscreen, jump_sound, main_menu, game_over):
+    def __init__(self, game_surface, screen, layout, fullscreen, jump_sound, main_menu, game_over, gameplay_settings_screen):
         self.game_surface = game_surface
         self.screen = screen
         self.layout = layout
@@ -22,6 +22,8 @@ class GameInputs:
         self._space_pressed_this_frame = False
         self.in_menu = True
         self.main_menu = main_menu
+        self.in_settings = False
+        self.gameplay_settings_screen = gameplay_settings_screen
         self.is_game_over = False
         self.game_over_screen = game_over
         self.reset_level = False
@@ -79,6 +81,25 @@ class GameInputs:
                     self.game_loop_running = False
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 self.in_menu = True
+
+            if self.settings_pressed and not self.in_settings:
+                self.in_settings = True
+            elif self.settings_pressed and self.in_settings:
+                self.in_settings = False
+
+            if self.in_settings:
+                action = self.gameplay_settings_screen.handle_event(e)
+                if action == Action.RESET_LEVEL:
+                    self.is_game_over = False
+                    self.reset_level = True
+                    self.in_settings = False
+                elif action == Action.GO_TO_MENU:
+                    self.is_game_over = False
+                    self.in_menu = True
+                    self.reset_level = True
+                    self.in_settings = False
+                elif action == Action.CLOSE_WINDOW:
+                    self.in_settings = False
 
             if self.is_game_over:
                 action = self.game_over_screen.handle_event(e)

@@ -9,7 +9,6 @@ from gameplay.player.inventory import Inventory
 from gameplay.player.player import Player
 from render.debug import DEBUG_RENDERER
 from render.debuggable import Debuggable
-from render.drawable import Drawable
 
 
 class Level:
@@ -34,7 +33,7 @@ class Level:
         self.current_map = self._maps[next_map_id]
         return True
 
-    def draw_level(self, game_surface: pygame.Surface, player: Drawable):
+    def draw_level(self, game_surface: pygame.Surface):
         self.current_map.background_img.draw(game_surface)
         for hazardous_obj in self.current_map.hazard:
             hazardous_obj.draw(game_surface)
@@ -50,8 +49,6 @@ class Level:
             npc.draw(game_surface)
         for consumable_object in self.current_map.consumable_objects:
             consumable_object.draw(game_surface)
-
-        player.draw(game_surface)
 
     def draw_debug(self, game_surface, debuggables: list[Debuggable]):
         DEBUG_RENDERER.draw_area(game_surface, self.current_map.strawberry_bushes, (190, 20, 40), "TRUS")
