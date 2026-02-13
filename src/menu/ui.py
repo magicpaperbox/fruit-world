@@ -2,6 +2,8 @@ from enum import Enum, auto
 
 import pygame
 
+from screen.game_units import GameUnit
+
 
 class Action(Enum):
     NONE = auto()
@@ -58,13 +60,18 @@ class Modal:
         self,
         rect: pygame.Rect,
         title: str,
+        offset_y: int,
         buttons: list[Button],
         font: pygame.font.Font,
     ):
         self.rect = rect
         self.title = title
+        self.offset_y = offset_y
         self.buttons = buttons
         self.font = font
+        self.show_border = True
+        self._overlay_alpha = 0
+        self.border_radius = GameUnit(30).pixels
 
     def handle_event(self, e: pygame.event.Event) -> Action:
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
@@ -76,18 +83,27 @@ class Modal:
         return Action.NONE
 
     def draw(self, surf: pygame.Surface):
+        self._overlay_alpha = min(self._overlay_alpha + 2, 80)
         overlay = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
-        overlay.fill((0, 0, 0, 0))
+        overlay.fill((0, 0, 0, self._overlay_alpha))
+
         surf.blit(overlay, (0, 0))
 
-        pygame.draw.rect(surf, (30, 30, 40), self.rect, border_radius=16)
-        pygame.draw.rect(surf, (220, 220, 235), self.rect, 2, border_radius=16)
+        pygame.draw.rect(surf, (80, 100, 75), self.rect, border_radius=self.border_radius)
+        pygame.draw.rect(surf, (220, 220, 235), self.rect, 2, border_radius=self.border_radius)
 
-        title_s = self.font.render(self.title, True, (255, 255, 255))
-        surf.blit(title_s, title_s.get_rect(midtop=(self.rect.centerx, self.rect.top + 16)))
+        if self.title:
+            title = self.font.render(self.title, True, (255, 255, 255))
+            title_y = self.rect.centery - self.offset_y
+            title_rect = title.get_rect(centerx=self.rect.centerx, centery=title_y)
+            surf.blit(title, title_rect)
 
         for b in self.buttons:
             b.draw(surf)
+        if self.show_border:
+            shadow_rect = self.rect.inflate(3, 3).move(2, 2)
+            pygame.draw.rect(surf, (65, 85, 60), shadow_rect, width=GameUnit(6).non_zero_pixels, border_radius=self.border_radius)
+            pygame.draw.rect(surf, (140, 165, 135), self.rect, width=GameUnit(6).non_zero_pixels, border_radius=self.border_radius)
 
 
 class UIManager:

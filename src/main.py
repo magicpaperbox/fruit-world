@@ -189,6 +189,7 @@ class Game:
                 elif self.inputs.is_game_over:
                     self.game_over_screen.draw(self.screen)
                 elif self.inputs.in_settings:
+                    self._draw_gameplay(dt)
                     self.settings.draw(self.screen)
                 else:
                     now_ms = pygame.time.get_ticks()

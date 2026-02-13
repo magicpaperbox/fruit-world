@@ -11,6 +11,7 @@ class MainMenu:
         self.screen_size = screen_size
         self.font = font
         self.ui = UIManager()
+        self._rect = pygame.Rect(0, 0, 0, 0)
         self.background = SPRITE_FACTORY.load("sprites/map/main_menu.png", ss.SCREEN_HEIGHT)
         self._setup()
 
@@ -43,7 +44,7 @@ class MainMenu:
             ),
         ]
 
-        modal = Modal(pygame.Rect(0, 0, 0, 0), "", buttons, self.font)
+        modal = Modal(pygame.Rect(self._rect), "", GameUnit(50).pixels, buttons, self.font)
         self.ui.push(modal)
 
     def draw(self, surface: pygame.Surface):

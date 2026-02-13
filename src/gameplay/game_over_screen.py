@@ -14,23 +14,11 @@ class GameOverScreen(Drawable):
         game_height = ss.GAME_HEIGHT
         self._rect = pygame.Rect(0, 0, GameUnit(500).pixels, GameUnit(300).pixels)
         self._rect.center = (game_width // 2, game_height // 2)
-        self._color = 80, 100, 75
         self._ui = UIManager()
         self._setup()
 
     def draw(self, screen: pygame.surface.Surface):
-        pygame.draw.rect(screen, self._color, self._rect, border_radius=GameUnit(30).pixels)
-        text_surface = self._font.render("GAME OVER", True, (255, 255, 255))
-        text_rect = text_surface.get_rect()
-        text_rect.centerx = self._rect.centerx
-        text_rect.centery = self._rect.centery - text_rect.height
-
-        screen.blit(text_surface, text_rect)
         self._ui.draw(screen)
-
-        shadow_rect = self._rect.inflate(3, 3).move(2, 2)
-        pygame.draw.rect(screen, (65, 85, 60), shadow_rect, width=GameUnit(6).non_zero_pixels, border_radius=GameUnit(30).pixels)
-        pygame.draw.rect(screen, (140, 165, 135), self._rect, width=GameUnit(6).non_zero_pixels, border_radius=GameUnit(30).pixels)
 
     def _setup(self):
         cx, cy = self._rect.center
@@ -66,7 +54,7 @@ class GameOverScreen(Drawable):
             ),
         ]
 
-        modal = Modal(pygame.Rect(0, 0, 0, 0), "", buttons, self._font)
+        modal = Modal(pygame.Rect(self._rect), "GAME OVER", GameUnit(40).pixels, buttons, self._font)
         self._ui.push(modal)
 
     def handle_event(self, event: pygame.event.Event) -> Action:
