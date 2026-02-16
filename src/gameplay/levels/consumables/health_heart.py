@@ -3,6 +3,7 @@ from typing import Self
 import pygame
 
 from gameplay.levels.consumables.consumable import Consumable
+from gameplay.levels.consumables.nut import EffectManager
 from gameplay.levels.object_spec import ConsumableSpec
 from gameplay.player.player import Player
 from render.animated_object import AnimatedObject
@@ -12,7 +13,7 @@ from screen.game_units import GameUnit
 
 
 class HealthHeart(Consumable):
-    def on_consume(self, player: Player):
+    def on_consume(self, player: Player, effect_manager: EffectManager):
         player.health.gain()
         pygame.mixer.Sound("sounds/heart_collect.wav").play()
 

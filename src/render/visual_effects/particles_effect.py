@@ -4,11 +4,42 @@ import random
 import pygame
 from pygame import Vector2
 
+from render.drawable import Drawable
+from render.game_object import GameObject
 from render.sprite_factory import SPRITE_FACTORY
+from render.sprite_object import SpriteObject
+from render.visual_effect import VisualEffect
 from screen.game_units import RelativeUnit
 
 
-class Particle:
+class ParticlesEffect(VisualEffect):
+    def __init__(self):
+        self._particles = []
+
+    def start(self, obj: SpriteObject) -> None:
+        self._spawn_particles(obj)
+
+    def update(self, obj: SpriteObject, dt: int) -> None:
+        for particle in self._particles:
+            particle.update(dt)
+        self._particles = [p for p in self._particles if p.is_alive()]
+
+    def draw(self, screen: pygame.surface.Surface):
+        for particle in self._particles:
+            particle.draw(screen)
+
+    def _spawn_particles(self, obj):
+        pos = obj.rect.center
+        particle_amount = 80
+        for i in range(particle_amount):
+            angle = random.uniform(0, 2 * 3.14159)  # rad
+            direction = Vector2(math.cos(angle), math.sin(angle))
+            speed = random.uniform(0.05, 0.15)
+            particle = Particle(pos, direction, speed)
+            self._particles.append(particle)
+
+
+class Particle(GameObject, Drawable):
     def __init__(self, position: tuple[int, int], direction: Vector2, speed: float, lifetime_ms: int = 500):
         self._position = Vector2(position)  # 2D vector
         self._direction = direction
@@ -27,7 +58,10 @@ class Particle:
     def is_alive(self) -> bool:
         return self._lifetime_ms > 0
 
-    def draw_fadeout(self, screen: pygame.Surface):
+    def draw(self, screen: pygame.surface.Surface):
+        self._draw_blink(screen)
+
+    def _draw_fadeout(self, screen: pygame.Surface):
         _alpha = int(255 * (self._lifetime_ms / self._initial_lifetime))
         _alpha = max(0, min(255, _alpha))
         # Create more transparent copy
@@ -35,7 +69,7 @@ class Particle:
         _image_copy.set_alpha(_alpha)
         screen.blit(_image_copy, self._position)
 
-    def draw_blink(self, screen: pygame.Surface):
+    def _draw_blink(self, screen: pygame.Surface):
         _scale = max(0.3, (self._lifetime_ms / self._initial_lifetime))
         _new_width = int(self._original_image.get_width() * _scale)
         _new_height = int(self._original_image.get_height() * _scale)
@@ -45,23 +79,3 @@ class Particle:
             screen.blit(_scaled_image, self._position)
         else:
             screen.blit(self._image, self._position)
-
-    @staticmethod
-    def spawn_particles(pos: tuple[int, int]) -> list["Particle"]:
-        particle_amount = 80
-        particles = []
-        for i in range(particle_amount):
-            angle = random.uniform(0, 2 * 3.14159)  # rad
-            direction = Vector2(math.cos(angle), math.sin(angle))
-            speed = random.uniform(0.05, 0.15)
-            particle = Particle(pos, direction, speed)
-            particles.append(particle)
-        return particles
-
-    @staticmethod
-    def create_blink_effect(screen: pygame.Surface, particles: list, dt: int) -> list["Particle"]:
-        for particle in particles:
-            particle.update(dt)
-            particle.draw_blink(screen)
-        particles = [p for p in particles if p.is_alive()]
-        return particles

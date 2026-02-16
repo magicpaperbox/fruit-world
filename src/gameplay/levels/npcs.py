@@ -69,7 +69,7 @@ class Npc:
         self._dialog_index = 0
         self._is_in_dialog = False
 
-    def interaction(self, now_ms: int) -> DialogStep | None:
+    def interaction(self) -> DialogStep | None:
         if not self._is_in_dialog:
             if self._current_quest is not None:
                 dialog = self._current_quest.get_current_dialog(self.npc_id)
@@ -90,17 +90,17 @@ class Npc:
         frame = step.frame
 
         if frame:
-            self.show_frame(frame, ms=1000, now_ms=now_ms)
+            self.show_frame(frame, ms=1000)
         has_next = self._dialog_index < len(self._dialog) - 1
         self._dialog_index += 1
         if not has_next:
             self._status = Status.HELLO
         return step
 
-    def end_interaction(self, now_ms: int) -> DialogStep | None:
+    def end_interaction(self) -> DialogStep | None:
         message = None
         if self._status == Status.HELLO:
-            self.play_once(self._bye_bye_animation, ms=500, now_ms=now_ms)
+            self.play_once(self._bye_bye_animation, ms=500)
             message = DialogStep("Bye bye!", "hello", speaker="Mouse")
             pygame.mixer.Sound("sounds/npc_hmhm.wav").play()
             self._dialog_index = 0
@@ -108,19 +108,19 @@ class Npc:
         self._status = Status.STANDBY
         return message
 
-    def show_frame(self, kind: str, ms: int, now_ms: int):
+    def show_frame(self, kind: str, ms: int):
         mapping = {
             "hello": self._hello,
             "happy": self._interaction,
             "thinking": self._quest_update,
         }
         self._override_surface = mapping[kind]
-        self._override_until_ms = now_ms + ms
+        self._override_until_ms = pygame.time.get_ticks() + ms
         self._override_anim = None
 
-    def play_once(self, anim: Animation, ms: int, now_ms: int):
+    def play_once(self, anim: Animation, ms: int):
         self._override_anim = anim.copy() if hasattr(anim, "copy") else anim
-        self._override_anim_until_ms = now_ms + ms
+        self._override_anim_until_ms = pygame.time.get_ticks() + ms
         self._override_surface = None
 
     @property
@@ -167,7 +167,8 @@ class Npc:
             self.npc_rect = new_frame.get_rect(centerx=cx, bottom=by)
         self._sprite = new_frame
 
-    def update_sprite(self, now_ms: int, dt_ms: int):
+    def update_sprite(self, dt_ms: int):
+        now_ms = pygame.time.get_ticks()
         # single animation
         if self._override_anim and now_ms < self._override_anim_until_ms:
             self._override_anim.update(dt_ms)

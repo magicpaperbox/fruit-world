@@ -10,11 +10,13 @@ class BobbingEffect(VisualEffect):
         self._base_y = None
         self._effect_amplitude = effect_amplitude
         self._speed = speed_factor
+        self._now_ms = 0
 
     def start(self, obj: SpriteObject) -> None:
         self._base_y = obj.rect.y
 
-    def update(self, obj: SpriteObject, now_ms: int) -> None:
+    def update(self, obj: SpriteObject, dt: int) -> None:
         assert self._base_y is not None
-        offset_y = int(round(sin(now_ms * self._speed) * self._effect_amplitude.pixels))
+        self._now_ms += dt
+        offset_y = int(round(sin(self._now_ms * self._speed) * self._effect_amplitude.pixels))
         obj.rect.y = self._base_y + offset_y

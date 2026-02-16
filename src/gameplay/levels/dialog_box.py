@@ -55,7 +55,7 @@ class DialogBox:
         self._away_time = 0.0
         self.farewell_shown = False
 
-    def handle_event(self, is_pick_pressed: bool, is_exit_pressed: bool, away: bool, now_ms: int, dt_ms: int):
+    def handle_event(self, is_pick_pressed: bool, is_exit_pressed: bool, away: bool, dt_ms: int):
         dt = dt_ms / 1000.0
 
         if is_pick_pressed:
@@ -70,7 +70,7 @@ class DialogBox:
             self._hide()
         if away:
             if not self._farewell_shown and self._active_npc is not None:
-                farewell_msg = self._active_npc.end_interaction(now_ms)
+                farewell_msg = self._active_npc.end_interaction()
                 if farewell_msg:
                     self.show(farewell_msg)
                 self._farewell_shown = True

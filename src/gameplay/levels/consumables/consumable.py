@@ -6,14 +6,14 @@ import pygame
 from gameplay.levels.object_spec import ConsumableSpec
 from gameplay.player.player import Player
 from render.drawable import Drawable
+from render.effect_manager import EffectManager
 from render.game_object import GameObject
 from render.sprite_object import SpriteObject
 
 
 class Consumable(Drawable, GameObject, abc.ABC):
-    def __init__(self, sprite_obj: SpriteObject, kind: str = ""):
+    def __init__(self, sprite_obj: SpriteObject):
         self._sprite_obj = sprite_obj
-        self.kind = kind
 
     @property
     def rect(self):
@@ -22,11 +22,11 @@ class Consumable(Drawable, GameObject, abc.ABC):
     def draw(self, screen: pygame.surface.Surface):
         self._sprite_obj.draw(screen)
 
-    def update(self, now_ms: int) -> None:
-        self._sprite_obj.update(now_ms)
+    def update(self, dt: int) -> None:
+        self._sprite_obj.update(dt)
 
     @abc.abstractmethod
-    def on_consume(self, player: Player):
+    def on_consume(self, player: Player, effect_manager: EffectManager):
         pass
 
     @classmethod
@@ -35,17 +35,12 @@ class Consumable(Drawable, GameObject, abc.ABC):
         pass
 
     @staticmethod
-    def consume(consumables: list["Consumable"], player: Player) -> list[tuple[int, int]]:
-        collected_positions = []
+    def consume(consumables: list["Consumable"], player: Player, effect_manager: EffectManager) -> None:
         to_remove = []
         for consumable in consumables:
             if player.player_rect.colliderect(consumable.rect):
-                consumable.on_consume(player)
+                consumable.on_consume(player, effect_manager)
                 to_remove.append(consumable)
-                if consumable.kind == "money":
-                    collected_positions.append(consumable.rect.center)
 
         for item in to_remove:
             consumables.remove(item)
-
-        return collected_positions

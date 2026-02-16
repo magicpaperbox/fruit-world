@@ -5,13 +5,14 @@ import pygame
 from gameplay.levels.consumables.consumable import Consumable
 from gameplay.levels.object_spec import ConsumableSpec
 from gameplay.player.player import Player
+from render.effect_manager import EffectManager
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
 from screen.game_units import GameUnit
 
 
 class ManaPotion(Consumable):
-    def on_consume(self, player: Player):
+    def on_consume(self, player: Player, effect_manager: EffectManager):
         player.mana.gain()
         pygame.mixer.Sound("sounds/potion_drink.wav").play()
 

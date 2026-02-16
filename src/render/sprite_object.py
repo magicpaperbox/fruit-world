@@ -11,7 +11,7 @@ class SpriteObject(Drawable, GameObject):
         self._sprite = sprite
         self.rect = rect
 
-    def update(self, now_ms: int):
+    def update(self, dt: int):
         pass
 
     def draw(self, screen: pygame.surface.Surface):

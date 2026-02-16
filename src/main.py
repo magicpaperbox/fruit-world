@@ -19,9 +19,9 @@ from gameplay.resources_ui import ResourcesUI
 from menu.main_menu import MainMenu
 from menu.settings_menu import GameSettings
 from menu.ui import UIManager
+from render.effect_manager import EffectManager
 from render.lighting import Lighting, SunLight
 from render.sprite_factory import SPRITE_FACTORY
-from render.visual_effects.particles_effect import Particle
 from screen import scale_screen as ss
 from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
@@ -102,11 +102,11 @@ class Game:
         self.level = Level(self.sara.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
-        self.particles = []
+        self.effect_manager = EffectManager()
 
-    def _update_gameplay(self, dt, now_ms):
+    def _update_gameplay(self, dt: int):
         self.music.play(self.level.music_path)
-        self.dialog_vm.handle_event(self.inputs.is_interaction_pressed, self.inputs.is_exit_pressed, self.away, now_ms, dt)
+        self.dialog_vm.handle_event(self.inputs.is_interaction_pressed, self.inputs.is_exit_pressed, self.away, dt)
 
         for npc in self.level.current_map.npcs:
             if self.sara.player_rect.colliderect(npc.npc_rect):
@@ -114,13 +114,13 @@ class Game:
                 self.colliding_npc = npc
                 if self.inputs.is_interaction_pressed:
                     self.mhmm_sound.play()
-                    dialog_step = npc.interaction(now_ms)
+                    dialog_step = npc.interaction()
                     if dialog_step is not None:
                         self.dialog_vm.show(dialog_step, npc=npc)
             else:
                 self.away = True
                 self.colliding_npc = None
-            npc.update_sprite(now_ms, dt)
+            npc.update_sprite(dt)
         self.dialog_vm.update(dt)
 
         self.hazard.update(dt)
@@ -136,32 +136,32 @@ class Game:
         self.sara.process_inputs(dt, self.inputs, all_solids)
         self.sara.update_sprite(self.inputs, dt)
         self.level.change_map(self.sara)
-        collected_pos = Consumable.consume(self.level.current_map.consumable_objects, self.sara)
-        for pos in collected_pos:
-            self.particles.extend(Particle.spawn_particles(pos))
+        Consumable.consume(self.level.current_map.consumable_objects, self.sara, self.effect_manager)
         if self.inputs.is_interaction_pressed:
             for bush in itertools.chain(self.level.current_map.strawberry_bushes, self.level.current_map.blueberry_bushes):
                 picked_items = bush.try_pick_berries(self.sara.player_rect)
                 if picked_items > 0:
                     self.sara.inventory.add(bush.berry_item_id, picked_items)
         self.sunlight.update(dt)
-        self.level.update_level(now_ms)
+        self.level.update_level(dt)
+        self.effect_manager.update(dt)
 
-    def _draw_gameplay(self, dt):
+    def _draw_gameplay(self):
         self.inputs.screen.fill((53, 71, 46))
-        self.level.draw_level(self.inputs.game_surface)
+        game_screen = self.inputs.game_surface
+        self.level.draw_level(game_screen)
         if self.colliding_npc is not None and self.colliding_npc.has_something_to_say():
-            self.colliding_npc.draw_bubble(self.inputs.game_surface, player_nearby=True)
-        self.sara.draw(self.inputs.game_surface)
-        self.particles = Particle.create_blink_effect(self.inputs.game_surface, self.particles, dt)
-        self.sunlight.draw(self.inputs.game_surface)
+            self.colliding_npc.draw_bubble(game_screen, player_nearby=True)
+        self.sara.draw(game_screen)
+        self.effect_manager.draw(game_screen)
+        self.sunlight.draw(game_screen)
         self.lighting.reset()
         # self.lighting.draw_light(self.sara.player_rect.center)
-        self.lighting.apply(self.inputs.game_surface)
+        self.lighting.apply(game_screen)
         if self.inputs.DEBUG_OVERLAYS:
-            self.level.draw_debug(self.inputs.game_surface, [self.sara])
+            self.level.draw_debug(game_screen, [self.sara])
 
-        self.inputs.screen.blit(self.inputs.game_surface, self.inputs.layout.game_view.topleft)
+        self.inputs.screen.blit(game_screen, self.inputs.layout.game_view.topleft)
         self.inputs.layout.draw_panel(self.inputs.screen)
         self.inputs.layout.draw_panel_windows(self.inputs.screen)
         self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
@@ -187,12 +187,11 @@ class Game:
                 elif self.inputs.is_game_over:
                     self.game_over_screen.draw(self.screen)
                 elif self.inputs.in_settings:
-                    self._draw_gameplay(dt)
+                    self._draw_gameplay()
                     self.settings.draw(self.screen)
                 else:
-                    now_ms = pygame.time.get_ticks()
-                    self._update_gameplay(dt, now_ms)
-                    self._draw_gameplay(dt)
+                    self._update_gameplay(dt)
+                    self._draw_gameplay()
 
                 pygame.display.flip()
 
