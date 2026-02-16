@@ -98,6 +98,8 @@ class Slider:
         new_volume = relative_x / self.rect.width
         self._current_volume = max(0.0, min(1.0, new_volume))
 
+    #   pygame.mixer.music.set_volume(new_volume)
+
 
 class Modal:
     def __init__(
