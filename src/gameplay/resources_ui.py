@@ -11,7 +11,6 @@ from screen.game_units import GameUnit, RelativeUnit
 class ResourcesUI:
     def __init__(self, font: pygame.font.Font):
         self._font = font
-
         self._y = RelativeUnit(0.03).pixels_y
 
         icon_height = RelativeUnit(0.05).pixels_y

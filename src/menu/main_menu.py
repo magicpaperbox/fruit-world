@@ -10,14 +10,14 @@ class MainMenu:
     def __init__(self, screen_size: tuple[int, int], font: pygame.font.Font):
         self.screen_size = screen_size
         self.font = font
+        self.transparent_background = True
         self.ui = UIManager()
-        self._rect = pygame.Rect(0, 0, 0, 0)
+        self._rect = pygame.Rect(0, 0, screen_size[0], screen_size[1])
         self.background = SPRITE_FACTORY.load("sprites/map/main_menu.png", ss.SCREEN_HEIGHT)
         self._setup()
 
     def _setup(self):
-        w, h = self.screen_size
-        cx, cy = w // 2, h // 2
+        cx, cy = self._rect.center
 
         buttons = [
             Button(
@@ -44,7 +44,7 @@ class MainMenu:
             ),
         ]
 
-        modal = Modal(pygame.Rect(self._rect), "", GameUnit(50).pixels, buttons, self.font)
+        modal = Modal(pygame.Rect(self._rect), "", GameUnit(50).pixels, buttons, self.font, transparent_background=True)
         self.ui.push(modal)
 
     def draw(self, surface: pygame.Surface):

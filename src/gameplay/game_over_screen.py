@@ -2,18 +2,13 @@ import pygame
 
 from menu.ui import Action, Button, Modal, UIManager
 from render.drawable import Drawable
-from screen import scale_screen as ss
 from screen.game_units import GameUnit
 
 
 class GameOverScreen(Drawable):
     def __init__(self, font: pygame.font.Font):
         self._font = font
-
-        game_width = ss.GAME_WIDTH
-        game_height = ss.GAME_HEIGHT
         self._rect = pygame.Rect(0, 0, GameUnit(500).pixels, GameUnit(300).pixels)
-        self._rect.center = (game_width // 2, game_height // 2)
         self._ui = UIManager()
         self._setup()
 
