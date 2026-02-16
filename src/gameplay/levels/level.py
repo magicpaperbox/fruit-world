@@ -1,9 +1,9 @@
 import pygame
 
 import screen.scale_screen as ss
+from gameplay.levels.direction import Direction
 from gameplay.levels.level_spec import LevelSpec
 from gameplay.levels.map import Map
-from gameplay.levels.map.direction import Direction
 from gameplay.levels.strawberry_quest import StrawberryQuest
 from gameplay.player.inventory import Inventory
 from gameplay.player.player import Player

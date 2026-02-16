@@ -4,10 +4,13 @@ import pygame
 
 import screen.scale_screen as ss
 from gameplay.levels.berry_bush import BerryBush
-from gameplay.levels.consumable import Consumable, HealthHeart, ManaPotion, Nut
-from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import ConsumableSpec, SpriteObjectSpec
+from gameplay.levels.consumables.consumable import Consumable
+from gameplay.levels.consumables.health_heart import HealthHeart
+from gameplay.levels.consumables.mana_potion import ManaPotion
+from gameplay.levels.consumables.nut import Nut
+from gameplay.levels.map_spec import MapSpec
 from gameplay.levels.npcs import Npc
+from gameplay.levels.object_spec import ConsumableSpec, SpriteObjectSpec
 from render.effects import AnimatedObject, BobbingEffect
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject

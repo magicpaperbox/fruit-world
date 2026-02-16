@@ -1,4 +1,4 @@
-from gameplay.levels.map.map_spec import MapSpec
+from gameplay.levels.map_spec import MapSpec
 
 
 class LevelSpec:

@@ -1,7 +1,7 @@
+from gameplay.levels.direction import Direction
 from gameplay.levels.level_spec import LevelSpec
-from gameplay.levels.map.direction import Direction
-from gameplay.levels.map.map_spec import MapSpec
-from gameplay.levels.map.object_spec import (
+from gameplay.levels.map_spec import MapSpec
+from gameplay.levels.object_spec import (
     ConsumableSpec,
     DynamicSpriteObjectSpec,
     ObjectSpec,

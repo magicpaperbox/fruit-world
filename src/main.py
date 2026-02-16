@@ -6,12 +6,12 @@ import traceback
 import pygame
 
 from gameplay.game_over_screen import GameOverScreen
-from gameplay.levels.consumable import Consumable
+from gameplay.levels.consumables import Consumable
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
+from gameplay.levels.hazards import Hazard
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
-from gameplay.levels.map.hazards import Hazard
-from gameplay.levels.map.music import Music
+from gameplay.levels.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import InventoryUI
 from gameplay.player.player import Player

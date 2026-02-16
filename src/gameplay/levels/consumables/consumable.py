@@ -39,21 +39,3 @@ class Consumable(Drawable, GameObject):
             consumables.remove(item)
 
         return collected_positions
-
-
-class HealthHeart(Consumable):
-    def on_consume(self, player: Player):
-        player.health.gain()
-        pygame.mixer.Sound("sounds/heart_collect.wav").play()
-
-
-class ManaPotion(Consumable):
-    def on_consume(self, player: Player):
-        player.mana.gain()
-        pygame.mixer.Sound("sounds/potion_drink.wav").play()
-
-
-class Nut(Consumable):
-    def on_consume(self, player: Player):
-        player.money.gain()
-        pygame.mixer.Sound("sounds/heart_collect.wav").play()
