@@ -10,7 +10,6 @@ class MainMenu:
     def __init__(self, screen_size: tuple[int, int], font: pygame.font.Font):
         self.screen_size = screen_size
         self.font = font
-        self.transparent_background = True
         self.ui = UIManager()
         self._rect = pygame.Rect(0, 0, screen_size[0], screen_size[1])
         self.background = SPRITE_FACTORY.load("sprites/map/main_menu.png", ss.SCREEN_HEIGHT)

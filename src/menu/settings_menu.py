@@ -1,6 +1,6 @@
 import pygame
 
-from menu.ui import Action, Button, Modal, UIManager
+from menu.ui import Action, Button, Modal, Slider, UIManager
 from screen.game_units import GameUnit
 
 
@@ -34,7 +34,9 @@ class GameSettings:
                 self._font,
                 transparency=180,
             ),
+            Slider(self._slot(0, 2), Action.NONE),
         ]
+
         modal = Modal(pygame.Rect(self._rect), "SETTINGS", GameUnit(250).pixels, buttons, self._font)
         self._ui.push(modal)
 

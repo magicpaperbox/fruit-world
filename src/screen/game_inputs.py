@@ -98,6 +98,7 @@ class GameInputs:
                 elif action == Action.CLOSE_WINDOW:
                     self.in_settings = False
                     self.settings_pressed = False
+                # elif action == Action.CHANGE_VOL:
 
             if self.is_game_over:
                 action = self.game_over_screen.handle_event(e)

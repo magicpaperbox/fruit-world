@@ -16,6 +16,7 @@ class Action(Enum):
     START_GAME = auto()
     GO_TO_MENU = auto()
     CLOSE_WINDOW = auto()
+    CHANGE_VOL = auto()
 
 
 class Button:
@@ -56,6 +57,48 @@ class Button:
         surf.blit(text_surface, text_rect)
 
 
+class Slider:
+    def __init__(self, rect: pygame.Rect, action: Action):
+        self.rect = rect
+        self._min_volume = 0
+        self._max_volume = 1
+        self._current_volume = 0.5
+        self._hover = False
+        self._pressed = False
+        self._action = action
+
+    def draw(self, screen: pygame.Surface):
+        pygame.draw.rect(screen, (65, 85, 60), self.rect, border_radius=GameUnit(30).pixels)
+        volume_ratio = self._current_volume
+        handle_width = GameUnit(55).pixels
+        handle_x = self.rect.x + (self.rect.width - handle_width) * volume_ratio
+        handle_y = self.rect.y
+        handle_rect = pygame.Rect(handle_x, handle_y, handle_width, self.rect.height)
+        color = (180, 200, 170) if self._hover or self._pressed else (160, 170, 150)
+        pygame.draw.rect(screen, color, handle_rect, border_radius=GameUnit(70).pixels)
+
+    def handle_event(self, e: pygame.event.Event) -> Action:
+        returned_action = Action.NONE
+        if e.type == pygame.MOUSEMOTION:
+            self._hover = self.rect.collidepoint(e.pos)
+            if self._pressed:
+                self._update_volume(e.pos[0])
+                returned_action = self._action
+        elif e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+            if self.rect.collidepoint(e.pos):
+                self._pressed = True
+                self._update_volume(e.pos[0])
+        elif e.type == pygame.MOUSEBUTTONUP and e.button == 1:
+            self._pressed = False
+
+        return returned_action
+
+    def _update_volume(self, mouse_x_pos: int):
+        relative_x = mouse_x_pos - self.rect.x  # relative position in slider
+        new_volume = relative_x / self.rect.width
+        self._current_volume = max(0.0, min(1.0, new_volume))
+
+
 class Modal:
     def __init__(
         self,
@@ -79,7 +122,6 @@ class Modal:
         self.buttons = buttons
         for button in self.buttons:
             button.rect.move_ip(dx, dy)
-
         self.font = font
         self.show_border = True
         self.transparent_background = transparent_background
