@@ -49,7 +49,7 @@ LEVEL_1_SPEC = LevelSpec(
             blueberry_bushes=[SpriteObjectSpec(x=970, y=885, height_units=120, sprite_path="sprites/objects/bush_big.png")],
             npcs={"mouse": ObjectSpec(x=1255, y=920, width=389, height=251)},
             static_objects=[SpriteObjectSpec(x=1230, y=695, height_units=251, sprite_path="sprites/objects/domek.png")],
-            consumable=[ConsumableSpec(x=500, y=830, height_units=70, sprite_path="sprites/items/mana_potion.png", kind="mana")],
+            consumable=[ConsumableSpec(x=500, y=830, kind="mana")],
             neighbours={Direction.RIGHT: "map2"},
         ),
         MapSpec(
@@ -96,8 +96,8 @@ LEVEL_1_SPEC = LevelSpec(
                 SpriteObjectSpec(x=1390, y=250, height_units=118, sprite_path="sprites/objects/yellow_herb.png"),
             ],
             consumable=[
-                ConsumableSpec(x=1350, y=290, height_units=50, sprite_path="sprites/items/heart.png", kind="heart"),
-                ConsumableSpec(x=1050, y=810, height_units=50, sprite_path="sprites/items/nut_money.png", kind="money"),
+                ConsumableSpec(x=1350, y=290, kind="heart"),
+                ConsumableSpec(x=1050, y=810, kind="money"),
             ],
             neighbours={Direction.LEFT: "map1"},
         ),

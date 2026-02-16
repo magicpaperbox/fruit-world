@@ -1,3 +1,5 @@
+import abc
+
 import pygame
 
 from gameplay.player.player import Player
@@ -6,8 +8,8 @@ from render.game_object import GameObject
 from render.sprite_object import SpriteObject
 
 
-class Consumable(Drawable, GameObject):
-    def __init__(self, sprite_obj: SpriteObject, kind: str):
+class Consumable(Drawable, GameObject, abc.ABC):
+    def __init__(self, sprite_obj: SpriteObject, kind: str = ""):
         self._sprite_obj = sprite_obj
         self.kind = kind
 
@@ -21,8 +23,9 @@ class Consumable(Drawable, GameObject):
     def update(self, now_ms: int) -> None:
         self._sprite_obj.update(now_ms)
 
+    @abc.abstractmethod
     def on_consume(self, player: Player):
-        raise NotImplementedError()
+        pass
 
     @staticmethod
     def consume(consumables: list["Consumable"], player: Player) -> list[tuple[int, int]]:

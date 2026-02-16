@@ -17,10 +17,15 @@ class SpriteObjectSpec:
         self.sprite_path = sprite_path
 
 
-class ConsumableSpec(SpriteObjectSpec):
-    def __init__(self, *args, kind: str, **kwargs):
-        super().__init__(*args, **kwargs)
+class ConsumableSpec:
+    def __init__(self, kind: str, x: int, y: int):
         self.kind = kind
+        self.x = GameUnit(x)
+        self.y = GameUnit(y)
+
+    @property
+    def pixel_coords(self) -> tuple[int, int]:
+        return self.x.pixels, self.y.pixels
 
 
 class DynamicSpriteObjectSpec:

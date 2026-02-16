@@ -11,10 +11,8 @@ from gameplay.levels.consumables.nut import Nut
 from gameplay.levels.map_spec import MapSpec
 from gameplay.levels.npcs import Npc
 from gameplay.levels.object_spec import ConsumableSpec, SpriteObjectSpec
-from render.effects import AnimatedObject, BobbingEffect
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
-from screen.game_units import GameUnit
 
 
 class Map:
@@ -79,20 +77,12 @@ class Map:
     def _load_consumable_objects(self, specs: list[ConsumableSpec]) -> list[Consumable]:
         consumables = []
         for obj_spec in specs:
-            sprite = SPRITE_FACTORY.load(obj_spec.sprite_path, obj_spec.height)
             if obj_spec.kind == "heart":
-                sprite_obj = AnimatedObject.create(
-                    sprite, effects=[BobbingEffect(effect_amplitude=GameUnit(8), speed_factor=0.003)], topleft=(obj_spec.x, obj_spec.y)
-                )
-                consumable = HealthHeart(sprite_obj, "heart")
+                consumable = HealthHeart.from_spec(obj_spec)
             elif obj_spec.kind == "money":
-                sprite_obj = AnimatedObject.create(
-                    sprite, effects=[BobbingEffect(effect_amplitude=GameUnit(5), speed_factor=0.004)], topleft=(obj_spec.x, obj_spec.y)
-                )
-                consumable = Nut(sprite_obj, "money")
+                consumable = Nut.from_spec(obj_spec)
             elif obj_spec.kind == "mana":
-                sprite_obj = self._create_sprite_object(obj_spec, sprite)
-                consumable = ManaPotion(sprite_obj, "mana")
+                consumable = ManaPotion.from_spec(obj_spec)
             else:
                 raise ValueError("Unknown consumable")
 

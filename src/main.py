@@ -6,7 +6,7 @@ import traceback
 import pygame
 
 from gameplay.game_over_screen import GameOverScreen
-from gameplay.levels.consumables import Consumable
+from gameplay.levels.consumables.consumable import Consumable
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.levels.hazards import Hazard
 from gameplay.levels.level import Level
