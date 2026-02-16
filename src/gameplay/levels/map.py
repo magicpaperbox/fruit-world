@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, Type
 
 import pygame
 
@@ -74,20 +74,13 @@ class Map:
             static_objects.append(sprite_obj)
         return static_objects
 
-    def _load_consumable_objects(self, specs: list[ConsumableSpec]) -> list[Consumable]:
-        consumables = []
+    def _load_consumable_objects(self, specs: list[ConsumableSpec]) -> Iterator[Consumable]:
+        factories: dict[str, Type[Consumable]] = {"heart": HealthHeart, "money": Nut, "mana": ManaPotion}
         for obj_spec in specs:
-            if obj_spec.kind == "heart":
-                consumable = HealthHeart.from_spec(obj_spec)
-            elif obj_spec.kind == "money":
-                consumable = Nut.from_spec(obj_spec)
-            elif obj_spec.kind == "mana":
-                consumable = ManaPotion.from_spec(obj_spec)
-            else:
+            if obj_spec.kind not in factories:
                 raise ValueError("Unknown consumable")
-
-            consumables.append(consumable)
-        return consumables
+            factory = factories[obj_spec.kind]
+            yield factory.from_spec(obj_spec)
 
     def _load_bushes(self, specs: list[SpriteObjectSpec], count: int, item_id: str):
         bushes = []
