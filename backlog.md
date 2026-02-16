@@ -1,15 +1,3 @@
-fonts:
-😄move fonts from sprites/ to toplevel fonts/
-😭można się zastanowić nad cache jak w sprite factory
-😄resolution size vs enlarge vs get font size🤔
-😄podawać wielkość czcionki w game units
-self.font -> self.fonts/font_factory
-self.font_size - do wywalenia, przejść na GameUnit
-
-refactor debug draw rects, etc into a class with font as state
-
-
---------------
 
 if obj.kind == "heart":
   heart_logic()

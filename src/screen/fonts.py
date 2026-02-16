@@ -22,11 +22,22 @@ class FontStyle(Enum):
     RUSTIC = "fonts/PrincessSofia.ttf"
 
 
+type _CacheKey = tuple[FontStyle, FontSize]
+
+
 class FontsFactory:
     def __init__(self):
         self._resolution_size = ss.get_resolution_index()
+        self._font_cache: dict[_CacheKey, pygame.font.Font] = {}
 
     def get_font(self, font_size: FontSize, font_style: FontStyle) -> pygame.font.Font:
+        cache_key = (font_style, font_size)
+        if font_style in self._font_cache:
+            return self._font_cache[cache_key]
+
         scale = self._resolution_size + GameUnit(4).pixels
         size = font_size.value + scale
-        return pygame.font.Font(font_style.value, size)
+        font = pygame.font.Font(font_style.value, size)
+
+        self._font_cache[cache_key] = font
+        return font
