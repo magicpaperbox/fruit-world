@@ -6,10 +6,10 @@ import traceback
 import pygame
 
 from gameplay.game_over_screen import GameOverScreen
+from gameplay.levels.consumable import Consumable
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
-from gameplay.levels.map.consumables import collect_consumables
 from gameplay.levels.map.hazards import Hazard
 from gameplay.levels.map.music import Music
 from gameplay.levels.npcs import Npc
@@ -136,9 +136,7 @@ class Game:
         self.sara.process_inputs(dt, self.inputs, all_solids)
         self.sara.update_sprite(self.inputs, dt)
         self.level.change_map(self.sara)
-        collected_pos = collect_consumables(
-            self.sara.player_rect, self.level.current_map.consumable_objects, self.sara.money, self.sara.health, self.sara.mana
-        )
+        collected_pos = Consumable.consume(self.level.current_map.consumable_objects, self.sara)
         for pos in collected_pos:
             self.particles.extend(Particle.spawn_particles(pos))
         if self.inputs.is_interaction_pressed:

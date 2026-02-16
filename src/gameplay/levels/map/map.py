@@ -4,7 +4,7 @@ import pygame
 
 import screen.scale_screen as ss
 from gameplay.levels.berry_bush import BerryBush
-from gameplay.levels.consumable import Consumable
+from gameplay.levels.consumable import Consumable, HealthHeart, ManaPotion, Nut
 from gameplay.levels.map.map_spec import MapSpec
 from gameplay.levels.map.object_spec import ConsumableSpec, SpriteObjectSpec
 from gameplay.levels.npcs import Npc
@@ -81,13 +81,18 @@ class Map:
                 sprite_obj = AnimatedObject.create(
                     sprite, effects=[BobbingEffect(effect_amplitude=GameUnit(8), speed_factor=0.003)], topleft=(obj_spec.x, obj_spec.y)
                 )
+                consumable = HealthHeart(sprite_obj, "heart")
             elif obj_spec.kind == "money":
                 sprite_obj = AnimatedObject.create(
                     sprite, effects=[BobbingEffect(effect_amplitude=GameUnit(5), speed_factor=0.004)], topleft=(obj_spec.x, obj_spec.y)
                 )
-            else:
+                consumable = Nut(sprite_obj, "money")
+            elif obj_spec.kind == "mana":
                 sprite_obj = self._create_sprite_object(obj_spec, sprite)
-            consumable = Consumable(sprite_obj, obj_spec.kind)
+                consumable = ManaPotion(sprite_obj, "mana")
+            else:
+                raise ValueError("Unknown consumable")
+
             consumables.append(consumable)
         return consumables
 
