@@ -5,8 +5,9 @@ import pygame
 from gameplay.levels.consumables.consumable import Consumable
 from gameplay.levels.object_spec import ConsumableSpec
 from gameplay.player.player import Player
-from render.effects import AnimatedObject, BobbingEffect
+from render.animated_object import AnimatedObject
 from render.sprite_factory import SPRITE_FACTORY
+from render.visual_effects.bobbing_effect import BobbingEffect
 from screen.game_units import GameUnit
 
 

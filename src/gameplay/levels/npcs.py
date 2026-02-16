@@ -170,7 +170,7 @@ class Npc:
     def update_sprite(self, now_ms: int, dt_ms: int):
         # single animation
         if self._override_anim and now_ms < self._override_anim_until_ms:
-            self._override_anim.advance(dt_ms)
+            self._override_anim.update(dt_ms)
             new_frame = self._override_anim.surface()
             self._center(new_frame)
             return
@@ -185,7 +185,7 @@ class Npc:
         else:
             self._override_surface = None
 
-        self._static.advance(dt_ms)
+        self._static.update(dt_ms)
         new_frame = self._static.surface()
         self._center(new_frame)
 

@@ -75,10 +75,10 @@ class PlayerView:
                 self._sprite = self._static
         else:
             if facing_dir == "right":
-                self._right_animation.advance(dt_ms)
+                self._right_animation.update(dt_ms)
                 self._sprite = self._right_animation.sprite
             elif facing_dir == "left":
-                self._left_animation.advance(dt_ms)
+                self._left_animation.update(dt_ms)
                 self._sprite = self._left_animation.sprite
             else:
                 self._sprite = self._static

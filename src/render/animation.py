@@ -1,7 +1,9 @@
 import pygame
 
+from render.game_object import GameObject
 
-class Animation:
+
+class Animation(GameObject):
     def __init__(self, duration: int, frames: list[pygame.Surface]):
         self.sprite = frames[0]
         self._duration = duration
@@ -9,7 +11,7 @@ class Animation:
         self._current_game_frame = 0
         self._frame_index = 0
 
-    def advance(self, dt_ms: int):
+    def update(self, dt_ms: int):
         self._current_game_frame += dt_ms
         if self._current_game_frame >= self._duration:
             self._current_game_frame -= self._duration

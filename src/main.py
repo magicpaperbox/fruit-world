@@ -19,9 +19,9 @@ from gameplay.resources_ui import ResourcesUI
 from menu.main_menu import MainMenu
 from menu.settings_menu import GameSettings
 from menu.ui import UIManager
-from render.interaction_effects import Particle
 from render.lighting import Lighting, SunLight
 from render.sprite_factory import SPRITE_FACTORY
+from render.visual_effects.particles_effect import Particle
 from screen import scale_screen as ss
 from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
