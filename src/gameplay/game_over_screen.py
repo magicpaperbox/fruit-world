@@ -1,6 +1,9 @@
 import pygame
 
-from menu.ui import Action, Button, Modal, UIManager
+from menu.ui.actions import Action
+from menu.ui.modal import Modal
+from menu.ui.ui_manager import UIManager
+from menu.ui.widgets import Button
 from render.drawable import Drawable
 from screen.game_units import GameUnit
 

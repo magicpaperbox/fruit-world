@@ -1,6 +1,6 @@
 import pygame
 
-from menu.ui import Action
+from menu.ui.actions import Action
 from screen import scale_screen as ss
 from screen.layout import Layout
 

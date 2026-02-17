@@ -18,7 +18,7 @@ from gameplay.player.player import Player
 from gameplay.resources_ui import ResourcesUI
 from menu.main_menu import MainMenu
 from menu.settings_menu import GameSettings
-from menu.ui import UIManager
+from menu.ui.ui_manager import UIManager
 from render.effect_manager import EffectManager
 from render.lighting import Lighting, SunLight
 from render.sprite_factory import SPRITE_FACTORY

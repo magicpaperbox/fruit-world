@@ -1,7 +1,10 @@
 import pygame
 
 import screen.scale_screen as ss
-from menu.ui import Action, Button, Modal, UIManager
+from menu.ui.actions import Action
+from menu.ui.modal import Modal
+from menu.ui.ui_manager import UIManager
+from menu.ui.widgets import Button
 from render.sprite_factory import SPRITE_FACTORY
 from screen.game_units import GameUnit
 
