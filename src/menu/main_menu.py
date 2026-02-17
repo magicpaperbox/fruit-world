@@ -36,6 +36,17 @@ class MainMenu:
             Button(
                 rect=pygame.Rect(
                     cx - GameUnit(167).pixels,
+                    cy + GameUnit(315).pixels,
+                    GameUnit(320).pixels,
+                    GameUnit(60).pixels,
+                ),
+                text="",
+                action=Action.OPEN_SETTINGS_IN_MM,
+                font=self.font,
+            ),
+            Button(
+                rect=pygame.Rect(
+                    cx - GameUnit(167).pixels,
                     cy + GameUnit(430).pixels,
                     GameUnit(315).pixels,
                     GameUnit(55).pixels,

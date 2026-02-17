@@ -6,7 +6,9 @@ from screen.layout import Layout
 
 
 class GameInputs:
-    def __init__(self, game_surface, screen, layout, fullscreen, jump_sound, main_menu, game_over, gameplay_settings_screen):
+    def __init__(
+        self, game_surface, screen, layout, fullscreen, jump_sound, main_menu, game_over, gameplay_settings_screen, mm_settings_screen
+    ):
         self.game_surface = game_surface
         self.screen = screen
         self.layout = layout
@@ -22,8 +24,10 @@ class GameInputs:
         self._space_pressed_this_frame = False
         self.in_menu = True
         self.main_menu = main_menu
-        self.in_settings = False
+        self.in_game_settings = False
         self.gameplay_settings_screen = gameplay_settings_screen
+        self.mm_settings_displayed = False
+        self.mm_settings_screen = mm_settings_screen
         self.is_game_over = False
         self.game_over_screen = game_over
         self.reset_level = False
@@ -69,7 +73,7 @@ class GameInputs:
                 self.DEBUG_OVERLAYS = not self.DEBUG_OVERLAYS
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_q:
                 self.is_exit_pressed = True
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_TAB:
+            elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 self.settings_pressed = True
 
             if self.in_menu:
@@ -79,24 +83,30 @@ class GameInputs:
                     self.in_menu = False
                 elif action == Action.QUIT_GAME:
                     self.game_loop_running = False
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
-                self.in_menu = True
+                elif action == Action.OPEN_SETTINGS_IN_MM:
+                    self.mm_settings_displayed = True
 
-            if self.in_settings:
+            if self.mm_settings_displayed:
+                action = self.mm_settings_screen.handle_event(e)
+                if action == Action.CLOSE_WINDOW:
+                    self.in_menu = True
+                    self.mm_settings_displayed = False
+
+            if self.in_game_settings:
                 action = self.gameplay_settings_screen.handle_event(e)
                 if action == Action.RESET_LEVEL:
                     self.is_game_over = False
                     self.reset_level = True
-                    self.in_settings = False
+                    self.in_game_settings = False
                     self.settings_pressed = False
                 elif action == Action.GO_TO_MENU:
                     self.is_game_over = False
                     self.in_menu = True
                     self.reset_level = True
-                    self.in_settings = False
+                    self.in_game_settings = False
                     self.settings_pressed = False
                 elif action == Action.CLOSE_WINDOW:
-                    self.in_settings = False
+                    self.in_game_settings = False
                     self.settings_pressed = False
 
             if self.is_game_over:
@@ -109,13 +119,11 @@ class GameInputs:
                     self.is_game_over = False
                     self.in_menu = True
                     self.reset_level = True
-            elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
-                self.in_menu = True
 
-        if self.settings_pressed and not self.in_settings:
-            self.in_settings = True
-        elif self.settings_pressed and self.in_settings:
-            self.in_settings = False
+        if self.settings_pressed and not self.in_game_settings:
+            self.in_game_settings = True
+        elif self.settings_pressed and self.in_game_settings:
+            self.in_game_settings = False
         keys = pygame.key.get_pressed()
         self._is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
         self._is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]

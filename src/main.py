@@ -16,8 +16,9 @@ from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import InventoryUI
 from gameplay.player.player import Player
 from gameplay.resources_ui import ResourcesUI
+from menu.in_game_settings import InGameSettings
 from menu.main_menu import MainMenu
-from menu.settings_menu import GameSettings
+from menu.main_menu_settings import MainMenuSettings
 from menu.ui.ui_manager import UIManager
 from render.effect_manager import EffectManager
 from render.lighting import Lighting, SunLight
@@ -81,11 +82,22 @@ class Game:
     def _init_game_inputs(self):
         self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
         main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
-        self.settings = GameSettings(
+        self.settings = InGameSettings(
+            self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD), change_volume_callback=self._change_volume
+        )
+        self.mm_settings = MainMenuSettings(
             self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD), change_volume_callback=self._change_volume
         )
         self.inputs = GameInputs(
-            self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen, self.settings
+            self.game_surface,
+            self.screen,
+            self.layout,
+            self.fullscreen,
+            self.jump_sound,
+            main_menu,
+            self.game_over_screen,
+            self.settings,
+            self.mm_settings,
         )
 
     def _init_inventory(self):
@@ -189,9 +201,11 @@ class Game:
                 if self.inputs.in_menu:
                     self.music.play("sounds/music/Fruit World.mp3")
                     self.inputs.main_menu.draw(self.inputs.screen)
+                    if self.inputs.mm_settings_displayed:
+                        self.mm_settings.draw(self.screen)
                 elif self.inputs.is_game_over:
                     self.game_over_screen.draw(self.screen)
-                elif self.inputs.in_settings:
+                elif self.inputs.in_game_settings:
                     self._draw_gameplay()
                     self.settings.draw(self.screen)
                 else:

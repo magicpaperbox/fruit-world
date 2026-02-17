@@ -7,7 +7,7 @@ from menu.ui.widgets import Button, Slider
 from screen.game_units import GameUnit
 
 
-class GameSettings:
+class MainMenuSettings:
     def __init__(self, font: pygame.font.Font, change_volume_callback):
         self._modal_w, self._modal_h = GameUnit(1000).pixels, GameUnit(700).pixels
         self._rect = pygame.Rect(0, 0, self._modal_w, self._modal_h)
@@ -23,8 +23,6 @@ class GameSettings:
         buttons = [
             Button(self._slot(0, 0), "UNAVAILABLE", Action.RES_800x600, self._font, transparency=120),
             Button(self._slot(1, 0), "UNAVAILABLE", Action.RES_1280x720, self._font, transparency=120),
-            Button(self._slot(0, 1), "RESTART LEVEL", Action.RESET_LEVEL, self._font, transparency=120),
-            Button(self._slot(1, 1), "MAIN MENU", Action.GO_TO_MENU, self._font, transparency=120),
             Button(
                 pygame.Rect(
                     self._rect.centerx - GameUnit(90).pixels,
