@@ -75,10 +75,15 @@ class Game:
         self.jump_sound = pygame.mixer.Sound("sounds/jump_rustle.wav")
         self.mhmm_sound = pygame.mixer.Sound("sounds/npc_mmhm.wav")
 
+    def _change_volume(self, val):
+        pygame.mixer.music.set_volume(val)
+
     def _init_game_inputs(self):
         self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
         main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
-        self.settings = GameSettings(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
+        self.settings = GameSettings(
+            self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD), change_volume_callback=self._change_volume
+        )
         self.inputs = GameInputs(
             self.game_surface, self.screen, self.layout, self.fullscreen, self.jump_sound, main_menu, self.game_over_screen, self.settings
         )

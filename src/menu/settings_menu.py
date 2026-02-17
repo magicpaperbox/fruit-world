@@ -5,13 +5,13 @@ from screen.game_units import GameUnit
 
 
 class GameSettings:
-    def __init__(self, font: pygame.font.Font):
+    def __init__(self, font: pygame.font.Font, change_volume_callback):
         self._modal_w, self._modal_h = GameUnit(1000).pixels, GameUnit(700).pixels
         self._rect = pygame.Rect(0, 0, self._modal_w, self._modal_h)
         self._pad = GameUnit(40).pixels
         self._btn_w = (self._modal_w - self._pad * 3) // 2
         self._btn_h = GameUnit(56).pixels
-
+        self.change_volume_callback = change_volume_callback
         self._font = font
         self._ui = UIManager()
         self._setup()
@@ -34,7 +34,7 @@ class GameSettings:
                 self._font,
                 transparency=180,
             ),
-            Slider(self._slot(0, 2), Action.NONE),
+            Slider(self._slot(0, 2), Action.NONE, on_change=self.change_volume_callback),
         ]
 
         modal = Modal(pygame.Rect(self._rect), "SETTINGS", GameUnit(250).pixels, buttons, self._font)

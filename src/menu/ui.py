@@ -58,18 +58,19 @@ class Button:
 
 
 class Slider:
-    def __init__(self, rect: pygame.Rect, action: Action):
+    def __init__(self, rect: pygame.Rect, action: Action, on_change=None):
         self.rect = rect
         self._min_volume = 0
         self._max_volume = 1
-        self._current_volume = 0.5
+        self.current_volume = 0.5
         self._hover = False
         self._pressed = False
         self._action = action
+        self.on_change = on_change
 
     def draw(self, screen: pygame.Surface):
         pygame.draw.rect(screen, (65, 85, 60), self.rect, border_radius=GameUnit(30).pixels)
-        volume_ratio = self._current_volume
+        volume_ratio = self.current_volume
         handle_width = GameUnit(55).pixels
         handle_x = self.rect.x + (self.rect.width - handle_width) * volume_ratio
         handle_y = self.rect.y
@@ -96,9 +97,9 @@ class Slider:
     def _update_volume(self, mouse_x_pos: int):
         relative_x = mouse_x_pos - self.rect.x  # relative position in slider
         new_volume = relative_x / self.rect.width
-        self._current_volume = max(0.0, min(1.0, new_volume))
-
-    #   pygame.mixer.music.set_volume(new_volume)
+        self.current_volume = max(0.0, min(1.0, new_volume))
+        if self.on_change:
+            self.on_change(self.current_volume)
 
 
 class Modal:
