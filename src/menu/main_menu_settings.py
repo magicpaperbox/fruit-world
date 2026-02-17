@@ -1,10 +1,6 @@
 import pygame
 
-from menu.ui.actions import Action
-from menu.ui.colors import MAIN_MENU_THEME
-from menu.ui.modal import Modal
-from menu.ui.ui_manager import UIManager
-from menu.ui.widgets import Button, Slider
+from menu.ui import MAIN_MENU_THEME, Action, Button, Modal, Slider, UIManager
 from screen.game_units import GameUnit
 
 

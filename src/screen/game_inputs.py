@@ -1,6 +1,6 @@
 import pygame
 
-from menu.ui.actions import Action
+from menu.ui import Action
 from screen import scale_screen as ss
 from screen.layout import Layout
 
@@ -83,7 +83,7 @@ class GameInputs:
                     self.in_menu = False
                 elif action == Action.QUIT_GAME:
                     self.game_loop_running = False
-                elif action == Action.OPEN_SETTINGS_IN_MM:
+                elif action == Action.OPEN_SETTINGS_IN_MAIN_MENU:
                     self.mm_settings_displayed = True
 
             if self.mm_settings_displayed:

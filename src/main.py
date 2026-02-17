@@ -19,7 +19,7 @@ from gameplay.resources_ui import ResourcesUI
 from menu.in_game_settings import InGameSettings
 from menu.main_menu import MainMenu
 from menu.main_menu_settings import MainMenuSettings
-from menu.ui.ui_manager import UIManager
+from menu.ui import UIManager
 from render.effect_manager import EffectManager
 from render.lighting import Lighting, SunLight
 from render.sprite_factory import SPRITE_FACTORY

@@ -1,11 +1,7 @@
 import pygame
 
 import screen.scale_screen as ss
-from menu.ui.actions import Action
-from menu.ui.colors import BASIC_THEME
-from menu.ui.modal import Modal
-from menu.ui.ui_manager import UIManager
-from menu.ui.widgets import Button
+from menu.ui import BASIC_THEME, Action, Button, Modal, UIManager
 from render.sprite_factory import SPRITE_FACTORY
 from screen.game_units import GameUnit
 
@@ -43,7 +39,7 @@ class MainMenu:
                     GameUnit(60).pixels,
                 ),
                 text="",
-                action=Action.OPEN_SETTINGS_IN_MM,
+                action=Action.OPEN_SETTINGS_IN_MAIN_MENU,
                 font=self.font,
                 theme=BASIC_THEME,
             ),

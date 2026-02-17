@@ -11,4 +11,4 @@ class Action(Enum):
     START_GAME = auto()
     GO_TO_MENU = auto()
     CLOSE_WINDOW = auto()
-    OPEN_SETTINGS_IN_MM = auto()
+    OPEN_SETTINGS_IN_MAIN_MENU = auto()
