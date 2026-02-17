@@ -2,6 +2,7 @@ import pygame
 
 import screen.scale_screen as ss
 from menu.ui.actions import Action
+from menu.ui.colors import BASIC_THEME
 from menu.ui.modal import Modal
 from menu.ui.ui_manager import UIManager
 from menu.ui.widgets import Button
@@ -32,6 +33,7 @@ class MainMenu:
                 text="",
                 action=Action.START_GAME,
                 font=self.font,
+                theme=BASIC_THEME,
             ),
             Button(
                 rect=pygame.Rect(
@@ -43,6 +45,7 @@ class MainMenu:
                 text="",
                 action=Action.OPEN_SETTINGS_IN_MM,
                 font=self.font,
+                theme=BASIC_THEME,
             ),
             Button(
                 rect=pygame.Rect(
@@ -54,10 +57,11 @@ class MainMenu:
                 text="",
                 action=Action.QUIT_GAME,
                 font=self.font,
+                theme=BASIC_THEME,
             ),
         ]
 
-        modal = Modal(pygame.Rect(self._rect), "", GameUnit(50).pixels, buttons, self.font, transparent_background=True)
+        modal = Modal(pygame.Rect(self._rect), "", GameUnit(50).pixels, buttons, self.font, BASIC_THEME, transparent_background=True)
         self.ui.push(modal)
 
     def draw(self, surface: pygame.Surface):

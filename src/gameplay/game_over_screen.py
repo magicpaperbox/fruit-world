@@ -1,6 +1,7 @@
 import pygame
 
 from menu.ui.actions import Action
+from menu.ui.colors import BASIC_THEME
 from menu.ui.modal import Modal
 from menu.ui.ui_manager import UIManager
 from menu.ui.widgets import Button
@@ -36,6 +37,7 @@ class GameOverScreen(Drawable):
                 text="RESTART",
                 action=Action.RESET_LEVEL,
                 font=self._font,
+                theme=BASIC_THEME,
                 transparency=120,
             ),
             Button(
@@ -48,11 +50,12 @@ class GameOverScreen(Drawable):
                 text="MENU",
                 action=Action.GO_TO_MENU,
                 font=self._font,
+                theme=BASIC_THEME,
                 transparency=120,
             ),
         ]
 
-        modal = Modal(pygame.Rect(self._rect), "GAME OVER", GameUnit(40).pixels, buttons, self._font)
+        modal = Modal(pygame.Rect(self._rect), "GAME OVER", GameUnit(40).pixels, buttons, self._font, BASIC_THEME)
         self._ui.push(modal)
 
     def handle_event(self, event: pygame.event.Event) -> Action:

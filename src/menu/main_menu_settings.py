@@ -1,6 +1,7 @@
 import pygame
 
 from menu.ui.actions import Action
+from menu.ui.colors import MAIN_MENU_THEME
 from menu.ui.modal import Modal
 from menu.ui.ui_manager import UIManager
 from menu.ui.widgets import Button, Slider
@@ -21,8 +22,8 @@ class MainMenuSettings:
 
     def _setup(self):
         buttons = [
-            Button(self._slot(0, 0), "UNAVAILABLE", Action.RES_800x600, self._font, transparency=120),
-            Button(self._slot(1, 0), "UNAVAILABLE", Action.RES_1280x720, self._font, transparency=120),
+            Button(self._slot(0, 0), "UNAVAILABLE", Action.RES_800x600, self._font, theme=MAIN_MENU_THEME, transparency=120),
+            Button(self._slot(1, 0), "UNAVAILABLE", Action.RES_1280x720, self._font, theme=MAIN_MENU_THEME, transparency=120),
             Button(
                 pygame.Rect(
                     self._rect.centerx - GameUnit(90).pixels,
@@ -33,12 +34,13 @@ class MainMenuSettings:
                 "Return",
                 Action.CLOSE_WINDOW,
                 self._font,
+                theme=MAIN_MENU_THEME,
                 transparency=180,
             ),
-            Slider(self._slot(0, 2), Action.NONE, on_change=self.change_volume_callback),
+            Slider(self._slot(0, 2), Action.NONE, theme=MAIN_MENU_THEME, on_change=self.change_volume_callback),
         ]
 
-        modal = Modal(pygame.Rect(self._rect), "SETTINGS", GameUnit(250).pixels, buttons, self._font)
+        modal = Modal(pygame.Rect(self._rect), "SETTINGS", GameUnit(250).pixels, buttons, self._font, MAIN_MENU_THEME)
         self._ui.push(modal)
 
     def _slot(self, col: int, row: int) -> pygame.Rect:
