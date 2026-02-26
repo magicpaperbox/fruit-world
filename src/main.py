@@ -113,7 +113,7 @@ class Game:
         )
 
     def _init_gameplay(self):
-        self.gravity = ss.game_units_to_decimal(0.001)
+        self.gravity = ss.game_units_to_decimal_px(0.001)
         self.sara = Player.load(self.gravity)
         self.hazard = Hazard()
         self.level = Level(self.sara.inventory, LEVEL_1_SPEC)

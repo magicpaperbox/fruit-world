@@ -17,7 +17,7 @@ SIDE_PANEL_W = None
 GAME_WIDTH: int | None = None
 GAME_HEIGHT: int | None = None
 
-_CANONICAL_SCREEN_HEIGHT = 1080
+_CANONICAL_SCREEN_WIDTH, _CANONICAL_SCREEN_HEIGHT = _RES_1080p
 
 
 def get_resolution_index():
@@ -51,7 +51,7 @@ def game_units_to_px_min(units: int) -> int:
     return max(scaled, 1)
 
 
-def game_units_to_decimal(units: float) -> float:  # Skalowanie stałych jednostek gry na piksele
+def game_units_to_decimal_px(units: float) -> float:
     return units * SCREEN_HEIGHT / _CANONICAL_SCREEN_HEIGHT
 
 
@@ -73,3 +73,11 @@ def relative_x_to_screen_units(horizontal_pos: float) -> int:
 
 def relative_y_to_screen_units(vertical_pos: float) -> int:
     return int(vertical_pos * SCREEN_HEIGHT)
+
+
+def canonical_game_height() -> int:
+    return _CANONICAL_SCREEN_HEIGHT
+
+
+def canonical_game_width() -> int:
+    return _CANONICAL_SCREEN_WIDTH
