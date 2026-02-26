@@ -19,6 +19,7 @@ class Map:
     def __init__(self, spec: MapSpec):
         self.background_img = self._load_map_background(spec.background)
         self.platforms = list(self._load_platforms(spec))
+        self.stairs = list(self._load_stairs(spec))
         self.hazard = self._load_hazardous_objects(spec.hazard)
         self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes), 1, "blueberry")
         self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes), 3, "strawberry")
@@ -101,6 +102,11 @@ class Map:
         if not isinstance(position, tuple):
             position = (position.x, position.y)
         return SpriteObject.create(sprite, topleft=position)
+
+    def _load_stairs(self, spec):
+        for stairs in spec.stairs:
+            sprite = SPRITE_FACTORY.load(stairs.sprite_path, stairs.height)
+            yield self._create_sprite_object(stairs, sprite)
 
 
 __all__ = ["Map"]

@@ -1,5 +1,6 @@
 import pygame
 
+from gameplay.levels.direction import Direction
 from render.sprite_object import SpriteObject
 
 
@@ -37,3 +38,17 @@ def collision_y(
         elif player_rect.bottom == s.rect.top and player_rect.right > s.rect.left and player_rect.left < s.rect.right:
             on_ground = True
     return player_velocity_y, on_ground
+
+
+def stairs(
+    stairs: list[SpriteObject],
+    player_rect: pygame.Rect,
+    direction: Direction,
+):
+    for s in stairs:
+        if player_rect.colliderect(s.rect):
+            if direction == Direction.UP:
+                player_rect.bottom = s.rect.top
+            elif direction == Direction.DOWN:
+                pass
+                # player_rect.bottom = s.rect.top  - tu nie moze byc bottom bo co jak schopek sie konczy pod ziemia

@@ -76,7 +76,7 @@ class PlayerMobility(Debuggable):
                     _, stepped_on_ground = collision_y(platforms, self.collision_rect_y, 1.0)
                     if stepped_on_ground:
                         step_up = True
-                        self._sync_all_rects()
+                        # self._sync_all_rects()
             if not step_up:
                 self._anchor[0], self._anchor[1] = old_anchor
                 self._sync_all_rects()

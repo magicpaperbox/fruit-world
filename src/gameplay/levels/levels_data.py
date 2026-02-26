@@ -41,6 +41,7 @@ LEVEL_1_SPEC = LevelSpec(
                     left_sprite_path="sprites/objects/grass_ground_left.png",
                 ),
             ],
+            stairs=[],
             strawberry_bushes=[
                 SpriteObjectSpec(x=365, y=416, height_units=120, sprite_path="sprites/objects/bush_big.png"),
                 SpriteObjectSpec(x=970, y=587, height_units=120, sprite_path="sprites/objects/bush_small.png"),
@@ -85,6 +86,7 @@ LEVEL_1_SPEC = LevelSpec(
                     left_sprite_path="sprites/objects/grass_ground_left.png",
                 ),
             ],
+            stairs=[],
             old_platforms={},
             strawberry_bushes=[
                 SpriteObjectSpec(x=770, y=360, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
@@ -105,7 +107,7 @@ LEVEL_1_SPEC = LevelSpec(
             map_id="map3",
             background="background",
             hazard=[],
-            floating_platforms=[
+            stairs=[
                 SpriteObjectSpec(x=750, y=850, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
                 SpriteObjectSpec(x=750, y=890, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
             ],
@@ -119,6 +121,7 @@ LEVEL_1_SPEC = LevelSpec(
                     right_sprite_path="sprites/objects/grass_ground_right.png",
                 ),
             ],
+            floating_platforms=[],
             old_platforms={},
             strawberry_bushes=[
                 SpriteObjectSpec(x=525, y=790, height_units=120, sprite_path="sprites/objects/bush_wide.png"),
@@ -133,6 +136,7 @@ LEVEL_1_SPEC = LevelSpec(
             map_id="map4",
             background="background",
             hazard=[],
+            stairs=[],
             floating_platforms=[
                 SpriteObjectSpec(x=150, y=890, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
                 SpriteObjectSpec(x=450, y=880, height_units=90, sprite_path="sprites/objects/platform_wide.png"),

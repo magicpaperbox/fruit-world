@@ -37,6 +37,8 @@ class Level:
         self.current_map.background_img.draw(game_surface)
         for hazardous_obj in self.current_map.hazard:
             hazardous_obj.draw(game_surface)
+        for stair in self.current_map.stairs:
+            stair.draw(game_surface)
         for platform in self.current_map.platforms:
             platform.draw(game_surface)
         for bush in self.current_map.blueberry_bushes:

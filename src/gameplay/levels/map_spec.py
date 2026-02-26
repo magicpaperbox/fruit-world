@@ -15,6 +15,7 @@ class MapSpec:
         hazard: list[SpriteObjectSpec],
         floating_platforms: list[SpriteObjectSpec],
         puzzle_platforms: list[DynamicSpriteObjectSpec],
+        stairs: list[SpriteObjectSpec],
         old_platforms: dict[str, ObjectSpec],
         strawberry_bushes: list[SpriteObjectSpec],
         blueberry_bushes: list[SpriteObjectSpec],
@@ -28,6 +29,7 @@ class MapSpec:
         self.hazard = hazard
         self.floating_platforms = floating_platforms
         self.puzzle_platforms = puzzle_platforms
+        self.stairs = stairs
         self.old_platforms = old_platforms
         self.strawberry_bushes = strawberry_bushes
         self.blueberry_bushes = blueberry_bushes

@@ -20,6 +20,8 @@ class GameInputs:
         self.DEBUG_OVERLAYS = False
         self._is_right_pressed = False
         self._is_left_pressed = False
+        self._is_up_pressed = False
+        self._is_down_pressed = False
         self._jump_sound = jump_sound
         self._space_pressed_this_frame = False
         self.in_menu = True
@@ -46,6 +48,14 @@ class GameInputs:
     @property
     def is_left_pressed(self):
         return self._is_left_pressed if self._allow_movement else False
+
+    @property
+    def is_up_pressed(self):
+        return self._is_up_pressed if self._allow_movement else False
+
+    @property
+    def is_down_pressed(self):
+        return self._is_down_pressed if self._allow_movement else False
 
     @property
     def space_pressed_this_frame(self):
@@ -75,6 +85,10 @@ class GameInputs:
                 self.is_exit_pressed = True
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 self.settings_pressed = True
+            elif e.type == pygame.KEYDOWN and (e.key == pygame.K_w or e.key == pygame.K_UP):
+                self._is_up_pressed = True
+            elif e.type == pygame.KEYDOWN and (e.key == pygame.K_s or e.key == pygame.K_DOWN):
+                self._is_down_pressed = True
 
             if self.in_menu:
                 action = self.main_menu.handle_event(e)
