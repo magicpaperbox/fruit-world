@@ -1,4 +1,5 @@
 import pygame
+from pygame import Vector2
 
 from gameplay.player.collisions import collision_x, collision_y
 from render.debug import DEBUG_RENDERER
@@ -12,7 +13,7 @@ class PlayerMobility(Debuggable):
         self._gravity = gravity
         # _anchor is now a list of floats for sub-pixel precision at high FPS
         x, y = GameCoords.from_relative(0.5, 0.5).pixels
-        self._anchor: list[float] = [float(x), float(y)]
+        self._anchor = Vector2(x, y)
 
         self.visual_rect = pygame.Rect((0, 0), GameCoords(60, 115).pixels)
         self.collision_rect_x = pygame.Rect((0, 0), GameCoords(59, 80).pixels)
@@ -30,9 +31,8 @@ class PlayerMobility(Debuggable):
         self._sync_all_rects()
 
     def _place_rect(self, rect: pygame.Rect, y_offset: int):
-        ax, ay = self._anchor
         # Convert float anchor to int only when setting rect coordinates
-        rect.midbottom = int(ax), int(ay + y_offset)
+        rect.midbottom = int(self._anchor.x), int(self._anchor.y) + y_offset
 
     def _sync_all_rects(self):
         self._place_rect(self.visual_rect, self._render_offset)
@@ -56,7 +56,7 @@ class PlayerMobility(Debuggable):
     def _move_horizontally(self, platforms: list[SpriteObject], dt: int, direction: int):
         # Apply movement to float anchor
         offset = direction * self._horizontal_speed_px_per_s * (dt / 1000.0)
-        self._anchor[0] += offset
+        self._anchor.x += offset
         self._sync_all_rects()
         x_before_collision = self.collision_rect_x.x
         collision_x(platforms, self.collision_rect_x)
@@ -64,10 +64,10 @@ class PlayerMobility(Debuggable):
         if self.collision_rect_x.x != x_before_collision:
             step_up = False
             ax, ay = self.collision_rect_x.midbottom
-            self._anchor[0] = float(ax)
-            old_anchor = self._anchor[0], self._anchor[1]
+            self._anchor.x = ax
+            old_anchor = self._anchor.copy()
             if self._on_ground:
-                self._anchor[1] -= self._max_step_height
+                self._anchor.y -= self._max_step_height
                 self._sync_all_rects()
                 x_before_collision = self.collision_rect_x.x
                 collision_x(platforms, self.collision_rect_x)
@@ -77,12 +77,12 @@ class PlayerMobility(Debuggable):
                         step_up = True
                         # self._sync_all_rects()
             if not step_up:
-                self._anchor[0], self._anchor[1] = old_anchor
+                self._anchor = old_anchor
                 self._sync_all_rects()
 
     def move_vertically(self, platforms: list[SpriteObject], dt: int):
         # Apply gravity and velocity to float anchor
-        self._anchor[1] += self.player_velocity_y * dt
+        self._anchor.y += self.player_velocity_y * dt
         self.player_velocity_y += self._gravity * dt
         self._sync_all_rects()
         y_before_collision = self.collision_rect_y.y
@@ -91,7 +91,7 @@ class PlayerMobility(Debuggable):
         self._on_ground = on_ground
         if self.collision_rect_y.y != y_before_collision:
             ax, ay = self.collision_rect_y.midbottom
-            self._anchor[1] = float(ay - self._legs_offset)
+            self._anchor.y = float(ay - self._legs_offset)
             self._sync_all_rects()
         if self._on_ground:
             self.jumps_left = 2
@@ -103,7 +103,7 @@ class PlayerMobility(Debuggable):
             self._on_ground = False
 
     def set_x_position(self, x: int) -> None:
-        self._anchor[0] = float(x) + self.collision_rect_x.width / 2
+        self._anchor.x = float(x) + self.collision_rect_x.width / 2
         self._sync_all_rects()
 
     def draw_debug(self, screen: pygame.Surface):
