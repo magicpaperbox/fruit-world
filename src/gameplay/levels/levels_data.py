@@ -106,8 +106,8 @@ LEVEL_1_SPEC = LevelSpec(
             background="background",
             hazard=[],
             floating_platforms=[
-                SpriteObjectSpec(x=750, y=800, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
                 SpriteObjectSpec(x=750, y=850, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(x=750, y=890, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
             ],
             puzzle_platforms=[
                 DynamicSpriteObjectSpec(
@@ -127,7 +127,33 @@ LEVEL_1_SPEC = LevelSpec(
             npcs={},
             static_objects=[],
             consumable=[],
-            neighbours={Direction.LEFT: "map2"},
+            neighbours={Direction.LEFT: "map2", Direction.RIGHT: "map4"},
+        ),
+        MapSpec(
+            map_id="map4",
+            background="background",
+            hazard=[],
+            floating_platforms=[
+                SpriteObjectSpec(x=150, y=890, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
+                SpriteObjectSpec(x=450, y=880, height_units=90, sprite_path="sprites/objects/platform_wide.png"),
+            ],
+            puzzle_platforms=[
+                DynamicSpriteObjectSpec(
+                    x=-130,
+                    y=909,
+                    height_units=175,
+                    segments_count=8,
+                    sprite_path="sprites/objects/grass_ground_center.png",
+                    right_sprite_path="sprites/objects/grass_ground_right.png",
+                ),
+            ],
+            old_platforms={},
+            strawberry_bushes=[],
+            blueberry_bushes=[],
+            npcs={},
+            static_objects=[],
+            consumable=[],
+            neighbours={Direction.LEFT: "map3"},
         ),
     ],
     initial_map_id="map1",

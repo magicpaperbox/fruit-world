@@ -33,3 +33,12 @@ class RelativeUnit:
         self.value = value
         self.pixels_y = ss.relative_y_to_game_units_px(self.value)
         self.pixels_x = ss.relative_x_to_game_units_px(self.value)
+
+
+class RelativeCoords:
+    def __init__(self, value_x: float, value_y: float):
+        self.value_x = value_x
+        self.value_y = value_y
+        self.pixels_x = ss.relative_x_to_game_units_px(self.value_x)
+        self.pixels_y = ss.relative_y_to_game_units_px(self.value_y)
+        self.values = self.pixels_x, self.pixels_y
