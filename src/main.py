@@ -27,7 +27,7 @@ from screen import scale_screen as ss
 from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
 from screen.game_inputs import GameInputs
-from screen.game_units import RelativeUnit
+from screen.game_units import GameUnit
 from screen.layout import Layout
 
 
@@ -101,7 +101,7 @@ class Game:
         )
 
     def _init_inventory(self):
-        icon_height = RelativeUnit(0.03).pixels_y
+        icon_height = GameUnit(20).pixels
         strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", icon_height)
         blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", icon_height)
         item_icons = {

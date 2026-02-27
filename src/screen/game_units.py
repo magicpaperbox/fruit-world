@@ -51,10 +51,3 @@ class GameCoords:
     @classmethod
     def from_relative(cls, width_frac: float, height_frac: float) -> Self:
         return cls(GameUnit.from_relative_width(width_frac).value, GameUnit.from_relative_height(height_frac).value)
-
-
-class RelativeUnit:
-    def __init__(self, value: float):
-        self.value = value
-        self.pixels_y = ss.relative_y_to_game_units_px(self.value)
-        self.pixels_x = ss.relative_x_to_game_units_px(self.value)

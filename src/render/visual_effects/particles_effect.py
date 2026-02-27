@@ -9,7 +9,7 @@ from render.game_object import GameObject
 from render.sprite_factory import SPRITE_FACTORY
 from render.sprite_object import SpriteObject
 from render.visual_effect import VisualEffect
-from screen.game_units import RelativeUnit
+from screen.game_units import GameUnit
 
 
 class ParticlesEffect(VisualEffect):
@@ -47,7 +47,7 @@ class Particle(GameObject, Drawable):
         self._lifetime_ms = lifetime_ms
         self._initial_lifetime = lifetime_ms
 
-        icon_height = RelativeUnit(0.03).pixels_y
+        icon_height = GameUnit(30).pixels
         self._image = SPRITE_FACTORY.load("sprites/items/spark.png", icon_height)
         self._original_image = self._image
 
