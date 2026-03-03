@@ -19,7 +19,8 @@ from gameplay.resources_ui import ResourcesUI
 from menu.in_game_settings import InGameSettings
 from menu.main_menu import MainMenu
 from menu.main_menu_settings import MainMenuSettings
-from menu.ui import UIManager
+from menu.ui import BASIC_THEME, UIManager
+from render.debug_console import DebugConsole
 from render.effect_manager import EffectManager
 from render.lighting import Lighting, SunLight
 from render.sprite_factory import SPRITE_FACTORY
@@ -27,7 +28,7 @@ from screen import scale_screen as ss
 from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
 from screen.game_inputs import GameInputs
-from screen.game_units import GameUnit
+from screen.game_units import DecimalGameUnit, GameUnit
 from screen.layout import Layout
 
 
@@ -38,6 +39,7 @@ class Game:
         self._init_game_window()
         self._init_dialogs()
         self._init_audio()
+        self._init_debug()
         self._init_game_inputs()
         self._init_inventory()
         self._init_gameplay()
@@ -79,6 +81,9 @@ class Game:
     def _change_volume(self, val):
         pygame.mixer.music.set_volume(val)
 
+    def _init_debug(self):
+        self.debug_console = DebugConsole(self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED_BOLD), BASIC_THEME)
+
     def _init_game_inputs(self):
         self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
         main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
@@ -98,10 +103,11 @@ class Game:
             self.game_over_screen,
             self.settings,
             self.mm_settings,
+            self.debug_console,
         )
 
     def _init_inventory(self):
-        icon_height = GameUnit(20).pixels
+        icon_height = GameUnit(32).pixels
         strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", icon_height)
         blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", icon_height)
         item_icons = {
@@ -113,32 +119,19 @@ class Game:
         )
 
     def _init_gameplay(self):
-        self.gravity = ss.game_units_to_decimal_px(0.001)
+        self.gravity = DecimalGameUnit(1000)
         self.sara = Player.load(self.gravity)
         self.hazard = Hazard()
         self.level = Level(self.sara.inventory, LEVEL_1_SPEC)
         self.away = True
         self.colliding_npc: Npc | None = None
         self.effect_manager = EffectManager()
+        self.debug_console.player = self.sara
 
     def _update_gameplay(self, dt: int):
         self.music.play(self.level.music_path)
         self.dialog_vm.handle_event(self.inputs.is_interaction_pressed, self.inputs.is_exit_pressed, self.away, dt)
-
-        for npc in self.level.current_map.npcs:
-            if self.sara.player_rect.colliderect(npc.npc_rect):
-                self.away = False
-                self.colliding_npc = npc
-                if self.inputs.is_interaction_pressed:
-                    self.mhmm_sound.play()
-                    dialog_step = npc.interaction()
-                    if dialog_step is not None:
-                        self.dialog_vm.show(dialog_step, npc=npc)
-            else:
-                self.away = True
-                self.colliding_npc = None
-            npc.update_sprite(dt)
-        self.dialog_vm.update(dt)
+        self._update_dialogs(dt)
 
         self.hazard.update(dt)
         self.hazard.collide_hazard(self.level.current_map.hazard, self.sara.player_rect, self.sara.health)
@@ -160,8 +153,24 @@ class Game:
                 if picked_items > 0:
                     self.sara.inventory.add(bush.berry_item_id, picked_items)
         self.sunlight.update(dt)
-        self.level.update_level(dt)
+        self.level.update(dt)
         self.effect_manager.update(dt)
+
+    def _update_dialogs(self, dt: int):
+        for npc in self.level.current_map.npcs:
+            if self.sara.player_rect.colliderect(npc.npc_rect):
+                self.away = False
+                self.colliding_npc = npc
+                if self.inputs.is_interaction_pressed:
+                    self.mhmm_sound.play()
+                    dialog_step = npc.interaction()
+                    if dialog_step is not None:
+                        self.dialog_vm.show(dialog_step, npc=npc)
+            else:
+                self.away = True
+                self.colliding_npc = None
+            npc.update_sprite(dt)
+        self.dialog_vm.update(dt)
 
     def _draw_gameplay(self):
         self.inputs.screen.fill((53, 71, 46))
@@ -184,6 +193,7 @@ class Game:
         self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
         self.inventory_ui.draw(self.inputs.screen, self.sara.inventory)
         self.resources_ui.draw(self.inputs.screen, self.sara.money, self.sara.health, self.sara.mana)
+        self.debug_console.draw(self.inputs.screen)
 
         if self.inputs.DEBUG_OVERLAYS:
             self.fps_counter.draw(self.inputs.screen)

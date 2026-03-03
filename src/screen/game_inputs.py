@@ -1,13 +1,24 @@
 import pygame
 
 from menu.ui import Action
+from render.debug_console import DebugConsole
 from screen import scale_screen as ss
 from screen.layout import Layout
 
 
 class GameInputs:
     def __init__(
-        self, game_surface, screen, layout, fullscreen, jump_sound, main_menu, game_over, gameplay_settings_screen, mm_settings_screen
+        self,
+        game_surface,
+        screen,
+        layout,
+        fullscreen,
+        jump_sound,
+        main_menu,
+        game_over,
+        gameplay_settings_screen,
+        mm_settings_screen,
+        debug_console: DebugConsole,
     ):
         self.game_surface = game_surface
         self.screen = screen
@@ -24,6 +35,7 @@ class GameInputs:
         self._is_down_pressed = False
         self._jump_sound = jump_sound
         self._space_pressed_this_frame = False
+        self._debug_console = debug_console
         self.in_menu = True
         self.main_menu = main_menu
         self.in_game_settings = False
@@ -69,11 +81,14 @@ class GameInputs:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 self.game_loop_running = False
+
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
                 self.fullscreen = not self.fullscreen
                 self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
                 self.layout = Layout()
                 self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
+            elif self._debug_console.handle_event(e):
+                pass
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 self._space_pressed_this_frame = True
                 self._jump_sound.play()
@@ -89,6 +104,10 @@ class GameInputs:
                 self._is_up_pressed = True
             elif e.type == pygame.KEYDOWN and (e.key == pygame.K_s or e.key == pygame.K_DOWN):
                 self._is_down_pressed = True
+
+            keys = pygame.key.get_pressed()
+            self._is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
+            self._is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]
 
             if self.in_menu:
                 action = self.main_menu.handle_event(e)
@@ -138,6 +157,3 @@ class GameInputs:
             self.in_game_settings = True
         elif self.settings_pressed and self.in_game_settings:
             self.in_game_settings = False
-        keys = pygame.key.get_pressed()
-        self._is_right_pressed = keys[pygame.K_d] or keys[pygame.K_RIGHT]
-        self._is_left_pressed = keys[pygame.K_a] or keys[pygame.K_LEFT]

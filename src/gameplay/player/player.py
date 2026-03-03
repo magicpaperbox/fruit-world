@@ -12,6 +12,7 @@ from render.debuggable import Debuggable
 from render.drawable import Drawable
 from render.sprite_object import SpriteObject
 from screen.game_inputs import GameInputs
+from screen.game_units import DecimalGameUnit
 
 
 class Player(Drawable, Debuggable):
@@ -39,10 +40,10 @@ class Player(Drawable, Debuggable):
 
     @property
     def player_rect(self):
-        return self._mobility.visual_rect
+        return self._mobility.render_rect
 
     @classmethod
-    def load(cls, gravity: float) -> Self:
+    def load(cls, gravity: DecimalGameUnit) -> Self:
         return Player(PlayerView.load(), Inventory(), PlayerMobility(gravity))
 
     def update_sprite(self, inputs: GameInputs, dt_ms: int) -> None:

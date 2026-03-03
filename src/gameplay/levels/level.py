@@ -87,6 +87,6 @@ class Level:
             else:
                 player.set_x_position(0)
 
-    def update_level(self, dt: int):
+    def update(self, dt: int):
         for consumable in self.current_map.consumable_objects:
             consumable.update(dt)

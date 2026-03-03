@@ -9,7 +9,7 @@ from screen.game_units import DecimalGameUnit, GameCoords, GameUnit
 
 
 class PlayerMobility(Debuggable):
-    def __init__(self, gravity: float):
+    def __init__(self, gravity: DecimalGameUnit):
         self._gravity = gravity
         x, y = GameCoords.from_relative(0.5, 0.5).pixels
         self._focal_point = Vector2(x, y)
@@ -21,25 +21,13 @@ class PlayerMobility(Debuggable):
         self._collision_rect_x_offset = GameUnit(-21).pixels
         self._collision_rect_y_offset = GameUnit(0).pixels
 
-        self._max_step_height = 0.25 * self.render_rect.height
-        self._player_velocity_y = 0.0
         self.jumps_available = 2
         self._is_on_ground = False
-        self._horizontal_speed_px_per_s = GameUnit(288).pixels
-        self._sync_player_parts()
 
-    def _place_rect(self, rect: pygame.Rect, y_offset: int):
-        rect.midbottom = int(self._focal_point.x), int(self._focal_point.y + y_offset)
+        self._velocity_y_px_per_sec = 0
+        self._velocity_x_px_per_sec = GameUnit(288).pixels
 
-    def _sync_player_parts(self):
-        self._place_rect(self.render_rect, self._render_rect_offset)
-        self._place_rect(self.collision_rect_x, self._collision_rect_x_offset)
-        self._place_rect(self.collision_rect_y, self._collision_rect_y_offset)
-
-    def _move_focal_point(self, dx=0.0, dy=0.0):
-        self._focal_point.x += dx
-        self._focal_point.y += dy
-        self._sync_player_parts()
+        self._sync_player_rects()
 
     @property
     def is_on_ground(self) -> bool:
@@ -49,6 +37,44 @@ class PlayerMobility(Debuggable):
     def coordinates(self) -> tuple[int, int]:
         return self.render_rect.x, self.render_rect.y
 
+    def jump(self):
+        if self.jumps_available > 0:
+            self.jumps_available -= 1
+            self._velocity_y_px_per_sec = DecimalGameUnit(-500).pixels
+            self._is_on_ground = False
+
+    def set_x_position(self, left_x: int) -> None:
+        self._focal_point.x = left_x + self.collision_rect_x.width / 2
+        self._sync_player_rects()
+
+    def set_y_position(self, bottom_y: int) -> None:
+        self._focal_point.y = float(bottom_y - self._collision_rect_y_offset)
+        self._sync_player_rects()
+
+    def move_vertically(self, platforms: list[SpriteObject], dt: int):
+        def move_with_velocity():
+            dy = self._velocity_y_px_per_sec * (dt / 1000.0)
+            self._move_focal_point(dy=dy)
+
+            self._velocity_y_px_per_sec += self._gravity.pixels * (dt / 1000.0)
+
+        def evaluate_collision():
+            y_before_collision = self.collision_rect_y.y
+            y_after_collision, self._velocity_y_px_per_sec, self._is_on_ground = collision_y(
+                platforms, self.collision_rect_y, self._velocity_y_px_per_sec
+            )
+
+            if y_before_collision != y_after_collision:
+                self.set_y_position(y_after_collision + self.collision_rect_y.height)
+
+        def reset_jumps():
+            if self._is_on_ground:
+                self.jumps_available = 2
+
+        move_with_velocity()
+        evaluate_collision()
+        reset_jumps()
+
     def move_right(self, platforms: list[SpriteObject], dt: int):
         self._move_horizontally(platforms, dt, direction=+1)
 
@@ -56,56 +82,32 @@ class PlayerMobility(Debuggable):
         self._move_horizontally(platforms, dt, direction=-1)
 
     def _move_horizontally(self, platforms: list[SpriteObject], dt: int, direction: int):
-        dx = direction * self._horizontal_speed_px_per_s * (dt / 1000.0)
-        self._move_focal_point(dx=dx)
-        x_before_collision = self.collision_rect_x.x
-        collision_x(platforms, self.collision_rect_x)
+        def move_with_velocity():
+            dx = direction * self._velocity_x_px_per_sec * (dt / 1000.0)
+            self._move_focal_point(dx=dx)
 
-        if self.collision_rect_x.x != x_before_collision:
-            ax, ay = self.collision_rect_x.midbottom
-            self._focal_point.x = ax
-            old_focal_point = self._focal_point.copy()
+        def evaluate_collision():
+            x_before_collision = self.collision_rect_x.x
+            x_after_collision = collision_x(platforms, self.collision_rect_x)
 
-            if self._is_on_ground:
-                self._move_focal_point(dy=-self._max_step_height)
-                if not self._make_a_step(platforms):
-                    self._focal_point = old_focal_point
-                    self._sync_player_parts()
+            if x_before_collision != x_after_collision:
+                self.set_x_position(x_after_collision)
 
-    def move_vertically(self, platforms: list[SpriteObject], dt: int):
-        self._move_focal_point(dy=self._player_velocity_y * dt)
-        self._player_velocity_y += self._gravity * dt
-        y_before_collision = self.collision_rect_y.y
-        player_velocity_y, is_on_ground = collision_y(platforms, self.collision_rect_y, self._player_velocity_y)
-        self._player_velocity_y = player_velocity_y
-        self._is_on_ground = is_on_ground
-        if self.collision_rect_y.y != y_before_collision:
-            ax, ay = self.collision_rect_y.midbottom
-            self.set_y_position(ay)
-        if self._is_on_ground:
-            self.jumps_available = 2
+        move_with_velocity()
+        evaluate_collision()
 
-    def _make_a_step(self, platforms: list[SpriteObject]) -> bool:
-        x_before_collision = self.collision_rect_x.x
-        collision_x(platforms, self.collision_rect_x)
-        if self.collision_rect_x.x == x_before_collision:
-            _, stepped_on_ground = collision_y(platforms, self.collision_rect_y, 1.0)
-            return stepped_on_ground
-        return False
+    def _move_focal_point(self, *, dx: float = 0.0, dy: float = 0.0):
+        self._focal_point.x += dx
+        self._focal_point.y += dy
+        self._sync_player_rects()
 
-    def jump(self):
-        if self.jumps_available > 0:
-            self.jumps_available -= 1
-            self._player_velocity_y = DecimalGameUnit(-0.5).pixels
-            self._is_on_ground = False
+    def _sync_player_rects(self):
+        def place_rect(rect: pygame.Rect, y_offset: int):
+            rect.midbottom = int(self._focal_point.x), int(self._focal_point.y + y_offset)
 
-    def set_x_position(self, x: int) -> None:
-        self._focal_point.x = float(x + self.collision_rect_x.width / 2)
-        self._sync_player_parts()
-
-    def set_y_position(self, y: int) -> None:
-        self._focal_point.y = float(y - self._collision_rect_y_offset)
-        self._sync_player_parts()
+        place_rect(self.render_rect, self._render_rect_offset)
+        place_rect(self.collision_rect_x, self._collision_rect_x_offset)
+        place_rect(self.collision_rect_y, self._collision_rect_y_offset)
 
     def draw_debug(self, screen: pygame.Surface):
         DEBUG_RENDERER.draw_rect(screen, self.collision_rect_x, (250, 250, 0), "X")
