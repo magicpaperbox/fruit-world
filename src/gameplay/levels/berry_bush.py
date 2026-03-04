@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from render.sprite_factory import SPRITE_FACTORY
+from gameplay.levels.inventory_item_template import InventoryItemTemplate
 from render.sprite_object import SpriteObject
 from screen.game_units import GameUnit
 
@@ -11,15 +11,17 @@ class BerryBush(SpriteObject):
     def __init__(
         self,
         rect: pygame.Rect,
-        berry_sprite_path: str,
+        berry_template: InventoryItemTemplate,
         berries_initial_count: int,
-        berry_item_id: str,
         bush: pygame.Surface,
     ):
         super().__init__(sprite=bush, rect=rect)
-        self._berry_sprite_path = berry_sprite_path
+        self._berry_template = berry_template
         self._berries = self._spawn_berries(berries_initial_count)
-        self.berry_item_id = berry_item_id
+
+    @property
+    def berry_item_id(self) -> str:
+        return self._berry_template.id
 
     def try_pick_berries(self, player_rect: pygame.Rect) -> int:
         for berry in self._berries[:]:  # kopia, bo modyfikujemy listę
@@ -36,7 +38,7 @@ class BerryBush(SpriteObject):
 
     def _spawn_berries(self, berries_amount: int):
         berry_height_px = GameUnit(40).pixels
-        sprite = SPRITE_FACTORY.load(self._berry_sprite_path, berry_height_px)
+        sprite = self._berry_template.load_sprite(berry_height_px)
         jitter_px = GameUnit(36).pixels
         rnd = random.Random()
         berries: list[SpriteObject] = []
