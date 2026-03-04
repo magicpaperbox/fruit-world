@@ -9,6 +9,7 @@ from gameplay.game_over_screen import GameOverScreen
 from gameplay.levels.consumables.consumable import Consumable
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.levels.hazards import Hazard
+from gameplay.levels.items import Item
 from gameplay.levels.level import Level
 from gameplay.levels.levels_data import LEVEL_1_SPEC
 from gameplay.levels.music import Music
@@ -28,7 +29,7 @@ from screen import scale_screen as ss
 from screen.fonts import FontsFactory, FontSize, FontStyle
 from screen.fps_counter import FPSCounter
 from screen.game_inputs import GameInputs
-from screen.game_units import DecimalGameUnit, GameUnit
+from screen.game_units import DecimalGameUnit
 from screen.layout import Layout
 
 
@@ -51,7 +52,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
     def _init_game_window(self):
-        game_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", target_height_px=64)
+        game_icon = SPRITE_FACTORY.load(Item.STRAWBERRY.sprite_path, target_height_px=64)
         pygame.display.set_icon(game_icon)
         pygame.display.set_caption("Fruit World")
 
@@ -107,13 +108,7 @@ class Game:
         )
 
     def _init_inventory(self):
-        icon_height = GameUnit(32).pixels
-        strawberry_icon = SPRITE_FACTORY.load("sprites/items/strawberry.png", icon_height)
-        blueberry_icon = SPRITE_FACTORY.load("sprites/items/blueberry.png", icon_height)
-        item_icons = {
-            "strawberry": strawberry_icon,
-            "blueberry": blueberry_icon,
-        }
+        item_icons = Item.load_all_icons()
         self.inventory_ui = InventoryUI(
             self.fonts.get_font(FontSize.MEDIUM, FontStyle.HANDWRITTING), item_icons, self.inputs.layout.right_window
         )

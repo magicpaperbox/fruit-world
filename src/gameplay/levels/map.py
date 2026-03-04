@@ -8,6 +8,7 @@ from gameplay.levels.consumables.consumable import Consumable
 from gameplay.levels.consumables.health_heart import HealthHeart
 from gameplay.levels.consumables.mana_potion import ManaPotion
 from gameplay.levels.consumables.nut import Nut
+from gameplay.levels.items import Item
 from gameplay.levels.map_spec import MapSpec
 from gameplay.levels.npcs import Npc
 from gameplay.levels.object_spec import ConsumableSpec, SpriteObjectSpec
@@ -21,8 +22,8 @@ class Map:
         self.platforms = list(self._load_platforms(spec))
         self.stairs = list(self._load_stairs(spec))
         self.hazard = self._load_hazardous_objects(spec.hazard)
-        self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes), 1, "blueberry")
-        self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes), 3, "strawberry")
+        self.blueberry_bushes = self._load_bushes(list(spec.blueberry_bushes), 1, Item.BLUEBERRY)
+        self.strawberry_bushes = self._load_bushes(list(spec.strawberry_bushes), 3, Item.STRAWBERRY)
         self.static_objects = self._load_static_objects(spec.static_objects)
         self.consumable_objects = list(self._load_consumable_objects(spec.consumable))
         self.npcs = []
@@ -83,13 +84,13 @@ class Map:
             factory = factories[obj_spec.kind]
             yield factory.from_spec(obj_spec)
 
-    def _load_bushes(self, specs: list[SpriteObjectSpec], count: int, item_id: str):
+    def _load_bushes(self, specs: list[SpriteObjectSpec], count: int, item: Item):
         bushes = []
         for p in specs:
             sprite = SPRITE_FACTORY.load(p.sprite_path, p.height)
             width = sprite.get_width()
             height = sprite.get_height()
-            bushes.append(BerryBush(pygame.Rect(p.x, p.y, width, height), f"sprites/items/{item_id}.png", count, item_id, sprite))
+            bushes.append(BerryBush(pygame.Rect(p.x, p.y, width, height), item.sprite_path, count, item.item_id, sprite))
 
         return bushes
 

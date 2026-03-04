@@ -34,13 +34,13 @@ class BerryBush(SpriteObject):
         for berry in self._berries:
             berry.draw(screen)
 
-    def _spawn_berries(self, berries_count: int):
+    def _spawn_berries(self, berries_amount: int):
         berry_height_px = GameUnit(40).pixels
         sprite = SPRITE_FACTORY.load(self._berry_sprite_path, berry_height_px)
         jitter_px = GameUnit(36).pixels
         rnd = random.Random()
         berries: list[SpriteObject] = []
-        if berries_count <= 0:
+        if berries_amount <= 0:
             return
 
         b = self.rect
@@ -53,10 +53,10 @@ class BerryBush(SpriteObject):
         y_min = b.y + vertical_margin_px * 2
         y_max = b.y + b.height - vertical_margin_px
 
-        slot_w = (x_max - x_min) / max(1, berries_count)  # nie dzieli przez 0
+        slot_w = (x_max - x_min) / max(1, berries_amount)  # nie dzieli przez 0
         jx_max = int(min(jitter_px, int(slot_w * 0.1)))
 
-        for i in range(berries_count):
+        for i in range(berries_amount):
             base_x = x_min + (i + 0.5) * slot_w
             x = base_x + (rnd.randint(-jx_max, jx_max) if jx_max > 0 else 0)
             y = rnd.randint(int(y_min), int(y_max))
