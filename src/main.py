@@ -9,9 +9,9 @@ from gameplay.game_over_screen import GameOverScreen
 from gameplay.levels.consumables.consumable import Consumable
 from gameplay.levels.dialog_box import DialogBox, DialogBoxView, make_dialog_rect
 from gameplay.levels.hazards import Hazard
-from gameplay.levels.items import Item
+from gameplay.levels.items import ItemUI
 from gameplay.levels.level import Level
-from gameplay.levels.levels_data import LEVEL_1_SPEC
+from gameplay.levels.levels_data import START_LEVEL
 from gameplay.levels.music import Music
 from gameplay.levels.npcs import Npc
 from gameplay.player.inventory import InventoryUI
@@ -52,7 +52,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
     def _init_game_window(self):
-        game_icon = SPRITE_FACTORY.load(Item.STRAWBERRY.sprite_path, target_height_px=64)
+        game_icon = SPRITE_FACTORY.load(ItemUI.STRAWBERRY.sprite_path, target_height_px=64)
         pygame.display.set_icon(game_icon)
         pygame.display.set_caption("Fruit World")
 
@@ -87,7 +87,7 @@ class Game:
 
     def _init_game_inputs(self):
         self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
-        main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))  # ?
+        main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))
         self.settings = InGameSettings(
             self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD), change_volume_callback=self._change_volume
         )
@@ -108,7 +108,7 @@ class Game:
         )
 
     def _init_inventory(self):
-        item_icons = Item.load_all_icons()
+        item_icons = ItemUI.load_all_icons()
         self.inventory_ui = InventoryUI(
             self.fonts.get_font(FontSize.MEDIUM, FontStyle.HANDWRITTING), item_icons, self.inputs.layout.right_window
         )
@@ -117,7 +117,7 @@ class Game:
         self.gravity = DecimalGameUnit(1000)
         self.sara = Player.load(self.gravity)
         self.hazard = Hazard()
-        self.level = Level(self.sara.inventory, LEVEL_1_SPEC)
+        self.level = Level(self.sara.inventory, START_LEVEL)
         self.away = True
         self.colliding_npc: Npc | None = None
         self.effect_manager = EffectManager()

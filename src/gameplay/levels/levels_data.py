@@ -163,3 +163,5 @@ LEVEL_1_SPEC = LevelSpec(
     initial_map_id="map1",
     music_path="sounds/music/Tiny Steps, Big World.mp3",
 )
+
+START_LEVEL = LEVEL_1_SPEC
