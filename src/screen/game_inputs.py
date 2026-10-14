@@ -2,17 +2,11 @@ import pygame
 
 from menu.ui import Action
 from render.debug_console import DebugConsole
-from screen import scale_screen as ss
-from screen.layout import Layout
 
 
 class GameInputs:
     def __init__(
         self,
-        game_surface,
-        screen,
-        layout,
-        fullscreen,
         jump_sound,
         main_menu,
         game_over,
@@ -20,10 +14,7 @@ class GameInputs:
         mm_settings_screen,
         debug_console: DebugConsole,
     ):
-        self.game_surface = game_surface
-        self.screen = screen
-        self.layout = layout
-        self.fullscreen = fullscreen
+        self.fullscreen_toggled = False
         self.is_interaction_pressed = False
         self.is_exit_pressed = False
         self.settings_pressed = False
@@ -74,6 +65,7 @@ class GameInputs:
         return self._space_pressed_this_frame if self._allow_movement else False
 
     def process_inputs(self):
+        self.fullscreen_toggled = False
         self._space_pressed_this_frame = False
         self.is_interaction_pressed = False
         self.is_exit_pressed = False
@@ -83,10 +75,8 @@ class GameInputs:
                 self.game_loop_running = False
 
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_F11:
-                self.fullscreen = not self.fullscreen
-                self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
-                self.layout = Layout()
-                self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
+                self.fullscreen_toggled = True
+
             elif self._debug_console.handle_event(e):
                 pass
             elif e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:

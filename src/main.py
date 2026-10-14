@@ -86,6 +86,7 @@ class Game:
         self.debug_console = DebugConsole(self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED_BOLD), BASIC_THEME)
 
     def _init_game_inputs(self):
+        self.fullscreen_toggled = False
         self.game_over_screen = GameOverScreen(self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD))
         main_menu = MainMenu(self.screen.get_size(), self.fonts.get_font(FontSize.LARGE, FontStyle.CAPS_CONDENSED))
         self.settings = InGameSettings(
@@ -95,10 +96,6 @@ class Game:
             self.fonts.get_font(FontSize.XLARGE, FontStyle.CAPS_CONDENSED_BOLD), change_volume_callback=self._change_volume
         )
         self.inputs = GameInputs(
-            self.game_surface,
-            self.screen,
-            self.layout,
-            self.fullscreen,
             self.jump_sound,
             main_menu,
             self.game_over_screen,
@@ -109,9 +106,7 @@ class Game:
 
     def _init_inventory(self):
         item_icons = InventoryItemTemplate.load_all_icons_for_inventory()
-        self.inventory_ui = InventoryUI(
-            self.fonts.get_font(FontSize.MEDIUM, FontStyle.HANDWRITTING), item_icons, self.inputs.layout.right_window
-        )
+        self.inventory_ui = InventoryUI(self.fonts.get_font(FontSize.MEDIUM, FontStyle.HANDWRITTING), item_icons, self.layout.right_window)
 
     def _init_gameplay(self):
         self.gravity = DecimalGameUnit(1000)
@@ -168,8 +163,8 @@ class Game:
         self.dialog_vm.update(dt)
 
     def _draw_gameplay(self):
-        self.inputs.screen.fill((53, 71, 46))
-        game_screen = self.inputs.game_surface
+        self.screen.fill((53, 71, 46))
+        game_screen = self.game_surface
         self.level.draw_level(game_screen)
         if self.colliding_npc is not None and self.colliding_npc.has_something_to_say():
             self.colliding_npc.draw_bubble(game_screen, player_nearby=True)
@@ -182,16 +177,16 @@ class Game:
         if self.inputs.DEBUG_OVERLAYS:
             self.level.draw_debug(game_screen, [self.sara])
 
-        self.inputs.screen.blit(game_screen, self.inputs.layout.game_view.topleft)
-        self.inputs.layout.draw_panel(self.inputs.screen)
-        self.inputs.layout.draw_panel_windows(self.inputs.screen)
-        self.dialog_view.draw(self.inputs.screen, self.dialog_vm)
-        self.inventory_ui.draw(self.inputs.screen, self.sara.inventory)
-        self.resources_ui.draw(self.inputs.screen, self.sara.money, self.sara.health, self.sara.mana)
-        self.debug_console.draw(self.inputs.screen)
+        self.screen.blit(game_screen, self.layout.game_view.topleft)
+        self.layout.draw_panel(self.screen)
+        self.layout.draw_panel_windows(self.screen)
+        self.dialog_view.draw(self.screen, self.dialog_vm)
+        self.inventory_ui.draw(self.screen, self.sara.inventory)
+        self.resources_ui.draw(self.screen, self.sara.money, self.sara.health, self.sara.mana)
+        self.debug_console.draw(self.screen)
 
         if self.inputs.DEBUG_OVERLAYS:
-            self.fps_counter.draw(self.inputs.screen)
+            self.fps_counter.draw(self.screen)
 
     def run(self):
         while self.inputs.game_loop_running:
@@ -199,13 +194,17 @@ class Game:
                 dt = self.clock.tick_busy_loop(self.FPS)
                 self.fps_counter.update(dt)
                 self.inputs.process_inputs()
-
+                if self.inputs.fullscreen_toggled:
+                    self.fullscreen = not self.fullscreen
+                    self.screen = ss.init_display(ss.SCREEN_WIDTH, ss.SCREEN_HEIGHT, self.fullscreen)
+                    self.layout = Layout()
+                    self.game_surface = pygame.Surface((ss.GAME_WIDTH, ss.GAME_HEIGHT)).convert()
                 if self.inputs.reset_level:
                     self._init_gameplay()
                     self.inputs.reset_level = False
                 if self.inputs.in_menu:
                     self.music.play("sounds/music/Fruit World.mp3")
-                    self.inputs.main_menu.draw(self.inputs.screen)
+                    self.inputs.main_menu.draw(self.screen)
                     if self.inputs.mm_settings_displayed:
                         self.mm_settings.draw(self.screen)
                 elif self.inputs.is_game_over:
